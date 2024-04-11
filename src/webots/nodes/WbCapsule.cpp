@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,12 +20,14 @@
 #include "WbMatter.hpp"
 #include "WbNodeUtilities.hpp"
 #include "WbOdeGeomData.hpp"
+#include "WbPose.hpp"
 #include "WbRay.hpp"
 #include "WbResizeManipulator.hpp"
 #include "WbSFBool.hpp"
 #include "WbSFInt.hpp"
 #include "WbSimulationState.hpp"
 #include "WbTransform.hpp"
+#include "WbVrmlNodeUtilities.hpp"
 #include "WbWrenRenderingContext.hpp"
 
 #include <wren/config.h>
@@ -44,7 +46,7 @@ void WbCapsule::init() {
   mTop = findSFBool("top");
   mSubdivision = findSFInt("subdivision");
 
-  mResizeConstraint = WbWrenAbstractResizeManipulator::X_EQUAL_Z;
+  mResizeConstraint = WbWrenAbstractResizeManipulator::X_EQUAL_Y;
 }
 
 WbCapsule::WbCapsule(WbTokenizer *tokenizer) : WbGeometry("Capsule", tokenizer) {
@@ -84,7 +86,7 @@ void WbCapsule::createWrenObjects() {
   if (isInBoundingObject()) {
     connect(WbWrenRenderingContext::instance(), &WbWrenRenderingContext::lineScaleChanged, this, &WbCapsule::updateLineScale);
 
-    if (mSubdivision->value() < MIN_BOUNDING_OBJECT_CIRCLE_SUBDIVISION && !WbNodeUtilities::hasAUseNodeAncestor(this))
+    if (mSubdivision->value() < MIN_BOUNDING_OBJECT_CIRCLE_SUBDIVISION && !WbVrmlNodeUtilities::hasAUseNodeAncestor(this))
       // silently reset the subdivision on node initialization
       mSubdivision->setValue(MIN_BOUNDING_OBJECT_CIRCLE_SUBDIVISION);
   }
@@ -98,9 +100,9 @@ void WbCapsule::createWrenObjects() {
 void WbCapsule::setResizeManipulatorDimensions() {
   WbVector3 scale(1.0f, 1.0f, 1.0f);
 
-  WbTransform *transform = upperTransform();
-  if (transform)
-    scale *= transform->matrix().scale();
+  const WbTransform *const up = upperTransform();
+  if (up)
+    scale *= up->absoluteScale();
 
   if (isAValidBoundingObject())
     scale *= 1.0f + (wr_config_get_line_scale() / LINE_SCALE_FACTOR);
@@ -115,17 +117,17 @@ void WbCapsule::createResizeManipulator() {
 }
 
 bool WbCapsule::areSizeFieldsVisibleAndNotRegenerator() const {
-  const WbField *const height = findField("height", true);
-  const WbField *const radius = findField("radius", true);
-  return WbNodeUtilities::isVisible(height) && WbNodeUtilities::isVisible(radius) &&
-         !WbNodeUtilities::isTemplateRegeneratorField(height) && !WbNodeUtilities::isTemplateRegeneratorField(radius);
+  const WbField *const heightField = findField("height", true);
+  const WbField *const radiusField = findField("radius", true);
+  return WbVrmlNodeUtilities::isVisible(heightField) && WbVrmlNodeUtilities::isVisible(radiusField) &&
+         !WbNodeUtilities::isTemplateRegeneratorField(heightField) && !WbNodeUtilities::isTemplateRegeneratorField(radiusField);
 }
 
 bool WbCapsule::sanitizeFields() {
   if (WbFieldChecker::resetIntIfNotInRangeWithIncludedBounds(this, mSubdivision, 4, 1000, 4))
     return false;
   if (mSubdivision->value() < MIN_BOUNDING_OBJECT_CIRCLE_SUBDIVISION && isInBoundingObject() &&
-      !WbNodeUtilities::hasAUseNodeAncestor(this)) {
+      !WbVrmlNodeUtilities::hasAUseNodeAncestor(this)) {
     parsingWarn(tr("'subdivision' value has no effect to physical 'boundingObject' geometry. "
                    "A minimum value of %2 is used for the representation.")
                   .arg(MIN_BOUNDING_OBJECT_CIRCLE_SUBDIVISION));
@@ -290,6 +292,17 @@ void WbCapsule::updateLineScale() {
   wr_transform_set_scale(wrenNode(), scale);
 }
 
+QStringList WbCapsule::fieldsToSynchronizeWithX3D() const {
+  QStringList fields;
+  fields << "radius"
+         << "height"
+         << "subdivision"
+         << "bottom"
+         << "side"
+         << "top";
+  return fields;
+}
+
 /////////////////
 // ODE objects //
 /////////////////
@@ -416,11 +429,11 @@ double WbCapsule::computeDistance(const WbRay &ray) const {
 double WbCapsule::computeLocalCollisionPoint(WbVector3 &point, const WbRay &ray) const {
   WbVector3 direction(ray.direction());
   WbVector3 origin(ray.origin());
-  WbTransform *transform = upperTransform();
-  if (transform) {
-    direction = ray.direction() * transform->matrix();
+  const WbPose *const up = upperPose();
+  if (up) {
+    direction = ray.direction() * up->matrix();
     direction.normalize();
-    origin = transform->matrix().pseudoInversed(ray.origin());
+    origin = up->matrix().pseudoInversed(ray.origin());
     origin /= absoluteScale();
   }
 
@@ -481,8 +494,8 @@ void WbCapsule::recomputeBoundingSphere() const {
   const bool top = mTop->value();
   const bool side = mSide->value();
   const bool bottom = mBottom->value();
-  const double halfHeight = scaledHeight() / 2.0;
-  const double radius = scaledRadius();
+  const double halfHeight = mHeight->value() / 2.0;
+  const double r = mRadius->value();
 
   if (!top && !side && !bottom) {  // it is empty
     mBoundingSphere->empty();
@@ -491,28 +504,28 @@ void WbCapsule::recomputeBoundingSphere() const {
 
   if (top + side + bottom == 1) {
     if (top || bottom)
-      mBoundingSphere->set(WbVector3(0, 0, top ? halfHeight : -halfHeight), radius);
+      mBoundingSphere->set(WbVector3(0, 0, top ? halfHeight : -halfHeight), r);
     else  // side
-      mBoundingSphere->set(WbVector3(), WbVector3(radius, 0, halfHeight).length());
+      mBoundingSphere->set(WbVector3(), WbVector3(r, 0, halfHeight).length());
   } else if (top != bottom) {  // we have 'top and side' or 'side and bottom'
-    const double maxZ = top ? halfHeight + radius : halfHeight;
-    const double minZ = bottom ? -halfHeight - radius : -halfHeight;
+    const double maxZ = top ? halfHeight + r : halfHeight;
+    const double minZ = bottom ? -halfHeight - r : -halfHeight;
     const double totalHeight = (maxZ - minZ);
-    const double newRadius = totalHeight / 2.0 + radius * radius / (2 * totalHeight);
+    const double newRadius = totalHeight / 2.0 + r * r / (2 * totalHeight);
     const double offsetZ = top ? (maxZ - newRadius) : (minZ + newRadius);
     mBoundingSphere->set(WbVector3(0, 0, offsetZ), newRadius);
   } else  // complete capsule
-    mBoundingSphere->set(WbVector3(), halfHeight + radius);
+    mBoundingSphere->set(WbVector3(), halfHeight + r);
 }
 
-void WbCapsule::write(WbVrmlWriter &writer) const {
+void WbCapsule::write(WbWriter &writer) const {
   if (writer.isWebots())
     WbGeometry::write(writer);
   else
     writeExport(writer);
 }
 
-void WbCapsule::exportNodeFields(WbVrmlWriter &writer) const {
+void WbCapsule::exportNodeFields(WbWriter &writer) const {
   WbGeometry::exportNodeFields(writer);
   if (writer.isX3d())
     writer << " subdivision=\'" << mSubdivision->value() << "\'";

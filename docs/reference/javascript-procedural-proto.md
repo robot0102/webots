@@ -157,7 +157,7 @@ A number of modules provide additional utility functions that can be useful when
 To use these functions, the module needs to be included first:
 
 ```javascript
-%{
+%<
   // to import the entire module
   import * as wbrandom from 'wbrandom.js';
 
@@ -166,7 +166,7 @@ To use these functions, the module needs to be included first:
 
   // to import only specific functions instead of the entire module
   import {integer} from 'wbrandom.js';
-}%
+>%
 ```
 
 The available modules are the following:
@@ -840,7 +840,7 @@ If the same seed is used every time or if it is not specified (i.e using the def
 ### Example
 
 ```
-#VRML_SIM R2022b utf8
+#VRML_SIM {{ webots.version.major }} utf8
 # tags: nonDeterministic
 # template language: javascript
 
@@ -912,7 +912,7 @@ PROTO DominoSpawner [
   Group {
     children [
       %< for (let i = 0; i < dominoSet.length; ++i) { >%
-        Transform {
+        Pose {
           translation %<= dominoSet[i].coordinates.x >% %<= dominoSet[i].coordinates.y >% %<= dominoSet[i].coordinates.z >%
           rotation 0 1 0 %<= Math.PI - angle >%
           children [

@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@
 #include "WbMatter.hpp"
 #include "WbNodeUtilities.hpp"
 #include "WbOdeGeomData.hpp"
+#include "WbPose.hpp"
 #include "WbRay.hpp"
 #include "WbResizeManipulator.hpp"
 #include "WbRgb.hpp"
@@ -31,6 +32,7 @@
 #include "WbSFInt.hpp"
 #include "WbSimulationState.hpp"
 #include "WbTransform.hpp"
+#include "WbVrmlNodeUtilities.hpp"
 #include "WbWrenMeshBuffers.hpp"
 #include "WbWrenRenderingContext.hpp"
 
@@ -245,7 +247,6 @@ void WbElevationGrid::updateHeight() {
 
   if (resizeManipulator() && resizeManipulator()->isAttached())
     setResizeManipulatorDimensions();
-
   emit changed();
 }
 
@@ -368,9 +369,10 @@ void WbElevationGrid::createResizeManipulator() {
 
 void WbElevationGrid::setResizeManipulatorDimensions() {
   WbVector3 scale(xSpacing(), ySpacing(), 1.0f);
-  WbTransform *transform = upperTransform();
-  if (transform)
-    scale *= transform->matrix().scale();
+
+  const WbTransform *const up = upperTransform();
+  if (up)
+    scale *= up->absoluteScale();
 
   if (isAValidBoundingObject())
     scale *= WbVector3(1.0f, 1.0f, 1.0f + (wr_config_get_line_scale() / LINE_SCALE_FACTOR));
@@ -380,10 +382,22 @@ void WbElevationGrid::setResizeManipulatorDimensions() {
 }
 
 bool WbElevationGrid::areSizeFieldsVisibleAndNotRegenerator() const {
-  const WbField *const xSpacing = findField("xSpacing", true);
-  const WbField *const ySpacing = findField("ySpacing", true);
-  return WbNodeUtilities::isVisible(xSpacing) && WbNodeUtilities::isVisible(ySpacing) &&
-         !WbNodeUtilities::isTemplateRegeneratorField(xSpacing) && !WbNodeUtilities::isTemplateRegeneratorField(ySpacing);
+  const WbField *const xSpacingField = findField("xSpacing", true);
+  const WbField *const ySpacingField = findField("ySpacing", true);
+  return WbVrmlNodeUtilities::isVisible(xSpacingField) && WbVrmlNodeUtilities::isVisible(ySpacingField) &&
+         !WbNodeUtilities::isTemplateRegeneratorField(xSpacingField) &&
+         !WbNodeUtilities::isTemplateRegeneratorField(ySpacingField);
+}
+
+QStringList WbElevationGrid::fieldsToSynchronizeWithX3D() const {
+  QStringList fields;
+  fields << "height"
+         << "xDimension"
+         << "xSpacing"
+         << "yDimension"
+         << "ySpacing"
+         << "thickness";
+  return fields;
 }
 
 /////////////////
@@ -415,11 +429,11 @@ bool WbElevationGrid::setOdeHeightfieldData() {
   mHeight->copyItemsTo(mData, xdyd);
 
   // Inverse mData lines for ODE
-  for (int i = 0; i < xd / 2; i++) {  // integer division
-    for (int j = 0; j < yd; j++) {
-      double temp = mData[i * yd + j];
-      mData[i * yd + j] = mData[(xd - 1 - i) * yd + j];
-      mData[(xd - 1 - i) * yd + j] = temp;
+  for (int i = 0; i < yd / 2; i++) {  // integer division
+    for (int j = 0; j < xd; j++) {
+      double temp = mData[i * xd + j];
+      mData[i * xd + j] = mData[(yd - 1 - i) * xd + j];
+      mData[(yd - 1 - i) * xd + j] = temp;
     }
   }
 
@@ -526,10 +540,10 @@ double WbElevationGrid::computeLocalCollisionPoint(const WbRay &ray, WbVector3 &
   mHeight->copyItemsTo(data, size);
 
   WbRay localRay(ray);
-  WbTransform *transform = upperTransform();
-  if (transform) {
-    localRay.setDirection(ray.direction() * transform->matrix());
-    WbVector3 origin = transform->matrix().pseudoInversed(ray.origin());
+  const WbPose *const up = upperPose();
+  if (up) {
+    localRay.setDirection(ray.direction() * up->matrix());
+    WbVector3 origin = up->matrix().pseudoInversed(ray.origin());
     origin /= absoluteScale();
     localRay.setOrigin(origin);
     localRay.normalize();
@@ -544,7 +558,6 @@ double WbElevationGrid::computeLocalCollisionPoint(const WbRay &ray, WbVector3 &
 
       // first triangle: ABC
       WbAffinePlane plane(vertexA, vertexB, vertexC);
-      plane.normalize();
       std::pair<bool, double> result = localRay.intersects(plane, true);
       if (result.first && result.second > 0 && result.second < minDistance) {
         // check finite plane bounds
@@ -557,7 +570,6 @@ double WbElevationGrid::computeLocalCollisionPoint(const WbRay &ray, WbVector3 &
 
       // second triangle: BCD
       plane = WbAffinePlane(vertexD, vertexC, vertexB);
-      plane.normalize();
       result = localRay.intersects(plane, true);
 
       if (result.first && result.second > 0 && result.second < minDistance) {
@@ -628,12 +640,13 @@ void WbElevationGrid::recomputeBoundingSphere() const {
   delete[] vertices;
 }
 
-void WbElevationGrid::exportNodeFields(WbVrmlWriter &writer) const {
+void WbElevationGrid::exportNodeFields(WbWriter &writer) const {
   if (writer.isWebots()) {
     WbGeometry::exportNodeFields(writer);
     return;
   }
 
+  findField("thickness", true)->write(writer);
   findField("xDimension", true)->write(writer);
   findField("yDimension", true)->write(writer);
   findField("xSpacing", true)->write(writer);

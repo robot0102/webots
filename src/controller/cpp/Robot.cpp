@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,6 +49,7 @@
 #include <webots/Skin.hpp>
 #include <webots/Speaker.hpp>
 #include <webots/TouchSensor.hpp>
+#include <webots/VacuumGripper.hpp>
 
 #include <cassert>
 #include <cstdlib>
@@ -75,12 +76,6 @@ Robot::Robot() {
   mMouse = new Mouse();
 }
 
-Robot *Robot::internalGetInstance() {
-  if (cInstance)
-    return cInstance;
-  return new Robot();
-}
-
 Robot::~Robot() {
   for (size_t i = 0; i < deviceList.size(); ++i)
     delete deviceList[i];
@@ -93,6 +88,14 @@ Robot::~Robot() {
 
 int Robot::step(int duration) {
   return wb_robot_step(duration);
+}
+
+int Robot::stepBegin(int duration) {
+  return wb_robot_step_begin(duration);
+}
+
+int Robot::stepEnd() {
+  return wb_robot_step_end();
 }
 
 Robot::UserInputEvent Robot::waitForUserInputEvent(UserInputEvent event_type, int timeout) {
@@ -171,10 +174,6 @@ Device *Robot::getDeviceByIndex(int index) {
 
 Device *Robot::getDevice(const std::string &name) {
   return getOrCreateDevice(wb_robot_get_device(name.c_str()));
-}
-
-int Robot::getType() const {
-  return wb_robot_get_type();
 }
 
 void Robot::batterySensorEnable(int sampling_period) {
@@ -457,6 +456,17 @@ TouchSensor *Robot::createTouchSensor(const string &name) const {
   return new TouchSensor(name);
 }
 
+VacuumGripper *Robot::getVacuumGripper(const string &name) {
+  WbDeviceTag tag = wb_robot_get_device(name.c_str());
+  if (!Device::hasType(tag, WB_NODE_VACUUM_GRIPPER))
+    return NULL;
+  return dynamic_cast<VacuumGripper *>(getOrCreateDevice(tag));
+}
+
+VacuumGripper *Robot::createVacuumGripper(const string &name) const {
+  return new VacuumGripper(name);
+}
+
 Device *Robot::getDeviceFromTag(int tag) {
   if (tag == 0)
     return NULL;
@@ -561,6 +571,9 @@ Device *Robot::getOrCreateDevice(int tag) {
       case WB_NODE_TOUCH_SENSOR:
         deviceList[otherTag] = createTouchSensor(name);
         break;
+      case WB_NODE_VACUUM_GRIPPER:
+        deviceList[otherTag] = createVacuumGripper(name);
+        break;
       default:
         deviceList[otherTag] = NULL;
         break;
@@ -598,7 +611,7 @@ const char *Robot::wwiReceive(int *size) {
 }
 
 string Robot::wwiReceiveText() {
-  const char *text = wb_robot_wwi_receive(NULL);
+  const char *text = wb_robot_wwi_receive_text();
   if (text)
     return string(text);
   else

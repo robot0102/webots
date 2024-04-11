@@ -1,4 +1,10 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://tests/default/protos/TestSuiteEmitter.proto"
+EXTERNPROTO "webots://projects/appearances/protos/RustyMetal.proto"
+EXTERNPROTO "webots://projects/appearances/protos/Plastic.proto"
+EXTERNPROTO "webots://tests/default/protos/TestSuiteSupervisor.proto"
+
 WorldInfo {
   coordinateSystem "NUE"
 }
@@ -65,7 +71,7 @@ Robot {
                 translation 0 0 0.1
                 name "tZ offset"
               }
-              Transform {
+              Pose {
                 rotation 1 0 0 -1.57
                 children [
                   Shape {
@@ -79,7 +85,7 @@ Robot {
                 ]
               }
             ]
-            boundingObject Transform {
+            boundingObject Pose {
               rotation 1 0 0 -1.57
               children [
                 Cylinder {
@@ -93,7 +99,7 @@ Robot {
           }
           DEF AXIS Group {
             children [
-              Transform {
+              Pose {
                 translation 0 0.063 0
                 children [
                   Shape {
@@ -109,7 +115,7 @@ Robot {
                 ]
                 rotation 1 0 0 -1.57
               }
-              Transform {
+              Pose {
                 translation 0 0.063 0
                 children [
                   Shape {
@@ -135,7 +141,7 @@ Robot {
     }
     DEF BASIS_GROUP Group {
       children [
-        Transform {
+        Pose {
           translation 0 0.02 0
           children [
             Shape {
@@ -151,7 +157,7 @@ Robot {
           ]
           rotation 1 0 0 -1.57
         }
-        Transform {
+        Pose {
           translation 0 0.04 0
           children [
             Shape {

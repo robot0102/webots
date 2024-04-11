@@ -1,12 +1,15 @@
-#VRML_SIM R2022b utf8
-#tags: hidden
+#VRML_SIM R2023b utf8
+# tags: hidden
+
+EXTERNPROTO "RobotisOp3ShinyMetalAppearance.proto"
+EXTERNPROTO "RobotisOp3BlackPaintedMetalAppearance.proto"
 
 PROTO MX430ServoShape [
 ]
 {
 Group {
   children [
-    Transform {
+    Pose {
       translation 0 0.0001 0.028
       rotation 1 0 0 -1.5708
       children [
@@ -14,7 +17,7 @@ Group {
           appearance PBRAppearance {
             baseColorMap ImageTexture {
               url [
-                "webots://projects/robots/robotis/darwin-op/protos/textures/dynamixel_logo.png"
+                "textures/dynamixel_logo.png"
               ]
             }
             metalness 0

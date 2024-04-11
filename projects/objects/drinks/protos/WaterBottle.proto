@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/drinks/protos/WaterBottle.proto
+# keywords: household/kitchen
 # A water bottle.
 # template language: javascript
 
@@ -8,7 +10,7 @@ PROTO WaterBottle [
   field SFVec3f    translation 0 0 0
   field SFRotation rotation    0 0 1 0
   field SFString   name        "water bottle"
-  field MFString   textureUrl  "webots://projects/objects/drinks/protos/textures/evian.png"
+  field MFString   textureUrl  "textures/evian.png"
   field SFFloat    mass        1
 ]
 {
@@ -44,7 +46,7 @@ Solid {
         creaseAngle 1.4
       }
     }
-    Transform {
+    Pose {
       translation 0 0 0.3
       children [
         Shape {
@@ -66,7 +68,7 @@ Solid {
   model "water bottle"
   boundingObject Group {
     children [
-      Transform {
+      Pose {
         translation 0 0 0.292
         children [
           Shape {
@@ -77,7 +79,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 0.245
         children [
           Shape {
@@ -87,7 +89,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 0.122
         children [
           Shape {

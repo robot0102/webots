@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
 #include "WbRadar.hpp"
 
 #include "WbAffinePlane.hpp"
+#include "WbDataStream.hpp"
 #include "WbFieldChecker.hpp"
 #include "WbObjectDetection.hpp"
 #include "WbRandom.hpp"
@@ -38,8 +39,9 @@
 
 class WbRadarTarget : public WbObjectDetection {
 public:
-  WbRadarTarget(WbRadar *radar, WbSolid *solidTarget, bool needToCheckCollision, double maxRange) :
-    WbObjectDetection(radar, solidTarget, needToCheckCollision, maxRange) {
+  WbRadarTarget(WbRadar *radar, WbSolid *solidTarget, const bool needToCheckCollision, const double maxRange) :
+    WbObjectDetection(radar, solidTarget, needToCheckCollision ? WbObjectDetection::ONE_RAY : WbObjectDetection::NONE, maxRange,
+                      radar->horizontalFieldOfView()) {
     mTargetDistance = 0.0;
     mReceivedPower = 0.0;
     mSpeed = 0.0;
@@ -58,7 +60,7 @@ public:
   void setAzimuth(double azimuth) { mAzimuth = azimuth; }
 
 protected:
-  double distance() override { return mObjectRelativePosition.length(); }
+  double distance() override { return objectRelativePosition().length(); }
 
   double mTargetDistance;
   double mReceivedPower;
@@ -297,9 +299,12 @@ void WbRadar::prePhysicsStep(double ms) {
     // create rays
     computeTargets(false, true);
 
-    if (!mRadarTargets.isEmpty())
+    if (!mRadarTargets.isEmpty()) {
       // radar or targets could move during physics step
-      subscribeToRaysUpdate(mRadarTargets[0]->geom());
+      const QList<dGeomID> &rays = mRadarTargets[0]->geoms();
+      if (!rays.isEmpty())
+        subscribeToRaysUpdate(rays.first());
+    }
   }
 }
 
@@ -317,20 +322,16 @@ void WbRadar::updateRaysSetupIfNeeded() {
   updateTransformForPhysicsStep();
 
   // compute the radar position, rotation, axis and plane
-  const WbVector3 radarPosition = matrix().translation();
-  WbMatrix3 radarRotation = rotationMatrix();
-  WbMatrix3 radarInverseRotation = radarRotation.transposed();
-  WbVector3 radarAxis = radarRotation * WbVector3(1.0, 0.0, 0.0);
-  WbAffinePlane radarPlane(radarRotation * WbVector3(0.0, 0.0, 1.0), radarAxis);
-  WbAffinePlane *frustumPlanes = WbObjectDetection::computeFrustumPlanes(radarPosition, radarRotation, verticalFieldOfView(),
-                                                                         horizontalFieldOfView(), maxRange());
+  const WbVector3 radarPosition = position();
+  const WbMatrix3 radarRotation = rotationMatrix();
+  const WbVector3 radarAxis = radarRotation * WbVector3(1.0, 0.0, 0.0);
+  const WbAffinePlane radarPlane(radarRotation * WbVector3(0.0, 0.0, 1.0), radarAxis);
+  const WbAffinePlane *frustumPlanes =
+    WbObjectDetection::computeFrustumPlanes(this, verticalFieldOfView(), horizontalFieldOfView(), maxRange(), true);
   foreach (WbRadarTarget *target, mRadarTargets) {
     target->object()->updateTransformForPhysicsStep();
-    bool valid = target->recomputeRayDirection(this, radarPosition, radarRotation, radarInverseRotation, frustumPlanes);
-    if (valid)
-      valid =
-        computeTarget(radarPosition, radarRotation, radarInverseRotation, radarAxis, radarPlane, frustumPlanes, target, true);
-    if (!valid) {
+    if (!target->recomputeRayDirection(frustumPlanes) ||
+        !setTargetProperties(radarPosition, radarRotation, radarAxis, radarPlane, target)) {
       mRadarTargets.removeAll(target);
       mInvalidRadarTargets.append(target);
     }
@@ -342,10 +343,10 @@ void WbRadar::updateRaysSetupIfNeeded() {
 void WbRadar::rayCollisionCallback(dGeomID geom, WbSolid *collidingSolid, double depth) {
   foreach (WbRadarTarget *target, mRadarTargets) {
     // check if this target is the one that collides
-    if (target->geom() == geom) {
+    if (target->contains(geom)) {
       // make sure the colliding solid is not the target itself
       if (target->object() != collidingSolid && !target->object()->solidChildren().contains(collidingSolid))
-        target->setCollided(depth);
+        target->setCollided(geom, depth);
       return;
     }
   }
@@ -387,7 +388,7 @@ void WbRadar::handleMessage(QDataStream &stream) {
   }
 }
 
-void WbRadar::writeConfigure(QDataStream &stream) {
+void WbRadar::writeConfigure(WbDataStream &stream) {
   mSensor->connectToRobotSignal(robot());
 
   stream << tag();
@@ -398,7 +399,7 @@ void WbRadar::writeConfigure(QDataStream &stream) {
   stream << (double)verticalFieldOfView();
 }
 
-void WbRadar::writeAnswer(QDataStream &stream) {
+void WbRadar::writeAnswer(WbDataStream &stream) {
   if (refreshSensorIfNeeded() || mSensor->hasPendingValue()) {
     stream << tag();
     stream << (unsigned char)C_RADAR_DATA;
@@ -416,13 +417,12 @@ void WbRadar::writeAnswer(QDataStream &stream) {
 
 void WbRadar::computeTargets(bool finalSetup, bool needCollisionDetection) {
   // compute the radar position, rotation, axis and plane
-  const WbVector3 radarPosition = matrix().translation();
-  WbMatrix3 radarRotation = rotationMatrix();
-  WbMatrix3 radarInverseRotation = radarRotation.transposed();
-  WbVector3 radarAxis = radarRotation * WbVector3(1.0, 0.0, 0.0);
-  WbAffinePlane radarPlane(radarRotation * WbVector3(0.0, 0.0, 1.0), radarAxis);
-  WbAffinePlane *frustumPlanes = WbObjectDetection::computeFrustumPlanes(radarPosition, radarRotation, verticalFieldOfView(),
-                                                                         horizontalFieldOfView(), maxRange());
+  const WbVector3 radarPosition = position();
+  const WbMatrix3 radarRotation = rotationMatrix();
+  const WbVector3 radarAxis = radarRotation * WbVector3(1.0, 0.0, 0.0);
+  const WbAffinePlane radarPlane(radarRotation * WbVector3(0.0, 0.0, 1.0), radarAxis);
+  const WbAffinePlane *frustumPlanes =
+    WbObjectDetection::computeFrustumPlanes(this, verticalFieldOfView(), horizontalFieldOfView(), maxRange(), true);
 
   // loop for each possible target to check if it is visible
   QList<WbSolid *> targets = WbWorld::instance()->radarTargetSolids();
@@ -433,9 +433,8 @@ void WbRadar::computeTargets(bool finalSetup, bool needCollisionDetection) {
     // create target
     WbRadarTarget *generatedTarget = new WbRadarTarget(this, target, needCollisionDetection, maxRange());
     if (finalSetup) {
-      bool valid = computeTarget(radarPosition, radarRotation, radarInverseRotation, radarAxis, radarPlane, frustumPlanes,
-                                 generatedTarget, false);
-      if (!valid) {
+      if (!generatedTarget->isContainedInFrustum(frustumPlanes) ||
+          !setTargetProperties(radarPosition, radarRotation, radarAxis, radarPlane, generatedTarget)) {
         delete generatedTarget;
         continue;
       }
@@ -446,17 +445,11 @@ void WbRadar::computeTargets(bool finalSetup, bool needCollisionDetection) {
   delete[] frustumPlanes;
 }
 
-bool WbRadar::computeTarget(const WbVector3 &radarPosition, const WbMatrix3 &radarRotation,
-                            const WbMatrix3 &radarInverseRotation, const WbVector3 &radarAxis, const WbAffinePlane &radarPlane,
-                            const WbAffinePlane *frustumPlanes, WbRadarTarget *radarTarget, bool fromRayUpdate) {
+bool WbRadar::setTargetProperties(const WbVector3 &radarPosition, const WbMatrix3 &radarRotation, const WbVector3 &radarAxis,
+                                  const WbAffinePlane &radarPlane, WbRadarTarget *radarTarget) {
   assert(radarTarget);
 
-  if (!fromRayUpdate) {
-    if (!radarTarget->computeObject(radarPosition, radarRotation, radarInverseRotation, frustumPlanes))
-      return false;
-  }
-
-  const WbVector3 targetPosition = radarTarget->object()->matrix().translation();
+  const WbVector3 targetPosition = radarTarget->object()->position();
   const WbVector3 targetToRadarVector = targetPosition - radarPosition;
 
   double distance = radarTarget->objectRelativePosition().length() + mRangeNoise->value() * WbRandom::nextGaussian();
@@ -531,9 +524,8 @@ bool WbRadar::refreshSensorIfNeeded() {
     // rays can be created at the end of the step when all the body positions
     // are up-to-date
     computeTargets(true, false);
-
-  // post process targets
-  if (mOcclusion->value())
+  else
+    // post process targets
     removeOccludedTargets();
 
   if (mCellDistance->value() > 0.0)

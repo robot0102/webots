@@ -1,7 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
-# documentation url: https://www.cyberbotics.com/doc/guide/robotis-op2
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/robots/robotis/darwin-op/protos/Darwin-op.proto
+# keywords: robot/legged
 # Robotis' DARwIn-OP is an open platform, miniature humanoid robot used for research, education and outreach.
 # The DARwIn-OP model contains principally:
 # - the 20 DOF
@@ -12,12 +13,15 @@
 # - realistic physics
 # template language: javascript
 
+EXTERNPROTO "webots://projects/joints/protos/HingeJointWithBacklash.proto"
+
 PROTO Darwin-op [
-  field SFVec3f    translation     0 0 0.227                  # Is `Transform.translation`.
-  field SFRotation rotation        0 0 1 0                    # Is `Transform.rotation`.
+  field SFVec3f    translation     0 0 0.227                  # Is `Pose.translation`.
+  field SFRotation rotation        0 0 1 0                    # Is `Pose.rotation`.
   field SFString   name            "DARwIn-OP"                # Is `Solid.name`.
   field SFString   controller      "motion_player"            # Is `Robot.controller`.
   field MFString   controllerArgs  []                         # Is `Robot.controllerArgs`.
+  field SFString   window          "<generic>"                # Is `Robot.window`.
   field SFString   customData      ""                         # Is `Robot.customData`.
   field SFBool     supervisor      FALSE                      # Is `Robot.supervisor`.
   field SFBool     synchronization TRUE                       # Is `Robot.synchronization`.
@@ -28,7 +32,6 @@ PROTO Darwin-op [
   field SFInt32    cameraHeight    120                        # Is `Camera.height`.
   field SFNode     jersey          NULL                       # Extends the robot with a jersey: typically RobotisJersey.proto.
   field SFInt32    channel         0                          # Defines the channel for the `Emitter` and `Receiver` devices.
-  field SFBool     showWindow      FALSE                      # Is `Robot.showWindow`.
   field SFBool     backlash        FALSE                      # Enables backlash on all joints.
   field MFNode     bodySlot        []                         # Extends the robot with new nodes in the body slot.
   field MFNode     headSlot        []                         # Extends the robot with new nodes in the head slot.
@@ -66,7 +69,7 @@ PROTO Darwin-op [
       DEF BODY_SLOT Group {
         children IS bodySlot
       }
-      Transform {
+      Pose {
         rotation 0.5774 0.5773 0.5773 2.0944
         children [
           DEF JERSEY_SLOT Slot {
@@ -75,7 +78,7 @@ PROTO Darwin-op [
           }
         ]
       }
-      Transform {
+      Pose {
         rotation 0.5774 0.5773 0.5773 2.0944
         children [
           DEF DBodyShape Shape {
@@ -285,7 +288,7 @@ PROTO Darwin-op [
                   endPoint Solid {
                     rotation -1 0 0 -0.5954
                     children [
-                      DEF HEAD_SLOT Transform {
+                      DEF HEAD_SLOT Pose {
                         translation 0 0.022 -0.012
                         children IS headSlot
                       }
@@ -405,7 +408,7 @@ PROTO Darwin-op [
                         gradual TRUE
                       }
                     ]
-                    boundingObject Transform {
+                    boundingObject Pose {
                       translation 0 0.022 -0.012
                       children [
                         Capsule {
@@ -428,7 +431,7 @@ PROTO Darwin-op [
                 }
             ]
             name "neck"
-            boundingObject Transform {
+            boundingObject Pose {
               translation 0 -0.009 0
               children [
                 Box {
@@ -754,7 +757,7 @@ PROTO Darwin-op [
                                                         ]
                                                       }
                                                     ]
-                                                    boundingObject Transform {
+                                                    boundingObject Pose {
                                                       translation 0.011 -0.027 -0.001
                                                       children [
                                                         Box {
@@ -775,7 +778,7 @@ PROTO Darwin-op [
                                                   }
                                                 }
                                             ]
-                                            boundingObject Transform {
+                                            boundingObject Pose {
                                               translation 0 0.01 -0.0205
                                               children [
                                                 Box {
@@ -798,7 +801,7 @@ PROTO Darwin-op [
                                     ]
                                     boundingObject Group {
                                       children [
-                                        Transform {
+                                        Pose {
                                           translation 0 -0.058 -0.001
                                           children [
                                             Box {
@@ -806,7 +809,7 @@ PROTO Darwin-op [
                                             }
                                           ]
                                         }
-                                        Transform {
+                                        Pose {
                                           translation 0 -0.02 0.016
                                           rotation 1 0 0 0.04
                                           children [
@@ -830,7 +833,7 @@ PROTO Darwin-op [
                                   }
                                 }
                             ]
-                            boundingObject Transform {
+                            boundingObject Pose {
                               translation 0 -0.058 0.006
                               children [
                                 Box {
@@ -851,7 +854,7 @@ PROTO Darwin-op [
                           }
                         }
                     ]
-                    boundingObject Transform {
+                    boundingObject Pose {
                       translation 0 -0.0105 -0.023
                       children [
                         Box {
@@ -873,7 +876,7 @@ PROTO Darwin-op [
                 }
             ]
             name "pelvYL"
-            boundingObject Transform {
+            boundingObject Pose {
               translation 0 0.017 0.001
               children [
                 Box {
@@ -1195,7 +1198,7 @@ PROTO Darwin-op [
                                                         ]
                                                       }
                                                     ]
-                                                    boundingObject Transform {
+                                                    boundingObject Pose {
                                                       translation -0.011 -0.027 -0.001
                                                       children [
                                                         Box {
@@ -1216,7 +1219,7 @@ PROTO Darwin-op [
                                                   }
                                                 }
                                             ]
-                                            boundingObject Transform {
+                                            boundingObject Pose {
                                               translation 0 0.01 -0.0205
                                               children [
                                                 Box {
@@ -1239,7 +1242,7 @@ PROTO Darwin-op [
                                     ]
                                     boundingObject Group {
                                       children [
-                                        Transform {
+                                        Pose {
                                           translation 0 -0.058 -0.001
                                           children [
                                             Box {
@@ -1247,7 +1250,7 @@ PROTO Darwin-op [
                                             }
                                           ]
                                         }
-                                        Transform {
+                                        Pose {
                                           translation 0 -0.02 0.016
                                           rotation 1 0 0 0.04
                                           children [
@@ -1271,7 +1274,7 @@ PROTO Darwin-op [
                                   }
                                 }
                             ]
-                            boundingObject Transform {
+                            boundingObject Pose {
                               translation 0 -0.058 0.006
                               children [
                                 Box {
@@ -1292,7 +1295,7 @@ PROTO Darwin-op [
                           }
                         }
                     ]
-                    boundingObject Transform {
+                    boundingObject Pose {
                       translation 0 -0.0105 -0.023
                       children [
                         Box {
@@ -1314,7 +1317,7 @@ PROTO Darwin-op [
                 }
             ]
             name "pelvYR"
-            boundingObject Transform {
+            boundingObject Pose {
               translation 0 0.017 0.001
               children [
                 Box {
@@ -1504,7 +1507,7 @@ PROTO Darwin-op [
                                 ]
                               }
                             ]
-                            boundingObject Transform {
+                            boundingObject Pose {
                               translation 0.0075 -0.073 -0.016
                               children [
                                 Box {
@@ -1527,7 +1530,7 @@ PROTO Darwin-op [
                     ]
                     boundingObject Group {
                       children [
-                        Transform {
+                        Pose {
                           translation 0 -0.019 0
                           children [
                             Box {
@@ -1535,7 +1538,7 @@ PROTO Darwin-op [
                             }
                           ]
                         }
-                        Transform {
+                        Pose {
                           translation 0 -0.06 0.003
                           children [
                             Box {
@@ -1559,7 +1562,7 @@ PROTO Darwin-op [
                 }
             ]
             name "shoulderL"
-            boundingObject Transform {
+            boundingObject Pose {
               translation -0.009 -0.0065 0
               rotation 0 0 1 -0.785398
               children [
@@ -1750,7 +1753,7 @@ PROTO Darwin-op [
                                 ]
                               }
                             ]
-                            boundingObject Transform {
+                            boundingObject Pose {
                               translation -0.0075 -0.073 -0.016
                               children [
                                 Box {
@@ -1773,7 +1776,7 @@ PROTO Darwin-op [
                     ]
                     boundingObject Group {
                       children [
-                        Transform {
+                        Pose {
                           translation 0 -0.019 0
                           children [
                             Box {
@@ -1781,7 +1784,7 @@ PROTO Darwin-op [
                             }
                           ]
                         }
-                        Transform {
+                        Pose {
                           translation 0 -0.06 0.003
                           children [
                             Box {
@@ -1805,7 +1808,7 @@ PROTO Darwin-op [
                 }
             ]
             name "shoulderR"
-            boundingObject Transform {
+            boundingObject Pose {
               translation 0.009 -0.0065 0
               rotation 0 0 1 0.785398
               children [
@@ -1826,7 +1829,7 @@ PROTO Darwin-op [
             }
           }
         }
-      DEF DHeadBackLED Transform {
+      DEF DHeadBackLED Pose {
         rotation 0.5774 0.5773 0.5773 2.0944
         %< if (has_jersey) { >%
           translation -0.056 -0.01 -0.01
@@ -1847,7 +1850,7 @@ PROTO Darwin-op [
           }
         ]
       }
-      DEF DEyeBackLED Transform {
+      DEF DEyeBackLED Pose {
         rotation 0.5774 0.5773 0.5773 2.0944
         %< if (has_jersey) { >%
           translation -0.056 -0.015 -0.01
@@ -1871,7 +1874,7 @@ PROTO Darwin-op [
     ]
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           rotation 0.5774 0.5773 0.5773 2.0944
           translation -0.025 0 -0.059
           children [
@@ -1880,7 +1883,7 @@ PROTO Darwin-op [
             }
           ]
         }
-        Transform {
+        Pose {
           rotation 0.5774 0.5773 0.5773 2.0944
           translation -0.038 0 -0.029
           children [
@@ -1889,7 +1892,7 @@ PROTO Darwin-op [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -0.027 0 -0.006
           rotation 0.5957 0.5957 0.5389 2.1531
           children [
@@ -1898,7 +1901,7 @@ PROTO Darwin-op [
             }
           ]
         }
-        Transform {
+        Pose {
           rotation 0.5774 0.5773 0.5773 2.0944
           translation 0.028 0 -0.042
           children [
@@ -1924,12 +1927,13 @@ PROTO Darwin-op [
     }
     controller IS controller
     controllerArgs IS controllerArgs
+    window IS window
     customData IS customData
     supervisor IS supervisor
     synchronization IS synchronization
     selfCollision IS selfCollision
-    showWindow IS showWindow
-    window "robotis-op2_window"
-    remoteControl "robotis-op2_tcpip"
+    %< if (fields.window.value != "<generic>" && fields.window.value != "<none>") { >%
+      remoteControl "robotis-op2_tcpip"
+    %< } >%
   }
 }

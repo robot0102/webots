@@ -1,4 +1,12 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "webots://projects/robots/adept/pioneer3/protos/Pioneer3dx.proto"
+EXTERNPROTO "webots://projects/robots/adept/pioneer3/protos/Pioneer3Gripper.proto"
+EXTERNPROTO "webots://projects/objects/balls/protos/Ball.proto"
+
 WorldInfo {
   info [
     "Pioneer 3DX with its gripper (Adept Mobile Robots)"
@@ -39,12 +47,12 @@ Ball {
 }
 DEF RED_TEE Solid {
   translation -0.0376035 0.618808 0
-  rotation 1 0 0 1.5708
   children [
     Group {
       children [
-        DEF PITCH_PLATE Transform {
-          translation 0 0.0465 0
+        DEF PITCH_PLATE Pose {
+          translation 0 0 0.0465
+          rotation 1 0 0 1.5708
           children [
             Shape {
               appearance PBRAppearance {
@@ -58,9 +66,8 @@ DEF RED_TEE Solid {
             }
           ]
         }
-        Transform {
-          translation 0 0.02 0
-          rotation 1 0 0 1.5708
+        Pose {
+          translation 0 0 0.02
           children [
             Shape {
               appearance DEF PITCH_APPEARANCE PBRAppearance {
@@ -75,9 +82,9 @@ DEF RED_TEE Solid {
             }
           ]
         }
-        Transform {
-          translation 0 0.028 0
-          rotation 9.381857096790023e-07 0.7071067811862364 -0.7071067811862364 3.14159
+        Pose {
+          translation 0 0 0.028
+          rotation 1 0 0 3.14159
           children [
             Shape {
               appearance USE PITCH_APPEARANCE
@@ -95,12 +102,12 @@ DEF RED_TEE Solid {
   boundingObject USE PITCH_PLATE
 }
 DEF BLUE_TEE Solid {
-  rotation 1 0 0 1.568
   children [
     Group {
       children [
-        DEF PITCH_PLATE Transform {
-          translation 0 0.0465 0
+        DEF PITCH_PLATE Pose {
+          translation 0 0 0.0465
+          rotation 1 0 0 1.5708
           children [
             Shape {
               appearance PBRAppearance {
@@ -114,9 +121,8 @@ DEF BLUE_TEE Solid {
             }
           ]
         }
-        Transform {
-          translation 0 0.02 0
-          rotation 1 0 0 1.5708
+        Pose {
+          translation 0 0 0.02
           children [
             Shape {
               appearance DEF PITCH_APPEARANCE PBRAppearance {
@@ -131,9 +137,9 @@ DEF BLUE_TEE Solid {
             }
           ]
         }
-        Transform {
-          translation 0 0.028 0
-          rotation 0 0.7071067811862364 -0.7071067811862364 3.14159
+        Pose {
+          translation 0 0 0.028
+          rotation 0 1 0 3.14159
           children [
             Shape {
               appearance USE PITCH_APPEARANCE

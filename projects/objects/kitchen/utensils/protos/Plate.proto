@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/kitchen/utensils/protos/Plate.proto
+# keywords: household/kitchen
 # A customizable (dimensions, texture, etc. ) plate.
 # template language: javascript
 
@@ -8,7 +10,7 @@ PROTO Plate [
   field SFVec3f    translation 0 0 0
   field SFRotation rotation    0 0 1 0
   field SFString   name        "plate"
-  field MFString   textureUrl  "webots://projects/objects/kitchen/utensils/protos/textures/floral_plate.jpg"  # Defines the textures used for of the plate.
+  field MFString   textureUrl  "textures/floral_plate.jpg"  # Defines the textures used for of the plate.
   field SFFloat    height      0.01                         # Defines the height of the plate.
   field SFFloat    radius      0.11                         # Defines the radius of the plate.
   field SFFloat    mass        0.3                          # Defines the mass of the plate in kg.
@@ -68,7 +70,7 @@ PROTO Plate [
     model "plate"
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0 0 %<= 0.2 * height >%
           children [
             Cylinder {
@@ -77,7 +79,7 @@ PROTO Plate [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0 0 %<= 0.8 * height >%
           children [
             Cylinder {

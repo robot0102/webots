@@ -1,4 +1,9 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "webots://tests/default/protos/TestSuiteEmitter.proto"
+EXTERNPROTO "webots://tests/default/protos/TestSuiteSupervisor.proto"
+
 WorldInfo {
   coordinateSystem "NUE"
   lineScale 0.3
@@ -23,7 +28,7 @@ Floor {
 DEF BLUE_ROBOT Robot {
   translation -0.25 0.025 0
   children [
-    DEF BASE_SHAPE Transform {
+    DEF BASE_SHAPE Pose {
       rotation 1 0 0 -1.57079632679
       children [
         Shape {
@@ -70,7 +75,7 @@ DEF BLUE_ROBOT Robot {
       endPoint Solid {
         translation 0 0.06 0
         children [
-          DEF THICK_CYLINDER_SHAPE Transform {
+          DEF THICK_CYLINDER_SHAPE Pose {
             rotation 1 0 0 -1.57079632679
             children [
               Shape {

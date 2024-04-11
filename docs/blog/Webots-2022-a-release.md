@@ -12,7 +12,7 @@ Here we are going to present some of the main new features, but for a comprehens
 
 ## Conversion to FLU/ENU
 
-### What Is FLU/ENU?
+### What is FLU/ENU?
 
 **FLU and ENU are conventions for axis systems.**
 
@@ -26,7 +26,7 @@ Before, Webots was using **NUE** as the global coordinate system and we switched
 In addition, **the object's axis system of Webots is now FLU** (_x-**F**orward, y-**L**eft, z-**U**p_). Whereas before there was no real preferred object's axis system.
 
 %figure "On the left, Webots R2021b, on the right Webots R2022a"
-![Axis illustration](images/flu-enu.png)
+![Axis illustration](images/flu-enu.thumbnail.jpg)
 %end
 
 ### Why These Changes?
@@ -42,7 +42,7 @@ We worked hard to convert all PROTOs and worlds distributed with Webots for you,
 A mechanism of backward compatibility has been implemented directly in Webots.
 Unfortunately, it was not possible to make it work in every cases.
 It will try to convert worlds and PROTOs at runtime, but PROTO changes cannot be saved.
-We also wrote a [guide](https://github.com/cyberbotics/webots/wiki/How-to-adapt-your-world-or-PROTO-to-Webots-R2022a) to help you convert your own PROTOs and worlds to use them in Webots R2022a.
+We also wrote a [guide](https://cyberbotics.com/doc/guide/from-2021b-to-2022a) to help you convert your own PROTOs and worlds to use them in Webots R2022a.
 
 We are aware that it is a major change and it can be annoying to convert your worlds and PROTOs to the new format.
 However, it is a worthwhile effort, especially if you work with ROS.
@@ -55,7 +55,7 @@ A new node, the [Skin](../reference/skin.md) node has been introduced to simulat
 This is particularly useful to simulate humans or animals.
 
 %figure "Skin examples"
-![Skin examples](images/skin.png)
+![Skin examples](images/skin.thumbnail.jpg)
 %end
 
 ---

@@ -1,4 +1,9 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
 WorldInfo {
 }
 Viewpoint {
@@ -73,7 +78,7 @@ DEF WALL Solid {
   name "wall"
   boundingObject Group {
     children [
-      Transform {
+      Pose {
         translation 0 -0.59 0.025
         children [
           DEF WALL_SHAPE1 Shape {
@@ -84,13 +89,13 @@ DEF WALL Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0.59 0.025
         children [
           USE WALL_SHAPE1
         ]
       }
-      Transform {
+      Pose {
         translation -0.89 0 0.025
         rotation 0 0 1 1.57
         children [
@@ -102,7 +107,7 @@ DEF WALL Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0.89 0 0.025
         rotation 0 0 1 1.57
         children [
@@ -117,9 +122,9 @@ E-puck {
   translation 0 0.44 0
   rotation 0 0 1 6.48849
   controller "beginner_linear_camera"
+  window "botstudio"
   camera_width 40
   camera_height 1
   camera_rotation 0 1 0 0.47
   camera_noise 0.04
-  window "botstudio"
 }

@@ -1,15 +1,21 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
-# documentation url: https://www.cyberbotics.com/doc/guide/altino
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/robots/saeon/protos/Altino.proto
+# keywords: robot/wheeled
 # The "ALTINO System" is a robot platform designed for education. It is a four-wheeled robot based on an Ackermann vehicle frame.
 
+EXTERNPROTO "webots://projects/vehicles/protos/abstract/Car.proto"
+EXTERNPROTO "AltinoBodyMesh.proto"
+EXTERNPROTO "AltinoWheel.proto"
+
 PROTO Altino [
-  field SFVec3f    translation     0 0 0.022               # Is `Transform.translation`.
-  field SFRotation rotation        0 0 1 0                 # Is `Transform.rotation`.
+  field SFVec3f    translation     0 0 0.022               # Is `Pose.translation`.
+  field SFRotation rotation        0 0 1 0                 # Is `Pose.rotation`.
   field SFString   name            "vehicle"               # Is `Solid.name`.
   field SFString   controller      "vehicle_driver_altino" # Is `Robot.controller`.
   field MFString   controllerArgs  []                      # Is `Robot.controllerArgs`.
+  field SFString   window          "<generic>"             # Is `Robot.window`.
   field SFBool     synchronization TRUE                    # Is `Robot.synchronization`.
   field SFColor    color           0.3 0.3 0.7             # Is `Material.diffuseColor`.
 ]
@@ -21,6 +27,7 @@ PROTO Altino [
     model "Altino"
     controller IS controller
     controllerArgs IS controllerArgs
+    window IS window
     synchronization IS synchronization
     trackFront                     0.08
     trackRear                      0.08
@@ -110,7 +117,7 @@ PROTO Altino [
         children [
           Group {
             children [
-              Transform {
+              Pose {
                 rotation -0.5773 0.5773 0.5773 -2.0944
                 translation 0.071 0 0.024
                 children [
@@ -167,7 +174,7 @@ PROTO Altino [
         children [
           Group {
             children [
-              Transform {
+              Pose {
                 rotation -0.5773 0.5773 0.5773 -2.0944
                 translation 0.071 0 0.024
                 children [
@@ -211,7 +218,7 @@ PROTO Altino [
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0.071 0 0.024
         rotation -0.57735 0.57735 0.57735 -2.09439
         children [
@@ -228,7 +235,7 @@ PROTO Altino [
     ]
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0.03 0 0.017
           children [
             Box {
@@ -236,7 +243,7 @@ PROTO Altino [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0.052 0 0.015
           children [
             Box {
@@ -244,7 +251,7 @@ PROTO Altino [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0.052 0 0.015
           children [
             Box {

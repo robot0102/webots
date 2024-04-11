@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,6 +47,7 @@ namespace webots {
   class Skin;
   class Speaker;
   class TouchSensor;
+  class VacuumGripper;
 
   class Robot {
   public:
@@ -64,10 +65,11 @@ namespace webots {
     } UserInputEvent;
 
     Robot();
-    static Robot *internalGetInstance();
     virtual ~Robot();
 
     virtual int step(int duration);
+    int stepBegin(int duration);
+    int stepEnd();
     UserInputEvent waitForUserInputEvent(UserInputEvent event_type, int timeout);
     std::string getName() const;
     std::string getUrdf(std::string prefix = "") const;
@@ -85,7 +87,6 @@ namespace webots {
     int getNumberOfDevices() const;
     Device *getDeviceByIndex(int index);
     Device *getDevice(const std::string &name);
-    int getType() const;
 
     virtual void batterySensorEnable(int samplingPeriod);
     virtual void batterySensorDisable();
@@ -119,6 +120,7 @@ namespace webots {
     Skin *getSkin(const std::string &name);
     Speaker *getSpeaker(const std::string &name);
     TouchSensor *getTouchSensor(const std::string &name);
+    VacuumGripper *getVacuumGripper(const std::string &name);
 
     void *windowCustomFunction(void *arg);
     void wwiSend(const char *data, int size);
@@ -138,6 +140,7 @@ namespace webots {
     static int getDeviceTagFromName(const std::string &name);
 
   protected:
+    static Robot *cInstance;
     virtual Accelerometer *createAccelerometer(const std::string &name) const;
     virtual Altimeter *createAltimeter(const std::string &name) const;
     virtual Brake *createBrake(const std::string &name) const;
@@ -162,9 +165,9 @@ namespace webots {
     virtual Skin *createSkin(const std::string &name) const;
     virtual Speaker *createSpeaker(const std::string &name) const;
     virtual TouchSensor *createTouchSensor(const std::string &name) const;
+    virtual VacuumGripper *createVacuumGripper(const std::string &name) const;
 
   private:
-    static Robot *cInstance;
     Keyboard *mKeyboard;
     Joystick *mJoystick;
     Mouse *mMouse;

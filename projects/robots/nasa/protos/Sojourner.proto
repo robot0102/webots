@@ -1,15 +1,19 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
-# documentation url: https://www.cyberbotics.com/doc/guide/sojourner
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/robots/nasa/protos/Sojourner.proto
+# keywords: robot/wheeled
 # Sojourner is the NASA Pathfinder robotic rover that landed on 1997 in the Ares Vallis region, and explored Mars for around three months.
 
+EXTERNPROTO "webots://projects/appearances/protos/SolarCell.proto"
+
 PROTO Sojourner [
-  field SFVec3f    translation     0 0 0       # Is `Transform.translation`.
-  field SFRotation rotation        0 0 1 0     # Is `Transform.rotation`.
+  field SFVec3f    translation     0 0 0.237   # Is `Pose.translation`.
+  field SFRotation rotation        0 0 1 0     # Is `Pose.rotation`.
   field SFString   name            "Sojourner" # Is `Solid.name`.
   field SFString   controller      "sojourner" # Is `Robot.controller`.
   field MFString   controllerArgs  []          # Is `Robot.controllerArgs`.
+  field SFString   window         "<generic>"  # Is `Robot.window`.
   field SFString   customData      ""          # Is `Robot.customData`.
   field SFBool     supervisor      FALSE       # Is `Robot.supervisor`.
   field SFBool     synchronization TRUE        # Is `Robot.synchronization`.
@@ -21,6 +25,7 @@ PROTO Sojourner [
     rotation IS rotation
     controller IS controller
     controllerArgs IS controllerArgs
+    window IS window
     customData IS customData
     supervisor IS supervisor
     synchronization IS synchronization
@@ -32,7 +37,7 @@ PROTO Sojourner [
       DEF Corps Transform {
         scale 0.001 0.001 0.001
         children [
-          DEF chassis Transform {
+          DEF chassis Pose {
             children [
               Shape {
                 appearance PBRAppearance {
@@ -40,22 +45,22 @@ PROTO Sojourner [
                   roughness 0.2
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/nasa/protos/textures/gold_leaf_base_color.jpg"
+                      "textures/gold_leaf_base_color.jpg"
                     ]
                   }
                   roughnessMap ImageTexture {
                     url [
-                      "webots://projects/robots/nasa/protos/textures/gold_leaf_roughness.jpg"
+                      "textures/gold_leaf_roughness.jpg"
                     ]
                   }
                   normalMap ImageTexture {
                     url [
-                      "webots://projects/robots/nasa/protos/textures/gold_leaf_normal.jpg"
+                      "textures/gold_leaf_normal.jpg"
                     ]
                   }
                   occlusionMap ImageTexture {
                     url [
-                      "webots://projects/robots/nasa/protos/textures/gold_leaf_occlusion.jpg"
+                      "textures/gold_leaf_occlusion.jpg"
                     ]
                   }
                 }
@@ -75,7 +80,7 @@ PROTO Sojourner [
               }
             ]
           }
-          DEF cam Transform {
+          DEF cam Pose {
             translation -285.0 35.0 0
             children [
               Shape {
@@ -83,7 +88,7 @@ PROTO Sojourner [
                   roughness 0.5
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/nasa/protos/textures/sojourner_metal.jpg"
+                      "textures/sojourner_metal.jpg"
                     ]
                   }
                 }
@@ -101,7 +106,7 @@ PROTO Sojourner [
               }
             ]
           }
-          DEF antenne Transform {
+          DEF antenne Pose {
             translation 230.0 -180.0 360.0
             children [
               Shape {
@@ -123,7 +128,7 @@ PROTO Sojourner [
               }
             ]
           }
-          DEF panneau Transform {
+          DEF panneau Pose {
             translation -25.0 0 80.0
             children [
               Shape {
@@ -154,7 +159,7 @@ PROTO Sojourner [
               }
             ]
           }
-          DEF capteur Transform {
+          DEF capteur Pose {
             translation -20.0 0 40.0
             children [
               Shape {
@@ -177,7 +182,7 @@ PROTO Sojourner [
               }
             ]
           }
-          DEF suppAV Transform {
+          DEF suppAV Pose {
             translation -174.0 0 60.0
             children [
               Shape {
@@ -196,7 +201,7 @@ PROTO Sojourner [
               }
             ]
           }
-          DEF parchoc Transform {
+          DEF parchoc Pose {
             translation -25.0 0 6.28
             children [
               Shape {
@@ -345,7 +350,7 @@ PROTO Sojourner [
                                 ]
                               }
                             ]
-                            boundingObject DEF BOUND_WHEEL Transform {
+                            boundingObject DEF BOUND_WHEEL Pose {
                               rotation 0 0 1 1.57
                               children [
                                 Cylinder {
@@ -382,7 +387,7 @@ PROTO Sojourner [
                         }
                       ]
                       name "BackLeftArm"
-                      boundingObject DEF BOUND_ARM_AR Transform {
+                      boundingObject DEF BOUND_ARM_AR Pose {
                         translation 0.01 -0.03 -0.05
                         children [
                           Box {
@@ -477,7 +482,7 @@ PROTO Sojourner [
                     }
                   }
                 ]
-                boundingObject Transform {
+                boundingObject Pose {
                   translation 0.08 0 0
                   children [
                     Box {
@@ -522,7 +527,7 @@ PROTO Sojourner [
           name "BackLeftBogie"
           boundingObject DEF BOUND_BOGIE Group {
             children [
-              Transform {
+              Pose {
                 translation 0.09 -0.035 -0.005
                 rotation 0 0 1 5.78319
                 children [
@@ -701,7 +706,7 @@ PROTO Sojourner [
                     }
                   }
                 ]
-                boundingObject DEF BOUND_ARM_AV Transform {
+                boundingObject DEF BOUND_ARM_AV Pose {
                   translation 0 -0.03 -0.05
                   children [
                     Box {
@@ -717,7 +722,7 @@ PROTO Sojourner [
             }
           ]
           name "FrontLeftBogie"
-          boundingObject Transform {
+          boundingObject Pose {
             translation -0.06 -0.05 0.015
             rotation 0 0 1 0.7
             children [
@@ -861,7 +866,7 @@ PROTO Sojourner [
                         }
                       ]
                       name "BackRightArm"
-                      boundingObject Transform {
+                      boundingObject Pose {
                         translation 0.01 -0.03 0.05
                         children [
                           Box {
@@ -981,7 +986,7 @@ PROTO Sojourner [
                     ]
                   }
                 ]
-                boundingObject Transform {
+                boundingObject Pose {
                   translation 0.08 0 0
                   children [
                     Box {
@@ -1026,7 +1031,7 @@ PROTO Sojourner [
           name "BackRightBogie"
           boundingObject Group {
             children [
-              Transform {
+              Pose {
                 translation 0.08 -0.025 -0.005
                 rotation 0 0 1 5.78319
                 children [
@@ -1205,7 +1210,7 @@ PROTO Sojourner [
                     ]
                   }
                 ]
-                boundingObject Transform {
+                boundingObject Pose {
                   translation 0 -0.03 0.05
                   children [
                     Box {
@@ -1221,7 +1226,7 @@ PROTO Sojourner [
             }
           ]
           name "FrontRightBogie"
-          boundingObject Transform {
+          boundingObject Pose {
             translation -0.06 -0.05 -0.015
             rotation 0 0 1 0.7
             children [
@@ -1246,7 +1251,7 @@ PROTO Sojourner [
     ]
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0 0 0.01
           children [
             Box {
@@ -1254,7 +1259,7 @@ PROTO Sojourner [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -0.025 0 0.08
           children [
             Box {
@@ -1262,7 +1267,7 @@ PROTO Sojourner [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -0.33 0 0.014
           rotation 0 1 0 1.5708
           children [

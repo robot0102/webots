@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,7 +31,7 @@ WbSolidReference::WbSolidReference(WbTokenizer *tokenizer) : WbBaseNode("SolidRe
   init();
 }
 
-WbSolidReference::WbSolidReference(const WbSolidReference &other) : WbBaseNode(other) {
+WbSolidReference::WbSolidReference(const WbSolidReference &other) : WbBaseNode(other), mSolid() {
   init();
 }
 
@@ -55,15 +55,15 @@ void WbSolidReference::postFinalize() {
 void WbSolidReference::updateName() {
   WbSolid *const ts = topSolid();
   assert(ts);
-  const QString &name = mName->value();
-  const bool linkToStaticEnvironment = name == STATIC_ENVIRONMENT;
+  const QString &nameString = mName->value();
+  const bool linkToStaticEnvironment = nameString == STATIC_ENVIRONMENT;
   if (!linkToStaticEnvironment)
-    mSolid = QPointer<WbSolid>(ts->findSolid(name, upperSolid()));
+    mSolid = QPointer<WbSolid>(ts->findSolid(nameString, upperSolid()));
   else
     mSolid.clear();
-  if (!name.isEmpty() && !linkToStaticEnvironment && mSolid.isNull())
+  if (!nameString.isEmpty() && !linkToStaticEnvironment && mSolid.isNull())
     parsingWarn(
-      tr("SolidReference has an invalid '%1' name or refers to its closest upper solid, which is prohibited.").arg(name));
+      tr("SolidReference has an invalid '%1' name or refers to its closest upper solid, which is prohibited.").arg(nameString));
 }
 
 QList<const WbBaseNode *> WbSolidReference::findClosestDescendantNodesWithDedicatedWrenNode() const {
@@ -71,4 +71,10 @@ QList<const WbBaseNode *> WbSolidReference::findClosestDescendantNodesWithDedica
   if (mSolid)
     list << mSolid;
   return list;
+}
+
+QString WbSolidReference::endPointName() const {
+  if (mSolid)
+    return "\"" + mName->value() + "\"";
+  return QString();
 }

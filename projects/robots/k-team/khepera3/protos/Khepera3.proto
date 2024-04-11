@@ -1,15 +1,21 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
-# documentation url: https://www.cyberbotics.com/doc/guide/khepera3
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/robots/k-team/khepera3/protos/Khepera3.proto
+# keywords: robot/wheeled
 # The "Khepera III" robot is a two-wheeled robot produced by K-Team.
 
+EXTERNPROTO "Khepera3_DistanceSensor.proto"
+EXTERNPROTO "Khepera3_GroundSensor.proto"
+EXTERNPROTO "Khepera3_USSensor.proto"
+
 PROTO Khepera3 [
-  field SFVec3f    translation     0 0 0         # Is `Transform.translation`.
-  field SFRotation rotation        0 0 1 0       # Is `Transform.rotation`.
+  field SFVec3f    translation     0 0 0         # Is `Pose.translation`.
+  field SFRotation rotation        0 0 1 0       # Is `Pose.rotation`.
   field SFString   name            "Khepera III" # Is `Solid.name`.
   field SFString   controller      "braitenberg" # Is `Robot.controller`.
   field MFString   controllerArgs  []            # Is `Robot.controllerArgs`.
+  field SFString   window          "<generic>"   # Is `Robot.window`.
   field SFString   customData      ""            # Is `Robot.customData`.
   field SFBool     supervisor      FALSE         # Is `Robot.supervisor`.
   field SFBool     synchronization TRUE          # Is `Robot.synchronization`.
@@ -24,13 +30,14 @@ PROTO Khepera3 [
     name IS name
     controller IS controller
     controllerArgs IS controllerArgs
+    window IS window
     customData IS customData
     supervisor IS supervisor
     synchronization IS synchronization
     children [
       Group {
         children [
-          Transform {
+          Pose {
             translation 0.004 0 0.0403
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -54,7 +61,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          Transform {
+          Pose {
             translation 0 0 0.0222
             rotation 0.577197 0.577197 0.577657 -2.093935
             children [
@@ -67,7 +74,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          Transform {
+          Pose {
             translation 0.0175 0 0.015
             rotation 0.000398 -1 -0.000398 1.570796
             children [
@@ -83,7 +90,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          DEF CONIC_FOOT Transform {
+          DEF CONIC_FOOT Pose {
             translation 0.0449 0 0.015
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -103,7 +110,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          DEF TOP Transform {
+          DEF TOP Pose {
             translation 0.0032 0 0.068
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -111,7 +118,7 @@ PROTO Khepera3 [
                 appearance PBRAppearance {
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/top.jpg"
+                      "textures/top.jpg"
                     ]
                   }
                 }
@@ -136,7 +143,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          DEF UPPER_BACK Transform {
+          DEF UPPER_BACK Pose {
             translation -0.0262 0 0.0568
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -144,27 +151,27 @@ PROTO Khepera3 [
                 appearance PBRAppearance {
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/upper_back_base_color.jpg"
+                      "textures/upper_back_base_color.jpg"
                     ]
                   }
                   roughnessMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/upper_back_roughness.jpg"
+                      "textures/upper_back_roughness.jpg"
                     ]
                   }
                   metalnessMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/upper_back_metalness.jpg"
+                      "textures/upper_back_metalness.jpg"
                     ]
                   }
                   normalMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/upper_back_normal.jpg"
+                      "textures/upper_back_normal.jpg"
                     ]
                   }
                   occlusionMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/upper_back_occlusion.jpg"
+                      "textures/upper_back_occlusion.jpg"
                     ]
                   }
                 }
@@ -189,7 +196,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          DEF MIDDLE_BACK Transform {
+          DEF MIDDLE_BACK Pose {
             translation -0.0384 0 0.0324
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -199,7 +206,7 @@ PROTO Khepera3 [
                   roughness 1
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/middle_back.jpg"
+                      "textures/middle_back.jpg"
                     ]
                   }
                 }
@@ -224,7 +231,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          DEF LOWER_BACK Transform {
+          DEF LOWER_BACK Pose {
             translation -0.05 0 0.0258
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -234,7 +241,7 @@ PROTO Khepera3 [
                   roughness 1
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/lower_back.jpg"
+                      "textures/lower_back.jpg"
                     ]
                   }
                 }
@@ -263,7 +270,7 @@ PROTO Khepera3 [
       }
       DEF TOP_PLATE Group {
         children [
-          Transform {
+          Pose {
             translation 0.0039 0 0.0716
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -287,7 +294,7 @@ PROTO Khepera3 [
               }
             ]
           }
-          DEF LOGO Transform {
+          DEF LOGO Pose {
             translation -0.026 0 0.0722
             rotation 0.57735 -0.57735 -0.57735 2.094395
             children [
@@ -297,7 +304,7 @@ PROTO Khepera3 [
                   roughness 0.4
                   baseColorMap ImageTexture {
                     url [
-                      "webots://projects/robots/k-team/khepera3/protos/textures/logo.png"
+                      "textures/logo.png"
                     ]
                   }
                 }
@@ -344,7 +351,7 @@ PROTO Khepera3 [
           translation 0 0.0458 0.0245
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
-            DEF WHEEL Transform {
+            DEF WHEEL Pose {
               rotation 0.577387 -0.577332 0.577332 -2.094339
               children [
                 Shape {
@@ -486,7 +493,7 @@ PROTO Khepera3 [
         type "serial"
         baudRate 57600
       }
-      DEF TURRET_SLOT Transform {
+      DEF TURRET_SLOT Pose {
         children IS turretSlot
       }
     ]
@@ -494,7 +501,7 @@ PROTO Khepera3 [
     contactMaterial IS bodyMaterial
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0.0449 0 0.006
           children [
             Sphere {
@@ -502,7 +509,7 @@ PROTO Khepera3 [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0.0035 0 0.042
           rotation 0 0 1 -1.570796
           children [

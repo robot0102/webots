@@ -11,9 +11,8 @@ import os
 import sys
 
 try:
-    includePath = os.environ.get("WEBOTS_HOME") + "/projects/samples/robotbenchmark/include"
-    includePath.replace('/', os.sep)
-    sys.path.append(includePath)
+    sys.path.append(os.path.join(os.path.normpath(os.environ.get("WEBOTS_HOME")), 'projects', 'samples', 'robotbenchmark',
+                                 'include'))
     from robotbenchmark import robotbenchmarkRecord
 except ImportError:
     sys.stderr.write("Warning: 'robotbenchmark' module not found.\n")
@@ -112,7 +111,7 @@ class MovingTarget():
 
         if distance < maxStep:
             self.trajectoryStep += 1
-            self.translation += vector
+            self.translation = [a + b for a, b in zip(self.translation, vector)]
             segmentChanged = True
         else:
             if math.isinf(self.rotationStep):
@@ -216,12 +215,13 @@ robot.wwiSendText("stop")
 timestep = int(robot.getBasicTimeStep())
 while robot.step(timestep) != -1:
     message = robot.wwiReceiveText()
-    if message:
+    while message:
         if message.startswith("record:"):
             record = robotbenchmarkRecord(message, "visual_tracking", hitRate)
             robot.wwiSendText(record)
             break
         elif message == "exit":
             break
+        message = robot.wwiReceiveText()
 
 robot.simulationSetMode(Supervisor.SIMULATION_MODE_PAUSE)

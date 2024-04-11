@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/buildings/protos/ResidentialBuildingWithRoundFront.proto
+# keywords: building/residential
 # A residential building with a rounded front face and optional boundingObject.
 # template language: javascript
 
@@ -50,27 +52,27 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_metalness.jpg"' >%
             ]
           }
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_normal.jpg"' >%
             ]
           }
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_wall_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -97,27 +99,27 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_metalness.jpg"' >%
             ]
           }
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_normal.jpg"' >%
             ]
           }
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_door_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -144,29 +146,29 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_metalness.jpg"' >%
             ]
           }
           %< if (type !== 'dark grey' && type !== 'dark braun') { >%
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_normal.jpg"' >%
             ]
           }
           %< } >%
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_frames_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -193,29 +195,29 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_metalness.jpg"' >%
             ]
           }
           %< if (type !== 'dark grey' && type !== 'dark braun') { >%
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_normal.jpg"' >%
             ]
           }
           %< } >%
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_windows_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -243,27 +245,27 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_metalness.jpg"' >%
             ]
           }
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_normal.jpg"' >%
             ]
           }
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_railling_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -290,27 +292,27 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_metalness.jpg"' >%
             ]
           }
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_normal.jpg"' >%
             ]
           }
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_stair_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -337,27 +339,27 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_metalness.jpg"' >%
             ]
           }
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_normal.jpg"' >%
             ]
           }
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_edges_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -384,27 +386,27 @@ PROTO ResidentialBuildingWithRoundFront [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_base_color.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_base_color.jpg"' >%
             ]
           }
           roughnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_roughness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_roughness.jpg"' >%
             ]
           }
           metalnessMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_metalness.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_metalness.jpg"' >%
             ]
           }
           normalMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_normal.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_normal.jpg"' >%
             ]
           }
           occlusionMap ImageTexture {
             url [
-              %<= '"webots://projects/objects/buildings/protos/textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_occlusion.jpg"' >%
+              %<= '"textures/residential_building_textures/residential_building_with_round_front_roof_' +  texture + '_occlusion.jpg"' >%
             ]
           }
         }
@@ -429,7 +431,7 @@ PROTO ResidentialBuildingWithRoundFront [
       }
     ]
     %< if (fields.enableBoundingObject.value) { >%
-    boundingObject Transform {
+    boundingObject Pose {
       translation 2.16 2.17 3.9
       rotation 0.57735 -0.57735 -0.57735 2.094395
       children [

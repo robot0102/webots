@@ -1,4 +1,9 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "webots://projects/objects/balls/protos/SoccerBall.proto"
+
 WorldInfo {
   info [
     "Example uses of assets download from a URL, including sounds, textures and meshes."
@@ -6,9 +11,9 @@ WorldInfo {
   title "Assets Download"
   contactProperties [
     ContactProperties {
-      bumpSound "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/sounds/bump.wav"
-      rollSound "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/sounds/roll.wav"
-      slideSound "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/sounds/slide.wav"
+      bumpSound "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/sounds/bump.wav"
+      rollSound "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/sounds/roll.wav"
+      slideSound "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/sounds/slide.wav"
     }
   ]
 }
@@ -18,40 +23,40 @@ Viewpoint {
 }
 Background {
   backUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_back.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_back.jpg"
   ]
   bottomUrl [
-    "webots://projects/default/worlds/textures/cubic/mountains_bottom.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_bottom.jpg"
   ]
   frontUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_front.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_front.jpg"
   ]
   leftUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_left.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_left.jpg"
   ]
   rightUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_right.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_right.jpg"
   ]
   topUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_top.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_top.jpg"
   ]
   backIrradianceUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_back.hdr"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_back.hdr"
   ]
   bottomIrradianceUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_bottom.hdr"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_bottom.hdr"
   ]
   frontIrradianceUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_front.hdr"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_front.hdr"
   ]
   leftIrradianceUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_left.hdr"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_left.hdr"
   ]
   rightIrradianceUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_right.hdr"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_right.hdr"
   ]
   topIrradianceUrl [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/textures/cubic/mountains_top.hdr"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/cubic/mountains_top.hdr"
   ]
 }
 TexturedBackgroundLight {
@@ -167,7 +172,7 @@ DEF MESH Transform {
       }
       geometry Mesh {
         url [
-          "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/meshes/suzanne.obj"
+          "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/meshes/suzanne.obj"
         ]
       }
     }
@@ -177,7 +182,7 @@ Robot {
   translation 0 -0.15 0
   rotation 0 0 1 1
   children [
-    Transform {
+    Pose {
       translation 0 0 0.0415
       children [
         Shape {
@@ -185,27 +190,27 @@ Robot {
             baseColor 0.8039 0.6745 0.5764
             baseColorMap DEF IMAGE_TEXTURE ImageTexture {
               url [
-                "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/appearances/protos/textures/varnished_pine/varnished_pine_base_color.jpg"
+                "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/varnished_pine/varnished_pine_base_color.jpg"
               ]
               filtering 5
             }
             roughnessMap ImageTexture {
               url [
-                "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/appearances/protos/textures/varnished_pine/varnished_pine_roughness.jpg"
+                "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/varnished_pine/varnished_pine_roughness.jpg"
               ]
               filtering 5
             }
             metalness 0
             normalMap ImageTexture {
               url [
-                "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/appearances/protos/textures/varnished_pine/varnished_pine_normal.jpg"
+                "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/varnished_pine/varnished_pine_normal.jpg"
               ]
               filtering 5
             }
             normalMapFactor 0.5
             occlusionMap ImageTexture {
               url [
-                "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/appearances/protos/textures/varnished_pine/varnished_pine_occlusion.jpg"
+                "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/varnished_pine/varnished_pine_occlusion.jpg"
               ]
               filtering 5
             }
@@ -226,7 +231,7 @@ Robot {
         RotationalMotor {
           name "left wheel motor"
           consumptionFactor 70
-          sound "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/sounds/rotational_motor.wav"
+          sound "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/sounds/rotational_motor.wav"
         }
         PositionSensor {
           name "left wheel sensor"
@@ -236,7 +241,7 @@ Robot {
         translation 0 0.045 0.025
         rotation 0 -1 0 4.98467
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -270,7 +275,7 @@ Robot {
         RotationalMotor {
           name "right wheel motor"
           consumptionFactor 70
-          sound "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/default/worlds/sounds/rotational_motor.wav"
+          sound "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/sounds/rotational_motor.wav"
         }
         PositionSensor {
           name "right wheel sensor"
@@ -291,7 +296,7 @@ Robot {
       translation 0.042 0.02 0.063
       rotation 0 0 -1 -0.499205
       children [
-        DEF SENSOR Transform {
+        DEF SENSOR Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -332,7 +337,7 @@ Robot {
       numberOfRays 2
       aperture 1
     }
-    DEF SMILE Transform {
+    DEF SMILE Pose {
       translation 0.036 0 0.025
       rotation -0.4472139205058218 -0.7745972408100837 0.44721228050582185 1.8234794
       children [
@@ -354,7 +359,7 @@ Robot {
       translation 0.04 0 0.0915
       rotation 1 0 0 0
       children [
-        Transform {
+        Pose {
           translation -0.015 0 0
           rotation 0 -1 0 1.57
           children [
@@ -375,11 +380,11 @@ Robot {
       width 400
       height 300
       antiAliasing TRUE
-      noiseMaskUrl "https://raw.githubusercontent.com/cyberbotics/webots/R2021a/projects/samples/devices/worlds/textures/noise_mask.png"
+      noiseMaskUrl "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/samples/devices/worlds/textures/noise_mask.png"
     }
   ]
   name "MyBot"
-  boundingObject Transform {
+  boundingObject Pose {
     translation 0 0 0.0415
     children [
       USE BODY

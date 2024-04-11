@@ -1,4 +1,10 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/objects/floors/protos/CircleArena.proto"
+EXTERNPROTO "webots://projects/objects/factory/containers/protos/WoodenBox.proto"
+
 WorldInfo {
   info [
     "The user drives a Supervisor by the Keyboard which drives slaves robots by using an emitter device."
@@ -48,7 +54,7 @@ DEF ROBOT1 Robot {
   translation -0.140251 0.362306 0
   rotation 0 0 -1 0.221754
   children [
-    DEF MAIN_BODY Transform {
+    DEF MAIN_BODY Pose {
       translation 0 0 0.0415
       children [
         Shape {
@@ -81,7 +87,7 @@ DEF ROBOT1 Robot {
         translation 0 0.045 0.025
         rotation 0 -1 0 4.98467
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -99,7 +105,7 @@ DEF ROBOT1 Robot {
           }
         ]
         name "left wheel"
-        boundingObject DEF WHEEL Transform {
+        boundingObject DEF WHEEL Pose {
           rotation -1 0 0 1.57
           children [
             Shape {
@@ -138,7 +144,7 @@ DEF ROBOT1 Robot {
         translation 0 -0.045 0.025
         rotation 0 -1 0 4.58735
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -167,7 +173,7 @@ DEF ROBOT1 Robot {
       translation 0.042 0.02 0.063
       rotation 0 0 -1 -0.499205
       children [
-        DEF INFRARED Transform {
+        DEF INFRARED Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -197,7 +203,7 @@ DEF ROBOT1 Robot {
       translation 0.042 -0.02 0.063
       rotation 0 0 1 -0.500795
       children [
-        DEF INFRARED Transform {
+        DEF INFRARED Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -228,7 +234,7 @@ DEF ROBOT1 Robot {
     Camera {
       translation 0.045 0 0.045
       children [
-        Transform {
+        Pose {
           rotation 0 -1 0 1.57
           children [
             Shape {
@@ -248,7 +254,7 @@ DEF ROBOT1 Robot {
     }
   ]
   name "robot1"
-  boundingObject DEF MYBOT_BOUNDING Transform {
+  boundingObject DEF MYBOT_BOUNDING Pose {
     translation 0 0 0.0415
     children [
       DEF BODY Cylinder {
@@ -267,7 +273,7 @@ DEF ROBOT2 Robot {
   translation -0.511288 -0.288898 0
   rotation 0 0 -1 2.67372
   children [
-    DEF MAIN_BODY Transform {
+    DEF MAIN_BODY Pose {
       translation 0 0 0.0415
       children [
         Shape {
@@ -300,7 +306,7 @@ DEF ROBOT2 Robot {
         translation 0 0.045 0.025
         rotation 0 -1 0 4.98467
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -318,7 +324,7 @@ DEF ROBOT2 Robot {
           }
         ]
         name "left wheel"
-        boundingObject DEF WHEEL Transform {
+        boundingObject DEF WHEEL Pose {
           rotation -1 0 0 1.57
           children [
             Shape {
@@ -357,7 +363,7 @@ DEF ROBOT2 Robot {
         translation 0 -0.045 0.025
         rotation 0 -1 0 4.58735
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -386,7 +392,7 @@ DEF ROBOT2 Robot {
       translation 0.042 0.02 0.063
       rotation 0 0 -1 -0.499205
       children [
-        DEF INFRARED Transform {
+        DEF INFRARED Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -416,7 +422,7 @@ DEF ROBOT2 Robot {
       translation 0.042 -0.02 0.063
       rotation 0 0 1 -0.500795
       children [
-        DEF INFRARED Transform {
+        DEF INFRARED Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -447,7 +453,7 @@ DEF ROBOT2 Robot {
     Camera {
       translation 0.045 0 0.045
       children [
-        Transform {
+        Pose {
           rotation 0 -1 0 1.57
           children [
             Shape {
@@ -467,7 +473,7 @@ DEF ROBOT2 Robot {
     }
   ]
   name "robot2"
-  boundingObject DEF MYBOT_BOUNDING Transform {
+  boundingObject DEF MYBOT_BOUNDING Pose {
     translation 0 0 0.0415
     children [
       DEF BODY Cylinder {
@@ -486,7 +492,7 @@ DEF ROBOT3 Robot {
   translation 0 -0.15 0
   rotation 0 0 1 2.54759
   children [
-    DEF MAIN_BODY Transform {
+    DEF MAIN_BODY Pose {
       translation 0 0 0.0415
       children [
         Shape {
@@ -519,7 +525,7 @@ DEF ROBOT3 Robot {
         translation 0 0.045 0.025
         rotation 0 -1 0 4.98467
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -537,7 +543,7 @@ DEF ROBOT3 Robot {
           }
         ]
         name "left wheel"
-        boundingObject DEF WHEEL Transform {
+        boundingObject DEF WHEEL Pose {
           rotation -1 0 0 1.57
           children [
             Shape {
@@ -576,7 +582,7 @@ DEF ROBOT3 Robot {
         translation 0 -0.045 0.025
         rotation 0 -1 0 4.58735
         children [
-          DEF WHEEL Transform {
+          DEF WHEEL Pose {
             rotation -1 0 0 1.57
             children [
               Shape {
@@ -605,7 +611,7 @@ DEF ROBOT3 Robot {
       translation 0.042 0.02 0.063
       rotation 0 0 -1 -0.499205
       children [
-        DEF INFRARED Transform {
+        DEF INFRARED Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -635,7 +641,7 @@ DEF ROBOT3 Robot {
       translation 0.042 -0.02 0.063
       rotation 0 0 1 -0.500795
       children [
-        DEF INFRARED Transform {
+        DEF INFRARED Pose {
           rotation 0.577656895078166 0.5771968951617173 -0.5771968951617173 -2.093935
           children [
             Shape {
@@ -666,7 +672,7 @@ DEF ROBOT3 Robot {
     Camera {
       translation 0.045 0 0.045
       children [
-        Transform {
+        Pose {
           rotation 0 -1 0 1.57
           children [
             Shape {
@@ -686,7 +692,7 @@ DEF ROBOT3 Robot {
     }
   ]
   name "robot3"
-  boundingObject DEF MYBOT_BOUNDING Transform {
+  boundingObject DEF MYBOT_BOUNDING Pose {
     translation 0 0 0.0415
     children [
       DEF BODY Cylinder {

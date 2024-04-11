@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/buildings/protos/HouseWithGarage.proto
+# keywords: building/house
 # A house with a garage and optional boundingObject.
 # template language: javascript
 
@@ -24,27 +26,27 @@ PROTO HouseWithGarage [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_roof_base_color.jpg"
+              "textures/house_with_garage_roof_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_roof_roughness.jpg"
+              "textures/house_with_garage_roof_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_roof_metalness.jpg"
+              "textures/house_with_garage_roof_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_roof_normal.jpg"
+              "textures/house_with_garage_roof_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_roof_occlusion.jpg"
+              "textures/house_with_garage_roof_occlusion.jpg"
             ]
           }
         }
@@ -71,27 +73,27 @@ PROTO HouseWithGarage [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_walls_base_color.jpg"
+              "textures/house_with_garage_walls_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_walls_roughness.jpg"
+              "textures/house_with_garage_walls_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_walls_metalness.jpg"
+              "textures/house_with_garage_walls_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_walls_normal.jpg"
+              "textures/house_with_garage_walls_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_walls_occlusion.jpg"
+              "textures/house_with_garage_walls_occlusion.jpg"
             ]
           }
         }
@@ -118,27 +120,27 @@ PROTO HouseWithGarage [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_frame_base_color.jpg"
+              "textures/house_with_garage_frame_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_frame_roughness.jpg"
+              "textures/house_with_garage_frame_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_frame_metalness.jpg"
+              "textures/house_with_garage_frame_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_frame_normal.jpg"
+              "textures/house_with_garage_frame_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_frame_occlusion.jpg"
+              "textures/house_with_garage_frame_occlusion.jpg"
             ]
           }
         }
@@ -165,27 +167,27 @@ PROTO HouseWithGarage [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_windows_base_color.jpg"
+              "textures/house_with_garage_windows_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_windows_roughness.jpg"
+              "textures/house_with_garage_windows_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_windows_metalness.jpg"
+              "textures/house_with_garage_windows_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_windows_normal.jpg"
+              "textures/house_with_garage_windows_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/house_with_garage_windows_occlusion.jpg"
+              "textures/house_with_garage_windows_occlusion.jpg"
             ]
           }
         }
@@ -212,7 +214,7 @@ PROTO HouseWithGarage [
     %< if (fields.enableBoundingObject.value) { >%
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0 0 3.75
           rotation -0.577352 0.577348 0.577352 -2.094405
           children [
@@ -221,7 +223,7 @@ PROTO HouseWithGarage [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -4.72 1.92 3.0
           rotation -0.577352 0.577348 0.577352 -2.094405
           children [
@@ -230,7 +232,7 @@ PROTO HouseWithGarage [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 4.83 5.28 2.0001
           rotation -0.577352 0.577348 0.577352 -2.094405
           children [

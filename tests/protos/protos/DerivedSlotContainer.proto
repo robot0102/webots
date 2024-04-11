@@ -1,11 +1,13 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://tests/protos/protos/SlotContainer.proto"
 
 PROTO DerivedSlotContainer [
 ]
 {
   SlotContainer {
     slot [
-      Transform {
+      Pose {
         rotation 1 0 0 -1.5708
         children [
           Shape {

@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/kitchen/breakfast/protos/JamJar.proto
+# keywords: household/kitchen
 # A jam jar.
 # template language: javascript
 
@@ -8,7 +10,7 @@ PROTO JamJar [
   field SFVec3f    translation   0 0 0
   field SFRotation rotation      0 0 1 0
   field SFString   name          "jam jar"
-  field MFString   textureLidUrl "webots://projects/objects/kitchen/breakfast/protos/textures/blue_jar_lid.jpg"  # Defines the texture used for the lid of the jar.
+  field MFString   textureLidUrl "textures/blue_jar_lid.jpg"  # Defines the texture used for the lid of the jar.
   field SFFloat    mass          0.5                          # Defines the mass of the jar in kg.
 ]
 {
@@ -50,11 +52,11 @@ PROTO JamJar [
       Shape {
         appearance PBRAppearance {
           baseColorMap ImageTexture {
-            url [ "webots://projects/objects/kitchen/breakfast/protos/textures/jam_jar.jpg" ]
+            url [ "textures/jam_jar.jpg" ]
           }
           metalness 0
           roughnessMap ImageTexture {
-            url [ "webots://projects/objects/kitchen/breakfast/protos/textures/jam_jar_roughness.jpg" ]
+            url [ "textures/jam_jar_roughness.jpg" ]
           }
         }
         geometry IndexedFaceSet {
@@ -80,7 +82,7 @@ PROTO JamJar [
     ]
     name IS name
     model "jam jar"
-    boundingObject Transform {
+    boundingObject Pose {
       translation 0 0 0.058
       children [
         Shape {

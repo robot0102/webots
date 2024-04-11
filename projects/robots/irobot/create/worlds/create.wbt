@@ -1,4 +1,19 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/lights/protos/CeilingLight.proto"
+EXTERNPROTO "webots://projects/objects/lights/protos/FloorLight.proto"
+EXTERNPROTO "webots://projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "webots://projects/objects/apartment_structure/protos/Door.proto"
+EXTERNPROTO "webots://projects/objects/bedroom/protos/Bed.proto"
+EXTERNPROTO "webots://projects/objects/tables/protos/Table.proto"
+EXTERNPROTO "webots://projects/objects/chairs/protos/Chair.proto"
+EXTERNPROTO "webots://projects/objects/living_room_furniture/protos/Armchair.proto"
+EXTERNPROTO "webots://projects/objects/paintings/protos/LandscapePainting.proto"
+EXTERNPROTO "webots://projects/objects/create_wall/protos/CreateWall.proto"
+EXTERNPROTO "webots://projects/robots/irobot/create/protos/Create.proto"
+EXTERNPROTO "webots://projects/appearances/protos/Parquetry.proto"
+
 WorldInfo {
   info [
     "iRobot Create simulation"
@@ -8,8 +23,8 @@ WorldInfo {
   title "iRobot Create"
 }
 Viewpoint {
-  orientation 0.33249414699184565 0.641565784217505 -0.6912604333661393 1.2383453671825142
-  position -4.757889379270686 7.671295556320952 13.48597636236832
+  orientation 0.36895104882333746 0.7282767074008142 -0.5774843383413859 1.397038466031713
+  position -6.830256412454387 4.466422892283906 13.589403049095361
   near 0.1
   follow "Create"
 }
@@ -114,7 +129,7 @@ Robot {
           appearance PBRAppearance {
             baseColorMap ImageTexture {
               url [
-                "webots://projects/robots/irobot/create/worlds/textures/dirty.jpg"
+                "webots://projects/robots/irobot/create/controllers/ground/dust.jpg"
               ]
             }
             transparency 0.9

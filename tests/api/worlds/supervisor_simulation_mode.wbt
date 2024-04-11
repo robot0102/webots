@@ -1,4 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://tests/default/protos/TestSuiteEmitter.proto"
+EXTERNPROTO "webots://tests/default/protos/TestSuiteSupervisor.proto"
+
 WorldInfo {
   basicTimeStep 8
   contactProperties [
@@ -20,7 +24,7 @@ DirectionalLight {
 }
 DEF FLOOR Solid {
   children [
-    DEF FLOOR_SHAPE Transform {
+    DEF FLOOR_SHAPE Pose {
       rotation 1 0 0 -1.57079632679
       children [
         Shape {

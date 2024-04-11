@@ -30,38 +30,32 @@ Please find instructions in [this section](verifying-your-graphics-driver-instal
 The advantage of this installation is that Webots will be updated automatically with system updates.
 The installation requires the `root` privileges.
 
-First of all, Webots should be authenticated with the [Cyberbotics.asc](https://cyberbotics.com/Cyberbotics.asc) signature file which can be installed using this command:
+First of all, Webots should be authenticated with the [Cyberbotics.asc](https://cyberbotics.com/Cyberbotics.asc) signature file.
+
+> **Note**: You can check with `apt-key list` if this signature file was already installed using the deprecated `apt-key add` method.
+If so, you should delete it with `apt-key del <keyid>` before proceeding with the re-installation.
+Similarly, if the repository was already listed, you should remove it using `apt-add-repository -y --remove 'deb https://cyberbotics.com/debian/ binary-amd64/'`.
+
+You can install the [Cyberbotics.asc](https://cyberbotics.com/Cyberbotics.asc) signature file using this command:
 
 ```bash
-wget -qO- https://cyberbotics.com/Cyberbotics.asc | sudo apt-key add -
+sudo mkdir -p /etc/apt/keyrings
+cd /etc/apt/keyrings
+sudo wget -q https://cyberbotics.com/Cyberbotics.asc
 ```
 
 Then, you can configure your APT package manager by adding the Cyberbotics repository.
 Simply execute the following lines:
 
 ```bash
-sudo apt-add-repository 'deb https://cyberbotics.com/debian/ binary-amd64/'
-sudo apt-get update
-```
-
-As an alternative, you can easily add the Cyberbotics repository from the `Software and Updates` application.
-In the `Other Software` tab, click on the `Add...` button and copy the following line:
-
-```text
-deb https://cyberbotics.com/debian/ binary-amd64/
-```
-
-When you close the window, the APT packages list should be automatically updated.
-Otherwise you can manually execute the following command:
-
-```bash
-sudo apt-get update
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/Cyberbotics.asc] https://cyberbotics.com/debian binary-amd64/" | sudo tee /etc/apt/sources.list.d/Cyberbotics.list
+sudo apt update
 ```
 
 Then proceed to the installation of Webots using:
 
 ```bash
-sudo apt-get install webots
+sudo apt install webots
 ```
 
 > **Note**: Although only the command line procedure is documented here, it is also possible to use any APT front-end tool, such as the Synaptic Package Manager, to proceed with the APT installation of Webots.
@@ -89,7 +83,6 @@ sudo gdebi webots_{{ webots.version.debian_package }}_amd64.deb
 #### Installing the "tarball" Package
 
 This section explains how to install Webots from the tarball package (having the `.tar.bz2` extension).
-Note that for the old Ubuntu versions 18.04 you should download the `webots-R2022a-x86-64_ubuntu-18.04.tar.bz2` package.
 
 The tarball package can be installed without the `root` privileges.
 It can be extracted anywhere using the `tar` `xjf` command line.
@@ -124,11 +117,6 @@ Execute the following command to install *ffmpeg* with *x264* support:
 ```bash
 conda install x264 ffmpeg -c conda-forge
 ```
-For SUMO, you will need to install libxerces-c-devel, libproj-devel, libgdal-devel, and fox16-devel.
-Execute the following commands to enable SUMO on Debian / Ubuntu based distributions:
-```bash
-sudo apt-get install libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev libgl2ps-dev
-```
 
 #### Installing the Snap Package
 
@@ -142,7 +130,7 @@ However, the sand-boxing constraints of snaps yield the following limitations:
 ##### Download Size
 
 The download is significantly bigger as it includes all the dependencies of Webots (ffmpeg, Python, C++ and Java compilers, etc.).
-For Webots R2019b revision 1, the download size of the snap is 1.8GB compared to 1.3GB of the Debian and tarball packages.
+For Webots R2023b, the download size of the snap is 651MB compared to 146MB of the Debian package.
 
 ##### Extern Controllers
 
@@ -151,12 +139,12 @@ However, when developing robot controllers, it is often useful to use various co
 If such components are needed, users can install them on their system or local environment to create, possibly compile and link their robot controllers.
 However, because of the snap sand-boxing, Webots will be unable to launch these controller itself.
 To work around this problem, such controllers should be launched as extern controllers from outside of Webots.
-Before launching extern controllers, you should set the `WEBOTS_HOME` environment variable to point to `/snap/webots/current/usr/share/webots` and add `$WEBOTS_HOME/lib/controller` to your `LD_LIBRARY_PATH` environment variable, so that your controllers will find the necessary shared libraries.
+Before launching extern controllers, you should set the `WEBOTS_HOME` environment variable to point to `/snap/webots/current/usr/share/webots` and run the `$WEBOTS_HOME/webots-controller` launcher.
 The chapter entitled [running extern robot controllers](running-extern-robot-controllers.md) details how to run extern controllers, including with the snap version of Webots.
 
 #### Installing the Docker Image
 
-[Docker](https://www.docker.com) images of Webots based on Ubuntu 18.04 and 20.04 are available on [dockerhub](https://hub.docker.com/r/cyberbotics/webots).
+[Docker](https://www.docker.com) images of Webots based on Ubuntu 20.04 are available on [dockerhub](https://hub.docker.com/r/cyberbotics/webots).
 
 These images can be used to run Webots in your continuous integration (CI) workflow without requiring any graphical user interface or to get a clean and sandboxed environment with Webots pre-installed including GPU accelerated graphical user interface.
 
@@ -305,6 +293,24 @@ open ~/Applications/Webots.app    # to launch Webots using the open command
 
 Alternatively, you can double-click on the Webots icon to launch it.
 
+#### Troubleshooting for Apple Silicon Users
+
+If you are getting errors like these:
+```bash
+...(mach-o file, but is an incompatible architecture (have (arm64), need (x86_64)))
+```
+
+This is likely caused by Rosetta loading Webots under the x86 architecture instead of the native ARM. Unless you really want to use x86 binaries with your Webots simulation, make sure to turn off Rosetta. Sometimes macOS may try to open the app using Rosetta by default, which may cause issues when it comes to run robot controllers with dependencies on ARM libraries.
+
+To check if it's opened using Rosetta, right click on the Webots application in Finder and select Get Info.
+
+Make sure that the "Open using Rosetta" setting is unchecked, like in the picture below:
+
+%figure "Rosetta setting"
+
+![rosetta_setting.png](images/rosetta_setting.png)
+
+%end
 
 #### From the Homebrew Package
 
@@ -342,3 +348,65 @@ Then, macOS should propose to open the application anyway (see [this figure](#un
 
 More information about disabling macOS Gatekeeper is available [here](https://disable-gatekeeper.github.io/).
 You may also change your macOS security settings to open Webots anyway (`System Preferences / Security & Privacy / General / Allow apps downloaded from:`).
+
+### Asset Cache Download
+
+From Webots 2021b, the necessary assets used in a world are downloaded on the fly as they are requested, and cached for subsequent usage.
+This allows to progressively download the assets as they are needed instead of downloading them all up-front, hence reducing the size of the distributions.
+From Webots 2022b a zip version of the entire cache is also available for download, meaning instead of letting Webots build it over time it can be used directly.
+This is beneficial for an offline usage of Webots or to mount it as a volume in a docker setting.
+1. Ensure that the size of the Webots disk cache is at least 1024 MB to be able to store all the assets: `Preferences -> Network -> Disk Cache`.
+2. Download the archive corresponding to your Webots version from the [releases](https://github.com/cyberbotics/webots/releases) page on github.
+If you have installed a nightly build of Webots, then you need to download the archive corresponding to that specific build.
+3. Depending on your operating system, the default location of the Webots cache is shown below.
+Please note that the assets need to be in a folder named `assets`, as such when decompressing the archive it might be necessary to rename the folder or to remove any intermediary directories being created.
+
+%tab-component "os"
+
+%tab "Windows"
+
+Extract the archive to:
+
+`C:/Users/<USER>/AppData/Local/Cyberbotics/Webots/cache`
+
+***Note:*** a folder named `assets` needs to be present in this location and if one already exists, it should be overwritten.
+
+%tab-end
+
+%tab "Linux"
+
+Extract the archive to:
+
+`~/.cache/Cyberbotics/Webots`
+
+***Note:*** a folder named `assets` needs to be present in this location and if one already exists, it should be overwritten.
+
+%tab-end
+
+%tab "macOS"
+
+Extract the archive to:
+
+`~/Library/Caches/Cyberbotics/Webots"` or `"/Library/Caches/Cyberbotics/Webots`
+
+***Note:*** a folder named `assets` needs to be present in this location and if one already exists, it should be overwritten.
+
+%tab-end
+
+%end
+
+&nbsp;
+
+In summary, for instance on Linux the expected structure should look something like:
+
+```
+~/.cache/Cyberbotics/Webots/assets/
+├── 0033b105637903b72be80210f36ad6d4efac8813
+├── 05599e9eefd659b2a2c0e4393ef60d1024b977ef
+├── 103be80357b69185ac460c11e0d8a9d39b76d804
+├── 11b83067b8ca597dbf24593f3790b3df8fa6b87c
+├── 123a565fefa525671b4af73b7667a89d2c05ddd6
+├── 1c004aaa4706ef38c764f5df1e17344035fe74fe
+...
+
+```

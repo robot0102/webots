@@ -1,18 +1,20 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
-# documentation url: https://www.cyberbotics.com/doc/guide/pr2
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/robots/clearpath/pr2/protos/Pr2.proto
+# keywords: robot/wheeled
 # The Clearpath's PR2 robot is a mobile manipulation platform.
 # The robot is mounted on four directional wheels, had two articulated arms with grippers, an articulated body and head.
 # It is mounted by several sensors including cameras.
 # Extracted from: pr2.urdf
 
 PROTO Pr2 [
-   field SFVec3f    translation     0 0 0       # Is `Transform.translation`.
-   field SFRotation rotation        0 0 1 0     # Is `Transform.rotation`.
+   field SFVec3f    translation     0 0 0       # Is `Pose.translation`.
+   field SFRotation rotation        0 0 1 0     # Is `Pose.rotation`.
    field SFString   name            "PR2"       # Is `Solid.name`.
    field SFString   controller      "pr2_demo"  # Is `Robot.controller`.
    field MFString   controllerArgs  []          # Is `Robot.controllerArgs`.
+   field SFString   window          "<generic>" # Is `Robot.window`.
    field SFString   customData      ""          # Is `Robot.customData`.
    field SFBool     supervisor      FALSE       # Is `Robot.supervisor`.
    field SFBool     synchronization TRUE        # Is `Robot.synchronization`.
@@ -25,6 +27,7 @@ PROTO Pr2 [
     rotation IS rotation
     controller IS controller
     controllerArgs IS controllerArgs
+    window IS window
     customData IS customData
     supervisor IS supervisor
     synchronization IS synchronization
@@ -46,7 +49,6 @@ PROTO Pr2 [
         children [
           DEF base_link Solid {
             translation 0.0 0.0 0.051
-            rotation 0.0 1.0 0.0 0.0
             name "base_link"
             physics Physics {
               density -1
@@ -57,7 +59,7 @@ PROTO Pr2 [
             contactMaterial "pr2_material"
             boundingObject Group {
               children [
-                Transform {
+                Pose {
                   translation 0.0 0.33 0.11
                   children [
                     Box {
@@ -65,7 +67,7 @@ PROTO Pr2 [
                     }
                   ]
                 }
-                Transform {
+                Pose {
                   translation 0.0 -0.33 0.11
                   children [
                     Box {
@@ -73,7 +75,7 @@ PROTO Pr2 [
                     }
                   ]
                 }
-                Transform {
+                Pose {
                   translation 0.33 0.0 0.11
                   children [
                     Box {
@@ -81,7 +83,7 @@ PROTO Pr2 [
                     }
                   ]
                 }
-                Transform {
+                Pose {
                   translation -0.33 0.0 0.11
                   children [
                     Box {
@@ -89,7 +91,7 @@ PROTO Pr2 [
                     }
                   ]
                 }
-                Transform {
+                Pose {
                   translation 0.0 0.0 0.21
                   children [
                     Box {
@@ -97,7 +99,7 @@ PROTO Pr2 [
                     }
                   ]
                 }
-                Transform {
+                Pose {
                   translation 0.24 0 0.26
                   children [
                     Box {
@@ -105,7 +107,7 @@ PROTO Pr2 [
                     }
                   ]
                 }
-                Transform {
+                Pose {
                   translation -0.29 0 0.44
                   children [
                     Box {
@@ -121,16 +123,15 @@ PROTO Pr2 [
                   metalness 0
                   roughness 0.5
                   baseColorMap ImageTexture {
-                    url ["webots://projects/robots/clearpath/pr2/protos/textures/base_color.jpg"]
+                    url ["textures/base_color.jpg"]
                   }
                 }
                 geometry Mesh {
-                  url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh0.obj"
+                  url "meshes/Mesh0.obj"
                 }
               }
               DEF base_bellow_link Solid {
                 translation -0.29 0.0 0.8
-                rotation 0.0 1.0 0.0 0.0
                 physics Physics {
                   density -1
                   mass 1.0
@@ -156,7 +157,6 @@ PROTO Pr2 [
               }
               DEF base_laser_link Solid {
                 translation 0.275 0.0 0.252
-                rotation 0.0 1.0 0.0 0.0
                 physics Physics {
                   density -1
                   mass 0.01
@@ -164,7 +164,7 @@ PROTO Pr2 [
                   centerOfMass [0.0 0.0 0.0]
                 }
                 children [
-                  Transform {
+                  Pose {
                     rotation 0 0 1 1.57
                     children [
                       Lidar {
@@ -175,7 +175,7 @@ PROTO Pr2 [
                         horizontalResolution 640
                         numberOfLayers 1
                         minRange 0.08
-                        spherical TRUE
+                        projection "cylindrical"
                         maxRange 10
                       }
                     ]
@@ -213,7 +213,7 @@ PROTO Pr2 [
                   contactMaterial "pr2_material"
                   boundingObject Group {
                     children [
-                      Transform {
+                      Pose {
                         translation 0  0 0.05
                         children [
                           Box {
@@ -221,7 +221,7 @@ PROTO Pr2 [
                           }
                         ]
                       }
-                      Transform {
+                      Pose {
                         translation 0 0 0.15
                         children [
                           Cylinder {
@@ -239,7 +239,7 @@ PROTO Pr2 [
                         roughness 0.5
                       }
                       geometry Mesh {
-                        url "webots://projects/robots/clearpath/pr2/protos/meshes/fr_caster_rotation_link_0.obj"
+                        url "meshes/fr_caster_rotation_link_0.obj"
                       }
                     }
                     DEF fl_caster_l_wheel_joint HingeJoint {
@@ -270,8 +270,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
-                          translation 0.0 0.0 0.0
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -287,7 +286,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/fl_caster_r_wheel_0.obj"
+                              url "meshes/fl_caster_r_wheel_0.obj"
                             }
                           }
                         ]
@@ -321,7 +320,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -337,7 +336,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/fr_caster_rotation_joint_0.obj"
+                              url "meshes/fr_caster_rotation_joint_0.obj"
                             }
                           }
                         ]
@@ -376,7 +375,7 @@ PROTO Pr2 [
                   contactMaterial "pr2_material"
                   boundingObject Group {
                     children [
-                      Transform {
+                      Pose {
                         translation 0  0 0.05
                         children [
                           Box {
@@ -384,7 +383,7 @@ PROTO Pr2 [
                           }
                         ]
                       }
-                      Transform {
+                      Pose {
                         translation 0 0 0.15
                         children [
                           Cylinder {
@@ -402,7 +401,7 @@ PROTO Pr2 [
                         roughness 0.5
                       }
                       geometry Mesh {
-                        url "webots://projects/robots/clearpath/pr2/protos/meshes/bl_caster_rotation_link_0.obj"
+                        url "meshes/bl_caster_rotation_link_0.obj"
                       }
                     }
                     DEF fr_caster_l_wheel_joint HingeJoint {
@@ -433,8 +432,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
-                          translation 0.0 0.0 0.0
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -450,7 +448,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/fr_caster_r_wheel_link_0.obj"
+                              url "meshes/fr_caster_r_wheel_link_0.obj"
                             }
                           }
                         ]
@@ -484,8 +482,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
-                          translation 0.0 0.0 0.0
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -501,7 +498,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/bl_caster_rotation_joint_0.obj"
+                              url "meshes/bl_caster_rotation_joint_0.obj"
                             }
                           }
                         ]
@@ -540,7 +537,7 @@ PROTO Pr2 [
                   contactMaterial "pr2_material"
                   boundingObject Group {
                     children [
-                      Transform {
+                      Pose {
                         translation 0  0 0.05
                         children [
                           Box {
@@ -548,7 +545,7 @@ PROTO Pr2 [
                           }
                         ]
                       }
-                      Transform {
+                      Pose {
                         translation 0 0 0.15
                         children [
                           Cylinder {
@@ -566,7 +563,7 @@ PROTO Pr2 [
                         roughness 0.5
                       }
                       geometry Mesh {
-                        url "webots://projects/robots/clearpath/pr2/protos/meshes/br_caster_rotation_link_0.obj"
+                        url "meshes/br_caster_rotation_link_0.obj"
                       }
                     }
                     DEF bl_caster_l_wheel_joint HingeJoint {
@@ -597,7 +594,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -613,7 +610,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/bl_caster_r_wheel_link_0.obj"
+                              url "meshes/bl_caster_r_wheel_link_0.obj"
                             }
                           }
                         ]
@@ -647,7 +644,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -663,7 +660,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/br_caster_rotation_joint_0.obj"
+                              url "meshes/br_caster_rotation_joint_0.obj"
                             }
                           }
                         ]
@@ -702,7 +699,7 @@ PROTO Pr2 [
                   contactMaterial "pr2_material"
                   boundingObject Group {
                     children [
-                      Transform {
+                      Pose {
                         translation 0  0 0.05
                         children [
                           Box {
@@ -710,7 +707,7 @@ PROTO Pr2 [
                           }
                         ]
                       }
-                      Transform {
+                      Pose {
                         translation 0 0 0.15
                         children [
                           Cylinder {
@@ -728,7 +725,7 @@ PROTO Pr2 [
                         roughness 0.5
                       }
                       geometry Mesh {
-                        url "webots://projects/robots/clearpath/pr2/protos/meshes/torso_lift_link_0.obj"
+                        url "meshes/torso_lift_link_0.obj"
                       }
                     }
                     DEF br_caster_l_wheel_joint HingeJoint {
@@ -759,7 +756,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -775,7 +772,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/br_caster_r_wheel_link_0.obj"
+                              url "meshes/br_caster_r_wheel_link_0.obj"
                             }
                           }
                         ]
@@ -809,7 +806,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
+                        boundingObject Pose {
                           rotation 1 0 0 1.57
                           children [
                             Cylinder {
@@ -825,7 +822,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/torso_lift_joint_0.obj"
+                              url "meshes/torso_lift_joint_0.obj"
                             }
                           }
                         ]
@@ -864,7 +861,7 @@ PROTO Pr2 [
                   contactMaterial "pr2_material"
                   boundingObject Group {
                     children [
-                      Transform {
+                      Pose {
                         translation -0.1 0 0.23
                         children [
                           Box {
@@ -872,7 +869,7 @@ PROTO Pr2 [
                           }
                         ]
                       }
-                      Transform {
+                      Pose {
                         translation -0.25 0 0.11
                         children [
                           Box {
@@ -880,7 +877,7 @@ PROTO Pr2 [
                           }
                         ]
                       }
-                      Transform {
+                      Pose {
                         translation -0.21 0 -0.50
                         children [
                           IndexedFaceSet {
@@ -903,11 +900,11 @@ PROTO Pr2 [
                         metalness 0
                         roughness 0.5
                         baseColorMap ImageTexture {
-                          url ["webots://projects/robots/clearpath/pr2/protos/textures/torso_lift_color.jpg"]
+                          url ["textures/torso_lift_color.jpg"]
                         }
                       }
                       geometry Mesh {
-                        url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh1.obj"
+                        url "meshes/Mesh1.obj"
                       }
                     }
                     DEF l_torso_lift_side_plate_link Solid {
@@ -947,10 +944,10 @@ PROTO Pr2 [
                         centerOfMass [0.0 0.0 0.0]
                       }
                       children [
-                        Transform {
+                        Pose {
                           rotation 1 0 0 1.57
                           children [
-                              Transform {
+                              Pose {
                                 rotation 0 0 1 3.14
                                 children [
                                 InertialUnit {
@@ -995,7 +992,7 @@ PROTO Pr2 [
                         contactMaterial "pr2_material"
                         boundingObject Group {
                           children [
-                            Transform {
+                            Pose {
                               translation 0.072 0 0.005
                               rotation 0.577657 -0.577197 -0.577197 -2.093935
                               children [
@@ -1005,7 +1002,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0 0 -0.037
                               children [
                                 Box {
@@ -1013,7 +1010,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation -0.026 0 0.01
                               rotation 0 1 0 -0.55
                               children [
@@ -1031,7 +1028,7 @@ PROTO Pr2 [
                               roughness 0.5
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/r_shoulder_pan_link_0.obj"
+                              url "meshes/r_shoulder_pan_link_0.obj"
                             }
                           }
                           DEF head_tilt_joint HingeJoint {
@@ -1063,7 +1060,7 @@ PROTO Pr2 [
                                 centerOfMass [0.0 0.0 0.0]
                               }
                               contactMaterial "pr2_material"
-                              boundingObject Transform {
+                              boundingObject Pose {
                                 translation -0.057 0 0.115
                                 children [
                                   Box {
@@ -1077,16 +1074,15 @@ PROTO Pr2 [
                                     metalness 0
                                     roughness 0.5
                                     baseColorMap ImageTexture {
-                                      url ["webots://projects/robots/clearpath/pr2/protos/textures/head_tilt_color.jpg"]
+                                      url ["textures/head_tilt_color.jpg"]
                                     }
                                   }
                                   geometry Mesh {
-                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/laser_tilt_mount_joint_0.obj"
+                                    url "meshes/laser_tilt_mount_joint_0.obj"
                                   }
                                 }
                                 DEF head_plate_frame Solid {
                                   translation 0.0232 0.0 0.0645
-                                  rotation 0.0 1.0 0.0 0.0
                                   physics Physics {
                                     density -1
                                     mass 0.01
@@ -1108,8 +1104,6 @@ PROTO Pr2 [
                                       }
                                     }
                                     DEF sensor_mount_link Solid {
-                                      translation 0.0 0.0 0.0
-                                      rotation 0.0 1.0 0.0 0.0
                                       name "sensor_mount_link"
                                       physics Physics {
                                         density -1
@@ -1129,7 +1123,6 @@ PROTO Pr2 [
                                         }
                                         DEF high_def_frame Solid {
                                           translation 0.046457 -0.11 0.0546
-                                          rotation 0.0 1.0 0.0 0.0
                                           physics Physics {
                                             density -1
                                             mass 0.01
@@ -1138,7 +1131,6 @@ PROTO Pr2 [
                                           }
                                           children [
                                             DEF high_def_optical_frame Solid {
-                                              translation 0.0 0.0 0.0
                                               rotation -0.577350269191 -0.577350269188 -0.577350269191 2.09439510239
                                               physics Physics {
                                                 density -1
@@ -1147,7 +1139,7 @@ PROTO Pr2 [
                                                 centerOfMass [0.0 0.0 0.0]
                                               }
                                               children [
-                                                Transform {
+                                                Pose {
                                                   rotation 0 1 0 1.57
                                                   children [
                                                     Camera {
@@ -1157,7 +1149,6 @@ PROTO Pr2 [
                                                       width 1224
                                                       height 1025
                                                       near 0.1
-                                                      type "color"
                                                     }
                                                   ]
                                                 }
@@ -1166,8 +1157,6 @@ PROTO Pr2 [
                                           ]
                                         }
                                         DEF double_stereo_link Solid {
-                                          translation 0.0 0.0 0.0
-                                          rotation 0.0 1.0 0.0 0.0
                                           name "double_stereo_link"
                                           physics Physics {
                                             density -1
@@ -1176,9 +1165,8 @@ PROTO Pr2 [
                                             centerOfMass [0.0 0.0 0.0]
                                           }
                                           children [
-                                            Transform {
+                                            Pose {
                                               translation -0.01 0.0 0.025
-                                              rotation 0.0 1.0 0.0 0.0
                                               children [
                                                 Shape {
                                                   appearance PBRAppearance {
@@ -1193,7 +1181,6 @@ PROTO Pr2 [
                                             }
                                             DEF wide_stereo_link Solid {
                                               translation 0.045 0.03 0.0501
-                                              rotation 0.0 1.0 0.0 0.0
                                               physics Physics {
                                                 density -1
                                                 mass 0.1
@@ -1202,8 +1189,6 @@ PROTO Pr2 [
                                               }
                                               children [
                                                 DEF wide_stereo_l_stereo_camera_frame Solid {
-                                                  translation 0.0 0.0 0.0
-                                                  rotation 0.0 1.0 0.0 0.0
                                                   physics Physics {
                                                     density -1
                                                     mass 0.01
@@ -1212,7 +1197,6 @@ PROTO Pr2 [
                                                   }
                                                   children [
                                                     DEF wide_stereo_l_stereo_camera_optical_frame Solid {
-                                                      translation 0.0 0.0 0.0
                                                       rotation -0.577350269191 -0.577350269188 -0.577350269191 2.09439510239
                                                       physics Physics {
                                                         density -1
@@ -1221,7 +1205,7 @@ PROTO Pr2 [
                                                         centerOfMass [0.0 0.0 0.0]
                                                       }
                                                       children [
-                                                        Transform {
+                                                        Pose {
                                                           rotation 0 1 0 1.57
                                                           children [
                                                             Camera {
@@ -1231,7 +1215,6 @@ PROTO Pr2 [
                                                               width 640
                                                               height 480
                                                               near 0.1
-                                                              type "color"
                                                             }
                                                           ]
                                                         }
@@ -1239,7 +1222,6 @@ PROTO Pr2 [
                                                     }
                                                     DEF wide_stereo_r_stereo_camera_frame Solid {
                                                       translation 0.0 -0.09 0.0
-                                                      rotation 0.0 1.0 0.0 0.0
                                                       name "wide_stereo_r_stereo_camera_frame"
                                                       physics Physics {
                                                         density -1
@@ -1249,7 +1231,6 @@ PROTO Pr2 [
                                                       }
                                                       children [
                                                         DEF wide_stereo_r_stereo_camera_optical_frame Solid {
-                                                          translation 0.0 0.0 0.0
                                                           rotation -0.577350269191 -0.577350269188 -0.577350269191 2.09439510239
                                                           physics Physics {
                                                             density -1
@@ -1258,7 +1239,7 @@ PROTO Pr2 [
                                                             centerOfMass [0.0 0.0 0.0]
                                                           }
                                                           children [
-                                                            Transform {
+                                                            Pose {
                                                               rotation 0 0 1 -1.57
                                                               children [
                                                                 Camera {
@@ -1268,7 +1249,6 @@ PROTO Pr2 [
                                                                   width 640
                                                                   height 480
                                                                   near 0.1
-                                                                  type "color"
                                                                 }
                                                               ]
                                                             }
@@ -1322,7 +1302,7 @@ PROTO Pr2 [
                           centerOfMass [0.0 0.0 0.0]
                         }
                         contactMaterial "pr2_material"
-                        boundingObject Transform {
+                        boundingObject Pose {
                           translation -0.003 0 0.004
                           rotation 1 0 0 -1.570796
                           children [
@@ -1338,16 +1318,15 @@ PROTO Pr2 [
                               metalness 0
                               roughness 0.5
                               baseColorMap ImageTexture {
-                                url ["webots://projects/robots/clearpath/pr2/protos/textures/tilting_hokuyo_color.jpg"]
+                                url ["textures/tilting_hokuyo_color.jpg"]
                               }
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/r_shoulder_pan_link_1.obj"
+                              url "meshes/r_shoulder_pan_link_1.obj"
                             }
                           }
                           DEF laser_tilt_link Solid {
                             translation 0.0 0.0 0.03
-                            rotation 0.0 1.0 0.0 0.0
                             physics Physics {
                               density -1
                               mass 0.01
@@ -1355,7 +1334,7 @@ PROTO Pr2 [
                               centerOfMass [0.0 0.0 0.0]
                             }
                             children [
-                              Transform {
+                              Pose {
                                 rotation 1 0 0 1.57
                                 children [
                                   Lidar {
@@ -1366,7 +1345,7 @@ PROTO Pr2 [
                                     horizontalResolution 640
                                     numberOfLayers 1
                                     minRange 0.08
-                                    spherical TRUE
+                                    projection "cylindrical"
                                     maxRange 10
                                   }
                                 ]
@@ -1408,7 +1387,7 @@ PROTO Pr2 [
                         contactMaterial "pr2_material"
                         boundingObject Group {
                           children [
-                            Transform {
+                            Pose {
                               translation -0.04 0 -0.175
                               children [
                                 Cylinder {
@@ -1417,7 +1396,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0 0 -0.175
                               children [
                                 Box {
@@ -1425,7 +1404,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0.1 -0.101 0
                               rotation 1 0 0 -1.570796
                               children [
@@ -1435,7 +1414,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0.1 0.101 0
                               rotation 1 0 0 -1.570796
                               children [
@@ -1453,11 +1432,11 @@ PROTO Pr2 [
                               metalness 0
                               roughness 0.5
                               baseColorMap ImageTexture {
-                                url ["webots://projects/robots/clearpath/pr2/protos/textures/shoulder_pan_color.jpg"]
+                                url ["textures/shoulder_pan_color.jpg"]
                               }
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/l_shoulder_pan_link_0.obj"
+                              url "meshes/l_shoulder_pan_link_0.obj"
                             }
                           }
                           DEF r_shoulder_lift_joint HingeJoint {
@@ -1489,7 +1468,7 @@ PROTO Pr2 [
                                 centerOfMass [0.0 0.0 0.0]
                               }
                               contactMaterial "pr2_material"
-                              boundingObject Transform {
+                              boundingObject Pose {
                                 rotation 1 0 0 -1.570796
                                 children [
                                   Cylinder {
@@ -1505,7 +1484,7 @@ PROTO Pr2 [
                                     roughness 0.5
                                   }
                                   geometry Mesh {
-                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/l_shoulder_pan_joint_0.obj"
+                                    url "meshes/l_shoulder_pan_joint_0.obj"
                                   }
                                 }
                                 DEF r_upper_arm_roll_joint HingeJoint {
@@ -1538,7 +1517,7 @@ PROTO Pr2 [
                                     }
                                     contactMaterial "pr2_material"
                                     boundingObject Mesh {
-                                      url "webots://projects/robots/clearpath/pr2/protos/meshes/l_shoulder_lift_joint_0.obj"
+                                      url "meshes/l_shoulder_lift_joint_0.obj"
                                     }
                                     children [
                                       Shape {
@@ -1547,12 +1526,10 @@ PROTO Pr2 [
                                           roughness 0.5
                                         }
                                         geometry Mesh {
-                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/l_shoulder_lift_joint_1.obj"
+                                          url "meshes/l_shoulder_lift_joint_1.obj"
                                         }
                                       }
                                       DEF r_upper_arm_link Solid {
-                                        translation 0.0 0.0 0.0
-                                        rotation 0.0 1.0 0.0 0.0
                                         physics Physics {
                                           density -1
                                           mass 6.01769
@@ -1562,7 +1539,7 @@ PROTO Pr2 [
                                         contactMaterial "pr2_material"
                                         boundingObject Group {
                                           children [
-                                            Transform {
+                                            Pose {
                                               translation 0.19 0 0
                                               rotation 1 0 0 -1.570796
                                               children [
@@ -1572,7 +1549,7 @@ PROTO Pr2 [
                                                 }
                                               ]
                                             }
-                                            Transform {
+                                            Pose {
                                               translation 0.4 0.04 0
                                               rotation 1 0 0 -1.570796
                                               children [
@@ -1582,7 +1559,7 @@ PROTO Pr2 [
                                                 }
                                               ]
                                             }
-                                            Transform {
+                                            Pose {
                                               translation 0.4 -0.04 0
                                               rotation 1 0 0 -1.570796
                                               children [
@@ -1592,7 +1569,7 @@ PROTO Pr2 [
                                                 }
                                               ]
                                             }
-                                            Transform {
+                                            Pose {
                                               translation 0.28 0 -0.035
                                               children [
                                                 Box {
@@ -1609,7 +1586,7 @@ PROTO Pr2 [
                                               roughness 0.5
                                             }
                                             geometry Mesh {
-                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh2.obj"
+                                              url "meshes/Mesh2.obj"
                                             }
                                           }
                                           DEF r_elbow_flex_joint HingeJoint {
@@ -1643,7 +1620,7 @@ PROTO Pr2 [
                                               contactMaterial "pr2_material"
                                               boundingObject Group {
                                                 children [
-                                                  Transform {
+                                                  Pose {
                                                     rotation 1 0 0 -1.570796
                                                     children [
                                                       Cylinder {
@@ -1652,7 +1629,7 @@ PROTO Pr2 [
                                                       }
                                                     ]
                                                   }
-                                                  Transform {
+                                                  Pose {
                                                     translation 0.078 0 0
                                                     rotation 0.577657 0.577197 -0.577197 -2.093935
                                                     children [
@@ -1671,7 +1648,7 @@ PROTO Pr2 [
                                                     roughness 0.5
                                                   }
                                                   geometry Mesh {
-                                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh3.obj"
+                                                    url "meshes/Mesh3.obj"
                                                   }
                                                 }
                                                 DEF r_forearm_roll_joint HingeJoint {
@@ -1701,7 +1678,7 @@ PROTO Pr2 [
                                                       centerOfMass [0.0 0.0 0.0]
                                                     }
                                                     contactMaterial "pr2_material"
-                                                    boundingObject Transform {
+                                                    boundingObject Pose {
                                                       translation 0.08 0 0
                                                       rotation 0.577657 0.577197 -0.577197 -2.093935
                                                       children [
@@ -1718,12 +1695,10 @@ PROTO Pr2 [
                                                           roughness 0.5
                                                         }
                                                         geometry Mesh {
-                                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/l_elbow_flex_joint_0.obj"
+                                                          url "meshes/l_elbow_flex_joint_0.obj"
                                                         }
                                                       }
                                                       DEF r_forearm_link Solid {
-                                                        translation 0.0 0.0 0.0
-                                                        rotation 0.0 1.0 0.0 0.0
                                                         physics Physics {
                                                           density -1
                                                           mass 2.57968
@@ -1731,7 +1706,7 @@ PROTO Pr2 [
                                                           centerOfMass [0.0 0.0 0.0]
                                                         }
                                                         contactMaterial "pr2_material"
-                                                        boundingObject Transform {
+                                                        boundingObject Pose {
                                                           translation 0.22 0 -0.01
                                                           children [
                                                             Box {
@@ -1745,11 +1720,11 @@ PROTO Pr2 [
                                                               metalness 0
                                                               roughness 0.5
                                                               baseColorMap ImageTexture {
-                                                                url ["webots://projects/robots/clearpath/pr2/protos/textures/forearm_color.jpg"]
+                                                                url ["textures/forearm_color.jpg"]
                                                               }
                                                             }
                                                             geometry Mesh {
-                                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/r_forearm_cam_frame_0.obj"
+                                                              url "meshes/r_forearm_cam_frame_0.obj"
                                                             }
                                                           }
                                                           DEF r_wrist_flex_joint HingeJoint {
@@ -1781,7 +1756,7 @@ PROTO Pr2 [
                                                                 centerOfMass [0.0 0.0 0.0]
                                                               }
                                                               contactMaterial "pr2_material"
-                                                              boundingObject Transform {
+                                                              boundingObject Pose {
                                                                 rotation 1 0 0 -1.570796
                                                                 children [
                                                                   Cylinder {
@@ -1797,7 +1772,7 @@ PROTO Pr2 [
                                                                     roughness 0.5
                                                                   }
                                                                   geometry Mesh {
-                                                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/l_wrist_flex_link_0.obj"
+                                                                    url "meshes/l_wrist_flex_link_0.obj"
                                                                   }
                                                                 }
                                                                 DEF r_wrist_roll_joint HingeJoint {
@@ -1834,12 +1809,10 @@ PROTO Pr2 [
                                                                           roughness 0.5
                                                                         }
                                                                         geometry Mesh {
-                                                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/r_forearm_cam_sensor_0.obj"
+                                                                          url "meshes/r_forearm_cam_sensor_0.obj"
                                                                         }
                                                                       }
                                                                       DEF r_gripper_palm_link Solid {
-                                                                        translation 0.0 0.0 0.0
-                                                                        rotation 0.0 1.0 0.0 0.0
                                                                         physics Physics {
                                                                           density -1
                                                                           mass 0.58007
@@ -1847,7 +1820,7 @@ PROTO Pr2 [
                                                                           centerOfMass [0.0 0.0 0.0]
                                                                         }
                                                                         contactMaterial "pr2_material"
-                                                                        boundingObject Transform {
+                                                                        boundingObject Pose {
                                                                           translation 0.08 0 0
                                                                           children [
                                                                             Cylinder {
@@ -1863,7 +1836,7 @@ PROTO Pr2 [
                                                                               roughness 0.5
                                                                             }
                                                                             geometry Mesh {
-                                                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/l_forearm_cam_sensor_0.obj"
+                                                                              url "meshes/l_forearm_cam_sensor_0.obj"
                                                                             }
                                                                           }
                                                                           DEF r_gripper_led_frame Solid {
@@ -1883,8 +1856,6 @@ PROTO Pr2 [
                                                                             ]
                                                                           }
                                                                           DEF r_gripper_motor_accelerometer_link Solid {
-                                                                            translation 0.0 0.0 0.0
-                                                                            rotation 0.0 1.0 0.0 0.0
                                                                             name "r_gripper_motor_accelerometer_link"
                                                                             physics Physics {
                                                                               density -1
@@ -1900,7 +1871,6 @@ PROTO Pr2 [
                                                                           }
                                                                           DEF r_gripper_tool_frame Solid {
                                                                             translation 0.18 0.0 0.0
-                                                                            rotation 0.0 1.0 0.0 0.0
                                                                             name "r_gripper_tool_frame"
                                                                             physics Physics {
                                                                               density -1
@@ -1943,7 +1913,7 @@ PROTO Pr2 [
                                                                             }
                                                                             device [
                                                                               RotationalMotor {
-                                                                                name "r_gripper_l_finger_joint"
+                                                                                name "r_finger_gripper_motor::l_finger"
                                                                                 maxVelocity 0.5
                                                                                 maxPosition 0.548
                                                                                 maxTorque 1000.0
@@ -1964,7 +1934,7 @@ PROTO Pr2 [
                                                                               }
                                                                               contactMaterial "pr2_material"
                                                                               boundingObject Mesh {
-                                                                                url "webots://projects/robots/clearpath/pr2/protos/meshes/l_wrist_roll_joint_0.obj"
+                                                                                url "meshes/l_wrist_roll_joint_0.obj"
                                                                               }
                                                                               children [
                                                                                 Shape {
@@ -1973,7 +1943,7 @@ PROTO Pr2 [
                                                                                     roughness 0.5
                                                                                   }
                                                                                   geometry Mesh {
-                                                                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/r_gripper_r_finger_link_0.obj"
+                                                                                    url "meshes/r_gripper_r_finger_link_0.obj"
                                                                                   }
                                                                                 }
                                                                                 DEF r_gripper_l_finger_tip_joint HingeJoint {
@@ -1985,7 +1955,7 @@ PROTO Pr2 [
                                                                                   }
                                                                                   device [
                                                                                     RotationalMotor {
-                                                                                      name "r_gripper_l_finger_tip_joint"
+                                                                                      name "r_finger_gripper_motor::l_finger_tip"
                                                                                       maxVelocity 0.5
                                                                                       maxPosition 0.548
                                                                                       maxTorque 1000.0
@@ -2006,7 +1976,7 @@ PROTO Pr2 [
                                                                                       centerOfMass [0.0 0.0 0.0]
                                                                                     }
                                                                                     contactMaterial "pr2_material"
-                                                                                    boundingObject Transform {
+                                                                                    boundingObject Pose {
                                                                                       translation 0.013 -0.01075 0
                                                                                       children [
                                                                                         Box {
@@ -2021,7 +1991,7 @@ PROTO Pr2 [
                                                                                           roughness 0.5
                                                                                         }
                                                                                         geometry Mesh {
-                                                                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/r_gripper_r_finger_joint_0.obj"
+                                                                                          url "meshes/r_gripper_r_finger_joint_0.obj"
                                                                                         }
                                                                                       }
                                                                                     ]
@@ -2039,7 +2009,7 @@ PROTO Pr2 [
                                                                             }
                                                                             device [
                                                                               RotationalMotor {
-                                                                                name "r_gripper_r_finger_joint"
+                                                                                name "r_finger_gripper_motor::r_finger"
                                                                                 maxVelocity 0.5
                                                                                 maxPosition 0.548
                                                                                 maxTorque 1000.0
@@ -2059,20 +2029,18 @@ PROTO Pr2 [
                                                                                 centerOfMass [0.0 0.0 0.0]
                                                                               }
                                                                               contactMaterial "pr2_material"
-                                                                              boundingObject Transform {
-                                                                                translation 0.0 0.0 0.0
+                                                                              boundingObject Pose {
                                                                                 rotation 1.0 0.0 0.0 3.14159265359
                                                                                 children [
                                                                                   Shape {
                                                                                     geometry Mesh {
-                                                                                      url "webots://projects/robots/clearpath/pr2/protos/meshes/l_gripper_motor_slider_joint_0.obj"
+                                                                                      url "meshes/l_gripper_motor_slider_joint_0.obj"
                                                                                     }
                                                                                   }
                                                                                 ]
                                                                               }
                                                                               children [
-                                                                                Transform {
-                                                                                  translation 0.0 0.0 0.0
+                                                                                Pose {
                                                                                   rotation 1.0 0.0 0.0 3.14159265359
                                                                                   children [
                                                                                     Shape {
@@ -2081,7 +2049,7 @@ PROTO Pr2 [
                                                                                         roughness 0.5
                                                                                       }
                                                                                       geometry Mesh {
-                                                                                        url "webots://projects/robots/clearpath/pr2/protos/meshes/l_gripper_motor_slider_joint_1.obj"
+                                                                                        url "meshes/l_gripper_motor_slider_joint_1.obj"
                                                                                       }
                                                                                     }
                                                                                   ]
@@ -2095,7 +2063,7 @@ PROTO Pr2 [
                                                                                   }
                                                                                   device [
                                                                                     RotationalMotor {
-                                                                                      name "r_gripper_r_finger_tip_joint"
+                                                                                      name "r_finger_gripper_motor::r_finger_tip"
                                                                                       maxVelocity 0.5
                                                                                       maxPosition 0.548
                                                                                       maxTorque 1000.0
@@ -2116,7 +2084,7 @@ PROTO Pr2 [
                                                                                       centerOfMass [0.0 0.0 0.0]
                                                                                     }
                                                                                     contactMaterial "pr2_material"
-                                                                                    boundingObject Transform {
+                                                                                    boundingObject Pose {
                                                                                       translation 0.013 0.01075 0
                                                                                       children [
                                                                                         Box {
@@ -2125,8 +2093,7 @@ PROTO Pr2 [
                                                                                       ]
                                                                                     }
                                                                                     children [
-                                                                                      Transform {
-                                                                                        translation 0.0 0.0 0.0
+                                                                                      Pose {
                                                                                         rotation 1.0 0.0 0.0 3.14159265359
                                                                                         children [
                                                                                           Shape {
@@ -2135,7 +2102,7 @@ PROTO Pr2 [
                                                                                               roughness 0.5
                                                                                             }
                                                                                             geometry Mesh {
-                                                                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/l_gripper_l_finger_tip_contact_sensor_0.obj"
+                                                                                              url "meshes/l_gripper_l_finger_tip_contact_sensor_0.obj"
                                                                                             }
                                                                                           }
                                                                                         ]
@@ -2191,7 +2158,6 @@ PROTO Pr2 [
                                                         }
                                                         children [
                                                           DEF r_forearm_cam_optical_frame Solid {
-                                                            translation 0.0 0.0 0.0
                                                             rotation -0.577350269191 -0.577350269188 -0.577350269191 2.09439510239
                                                             physics Physics {
                                                               density -1
@@ -2203,7 +2169,6 @@ PROTO Pr2 [
                                                               Camera {
                                                                 rotation -0.357557 0.357557 0.862732 1.717914
                                                                 name "r_forearm_cam_sensor"
-                                                                type "color"
                                                                 fieldOfView 1.57079632679
                                                                 width 640
                                                                 height 480
@@ -2262,7 +2227,7 @@ PROTO Pr2 [
                         contactMaterial "pr2_material"
                         boundingObject Group {
                           children [
-                            Transform {
+                            Pose {
                               translation -0.04 0 -0.175
                               children [
                                 Cylinder {
@@ -2271,7 +2236,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0 0 -0.175
                               children [
                                 Box {
@@ -2279,7 +2244,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0.1 -0.101 0
                               rotation 1 0 0 -1.570796
                               children [
@@ -2289,7 +2254,7 @@ PROTO Pr2 [
                                 }
                               ]
                             }
-                            Transform {
+                            Pose {
                               translation 0.1 0.101 0
                               rotation 1 0 0 -1.570796
                               children [
@@ -2307,11 +2272,11 @@ PROTO Pr2 [
                               metalness 0
                               roughness 0.5
                               baseColorMap ImageTexture {
-                                url ["webots://projects/robots/clearpath/pr2/protos/textures/shoulder_pan_color.jpg"]
+                                url ["textures/shoulder_pan_color.jpg"]
                               }
                             }
                             geometry Mesh {
-                              url "webots://projects/robots/clearpath/pr2/protos/meshes/torso_lift_motor_screw_joint_0.obj"
+                              url "meshes/torso_lift_motor_screw_joint_0.obj"
                             }
                           }
                           DEF l_shoulder_lift_joint HingeJoint {
@@ -2343,7 +2308,7 @@ PROTO Pr2 [
                                 centerOfMass [0.0 0.0 0.0]
                               }
                               contactMaterial "pr2_material"
-                              boundingObject Transform {
+                              boundingObject Pose {
                                 rotation 1 0 0 -1.570796
                                 children [
                                   Cylinder {
@@ -2359,7 +2324,7 @@ PROTO Pr2 [
                                     roughness 0.5
                                   }
                                   geometry Mesh {
-                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh4.obj"
+                                    url "meshes/Mesh4.obj"
                                   }
                                 }
                                 DEF l_upper_arm_roll_joint HingeJoint {
@@ -2392,7 +2357,7 @@ PROTO Pr2 [
                                     }
                                     contactMaterial "pr2_material"
                                     boundingObject Mesh {
-                                      url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh5.obj"
+                                      url "meshes/Mesh5.obj"
                                     }
                                     children [
                                       Shape {
@@ -2401,12 +2366,10 @@ PROTO Pr2 [
                                           roughness 0.5
                                         }
                                         geometry Mesh {
-                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh6.obj"
+                                          url "meshes/Mesh6.obj"
                                         }
                                       }
                                       DEF l_upper_arm_link Solid {
-                                        translation 0.0 0.0 0.0
-                                        rotation 0.0 1.0 0.0 0.0
                                         physics Physics {
                                           density -1
                                           mass 6.01769
@@ -2416,7 +2379,7 @@ PROTO Pr2 [
                                         contactMaterial "pr2_material"
                                         boundingObject Group {
                                           children [
-                                            Transform {
+                                            Pose {
                                               translation 0.19 0 0
                                               rotation 1 0 0 -1.570796
                                               children [
@@ -2426,7 +2389,7 @@ PROTO Pr2 [
                                                 }
                                               ]
                                             }
-                                            Transform {
+                                            Pose {
                                               translation 0.4 0.04 0
                                               rotation 1 0 0 -1.570796
                                               children [
@@ -2436,7 +2399,7 @@ PROTO Pr2 [
                                                 }
                                               ]
                                             }
-                                            Transform {
+                                            Pose {
                                               translation 0.4 -0.04 0
                                               rotation 1 0 0 -1.570796
                                               children [
@@ -2446,7 +2409,7 @@ PROTO Pr2 [
                                                 }
                                               ]
                                             }
-                                            Transform {
+                                            Pose {
                                               translation 0.28 0 -0.035
                                               children [
                                                 Box {
@@ -2463,7 +2426,7 @@ PROTO Pr2 [
                                               roughness 0.5
                                             }
                                             geometry Mesh {
-                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh7.obj"
+                                              url "meshes/Mesh7.obj"
                                             }
                                           }
                                           DEF l_elbow_flex_joint HingeJoint {
@@ -2497,7 +2460,7 @@ PROTO Pr2 [
                                               contactMaterial "pr2_material"
                                               boundingObject Group {
                                                 children [
-                                                  Transform {
+                                                  Pose {
                                                     rotation 1 0 0 -1.570796
                                                     children [
                                                       Cylinder {
@@ -2506,7 +2469,7 @@ PROTO Pr2 [
                                                       }
                                                     ]
                                                   }
-                                                  Transform {
+                                                  Pose {
                                                     translation 0.078 0 0
                                                     rotation 0.577657 0.577197 -0.577197 -2.093935
                                                     children [
@@ -2525,7 +2488,7 @@ PROTO Pr2 [
                                                     roughness 0.5
                                                   }
                                                   geometry Mesh {
-                                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh8.obj"
+                                                    url "meshes/Mesh8.obj"
                                                   }
                                                 }
                                                 DEF l_forearm_roll_joint HingeJoint {
@@ -2555,7 +2518,7 @@ PROTO Pr2 [
                                                       centerOfMass [0.0 0.0 0.0]
                                                     }
                                                     contactMaterial "pr2_material"
-                                                    boundingObject Transform {
+                                                    boundingObject Pose {
                                                       translation 0.08 0 0
                                                       rotation 0.577657 0.577197 -0.577197 -2.093935
                                                       children [
@@ -2572,12 +2535,10 @@ PROTO Pr2 [
                                                           roughness 0.5
                                                         }
                                                         geometry Mesh {
-                                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh9.obj"
+                                                          url "meshes/Mesh9.obj"
                                                         }
                                                       }
                                                       DEF l_forearm_link Solid {
-                                                        translation 0.0 0.0 0.0
-                                                        rotation 0.0 1.0 0.0 0.0
                                                         physics Physics {
                                                           density -1
                                                           mass 2.57968
@@ -2585,7 +2546,7 @@ PROTO Pr2 [
                                                           centerOfMass [0.0 0.0 0.0]
                                                         }
                                                         contactMaterial "pr2_material"
-                                                        boundingObject Transform {
+                                                        boundingObject Pose {
                                                           translation 0.22 0 -0.01
                                                           children [
                                                             Box {
@@ -2599,11 +2560,11 @@ PROTO Pr2 [
                                                               metalness 0
                                                               roughness 0.5
                                                               baseColorMap ImageTexture {
-                                                                url ["webots://projects/robots/clearpath/pr2/protos/textures/forearm_color.jpg"]
+                                                                url ["textures/forearm_color.jpg"]
                                                               }
                                                             }
                                                             geometry Mesh {
-                                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/l_forearm_cam_frame_0.obj"
+                                                              url "meshes/l_forearm_cam_frame_0.obj"
                                                             }
                                                           }
                                                           DEF l_wrist_flex_joint HingeJoint {
@@ -2636,7 +2597,7 @@ PROTO Pr2 [
                                                                 centerOfMass [0.0 0.0 0.0]
                                                               }
                                                               contactMaterial "pr2_material"
-                                                              boundingObject Transform {
+                                                              boundingObject Pose {
                                                                 rotation 1 0 0 -1.570796
                                                                 children [
                                                                   Cylinder {
@@ -2652,7 +2613,7 @@ PROTO Pr2 [
                                                                     roughness 0.5
                                                                   }
                                                                   geometry Mesh {
-                                                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh10.obj"
+                                                                    url "meshes/Mesh10.obj"
                                                                   }
                                                                 }
                                                                 DEF l_wrist_roll_joint HingeJoint {
@@ -2689,12 +2650,10 @@ PROTO Pr2 [
                                                                           roughness 0.5
                                                                         }
                                                                         geometry Mesh {
-                                                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/l_forearm_cam_sensor_1.obj"
+                                                                          url "meshes/l_forearm_cam_sensor_1.obj"
                                                                         }
                                                                       }
                                                                       DEF l_gripper_palm_link Solid {
-                                                                        translation 0.0 0.0 0.0
-                                                                        rotation 0.0 1.0 0.0 0.0
                                                                         physics Physics {
                                                                           density -1
                                                                           mass 0.58007
@@ -2702,7 +2661,7 @@ PROTO Pr2 [
                                                                           centerOfMass [0.0 0.0 0.0]
                                                                         }
                                                                         contactMaterial "pr2_material"
-                                                                        boundingObject Transform {
+                                                                        boundingObject Pose {
                                                                           translation 0.08 0 0
                                                                           children [
                                                                             Cylinder {
@@ -2718,7 +2677,7 @@ PROTO Pr2 [
                                                                               roughness 0.5
                                                                             }
                                                                             geometry Mesh {
-                                                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/l_forearm_cam_sensor_2.obj"
+                                                                              url "meshes/l_forearm_cam_sensor_2.obj"
                                                                             }
                                                                           }
                                                                           DEF l_gripper_led_frame Solid {
@@ -2735,8 +2694,6 @@ PROTO Pr2 [
                                                                             ]
                                                                           }
                                                                           DEF l_gripper_motor_accelerometer_link Solid {
-                                                                            translation 0.0 0.0 0.0
-                                                                            rotation 0.0 1.0 0.0 0.0
                                                                             name "l_gripper_motor_accelerometer_link"
                                                                             physics Physics {
                                                                               density -1
@@ -2753,7 +2710,6 @@ PROTO Pr2 [
                                                                           }
                                                                           DEF l_gripper_tool_frame Solid {
                                                                             translation 0.18 0.0 0.0
-                                                                            rotation 0.0 1.0 0.0 0.0
                                                                             name "l_gripper_tool_frame"
                                                                             physics Physics {
                                                                               density -1
@@ -2826,7 +2782,7 @@ PROTO Pr2 [
                                                                             }
                                                                             device [
                                                                               RotationalMotor {
-                                                                                name "l_gripper_l_finger_joint"
+                                                                                name "l_finger_gripper_motor::l_finger"
                                                                                 maxVelocity 0.5
                                                                                 maxPosition 0.548
                                                                                 maxTorque 1000.0
@@ -2847,7 +2803,7 @@ PROTO Pr2 [
                                                                               }
                                                                               contactMaterial "pr2_material"
                                                                               boundingObject Mesh {
-                                                                                url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh11.obj"
+                                                                                url "meshes/Mesh11.obj"
                                                                               }
                                                                               children [
                                                                                 Shape {
@@ -2856,7 +2812,7 @@ PROTO Pr2 [
                                                                                     roughness 0.5
                                                                                   }
                                                                                   geometry Mesh {
-                                                                                    url "webots://projects/robots/clearpath/pr2/protos/meshes/l_gripper_r_finger_link_0.obj"
+                                                                                    url "meshes/l_gripper_r_finger_link_0.obj"
                                                                                   }
                                                                                 }
                                                                                 DEF l_gripper_l_finger_tip_joint HingeJoint {
@@ -2868,7 +2824,7 @@ PROTO Pr2 [
                                                                                   }
                                                                                   device [
                                                                                     RotationalMotor {
-                                                                                      name "l_gripper_l_finger_tip_joint"
+                                                                                      name "l_finger_gripper_motor::l_finger_tip"
                                                                                       maxVelocity 0.5
                                                                                       maxPosition 0.548
                                                                                       maxTorque 1000.0
@@ -2889,7 +2845,7 @@ PROTO Pr2 [
                                                                                       centerOfMass [0.0 0.0 0.0]
                                                                                     }
                                                                                     contactMaterial "pr2_material"
-                                                                                    boundingObject Transform {
+                                                                                    boundingObject Pose {
                                                                                       translation 0.013 -0.01075 0
                                                                                       children [
                                                                                         Box {
@@ -2904,7 +2860,7 @@ PROTO Pr2 [
                                                                                           roughness 0.5
                                                                                         }
                                                                                         geometry Mesh {
-                                                                                          url "webots://projects/robots/clearpath/pr2/protos/meshes/l_gripper_r_finger_joint_0.obj"
+                                                                                          url "meshes/l_gripper_r_finger_joint_0.obj"
                                                                                         }
                                                                                       }
                                                                                     ]
@@ -2922,7 +2878,7 @@ PROTO Pr2 [
                                                                             }
                                                                             device [
                                                                               RotationalMotor {
-                                                                                name "l_gripper_r_finger_joint"
+                                                                                name "l_finger_gripper_motor::r_finger"
                                                                                 maxVelocity 0.5
                                                                                 maxPosition 0.548
                                                                                 maxTorque 1000.0
@@ -2942,20 +2898,18 @@ PROTO Pr2 [
                                                                                 centerOfMass [0.0 0.0 0.0]
                                                                               }
                                                                               contactMaterial "pr2_material"
-                                                                              boundingObject Transform {
-                                                                                translation 0.0 0.0 0.0
+                                                                              boundingObject Pose {
                                                                                 rotation 1.0 0.0 0.0 3.14159265359
                                                                                 children [
                                                                                   Shape {
                                                                                     geometry Mesh {
-                                                                                      url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh12.obj"
+                                                                                      url "meshes/Mesh12.obj"
                                                                                     }
                                                                                   }
                                                                                 ]
                                                                               }
                                                                               children [
-                                                                                Transform {
-                                                                                  translation 0.0 0.0 0.0
+                                                                                Pose {
                                                                                   rotation 1.0 0.0 0.0 3.14159265359
                                                                                   children [
                                                                                     Shape {
@@ -2964,7 +2918,7 @@ PROTO Pr2 [
                                                                                         roughness 0.5
                                                                                       }
                                                                                       geometry Mesh {
-                                                                                        url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh13.obj"
+                                                                                        url "meshes/Mesh13.obj"
                                                                                       }
                                                                                     }
                                                                                   ]
@@ -2978,7 +2932,7 @@ PROTO Pr2 [
                                                                                   }
                                                                                   device [
                                                                                     RotationalMotor {
-                                                                                      name "l_gripper_r_finger_tip_joint"
+                                                                                      name "l_finger_gripper_motor::r_finger_tip"
                                                                                       maxVelocity 0.5
                                                                                       maxPosition 0.548
                                                                                       maxTorque 1000.0
@@ -2999,7 +2953,7 @@ PROTO Pr2 [
                                                                                       centerOfMass [0.0 0.0 0.0]
                                                                                     }
                                                                                     contactMaterial "pr2_material"
-                                                                                    boundingObject Transform {
+                                                                                    boundingObject Pose {
                                                                                       translation 0.013 0.01075 0
                                                                                       children [
                                                                                         Box {
@@ -3008,8 +2962,7 @@ PROTO Pr2 [
                                                                                       ]
                                                                                     }
                                                                                     children [
-                                                                                      Transform {
-                                                                                        translation 0.0 0.0 0.0
+                                                                                      Pose {
                                                                                         rotation 1.0 0.0 0.0 3.14159265359
                                                                                         children [
                                                                                           Shape {
@@ -3018,7 +2971,7 @@ PROTO Pr2 [
                                                                                               roughness 0.5
                                                                                             }
                                                                                             geometry Mesh {
-                                                                                              url "webots://projects/robots/clearpath/pr2/protos/meshes/Mesh14.obj"
+                                                                                              url "meshes/Mesh14.obj"
                                                                                             }
                                                                                           }
                                                                                         ]
@@ -3074,7 +3027,6 @@ PROTO Pr2 [
                                                         }
                                                         children [
                                                           DEF l_forearm_cam_optical_frame Solid {
-                                                            translation 0.0 0.0 0.0
                                                             rotation -0.577350269191 -0.577350269188 -0.577350269191 2.09439510239
                                                             physics Physics {
                                                               density -1
@@ -3083,13 +3035,12 @@ PROTO Pr2 [
                                                               centerOfMass [0.0 0.0 0.0]
                                                             }
                                                             children [
-                                                              Transform {
+                                                              Pose {
                                                                 rotation 0 0 1 3.14159265359
                                                                 children [
                                                                   Camera {
                                                                     rotation 0.678689 -0.678689 0.280647 2.594375
                                                                     name "l_forearm_cam_sensor"
-                                                                    type "color"
                                                                     fieldOfView 1.57079632679
                                                                     width 640
                                                                     height 480

@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@ public:
   // reimplemented public functions
   int nodeType() const override { return WB_NODE_PLANE; }
   void postFinalize() override;
-  void write(WbVrmlWriter &writer) const override;
+  void write(WbWriter &writer) const override;
   void createWrenObjects() override;
   void createResizeManipulator() override;
   void rescale(const WbVector3 &scale) override;
@@ -64,15 +64,11 @@ public:
   // resize manipulator
   void setResizeManipulatorDimensions() override;
 
+  QStringList fieldsToSynchronizeWithX3D() const override;
+
 protected:
   bool areSizeFieldsVisibleAndNotRegenerator() const override;
-  void exportNodeFields(WbVrmlWriter &writer) const override;
-  void exportNodeSubNodes(WbVrmlWriter &writer) const override;
-  const QString &vrmlName() const override {
-    static const QString name("IndexedFaceSet");
-    return name;
-  }
-  const QString &x3dName() const override { return nodeModelName(); }
+  void exportNodeFields(WbWriter &writer) const override;
 
 private:
   // user accessible fields

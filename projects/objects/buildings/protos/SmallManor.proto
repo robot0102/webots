@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/buildings/protos/SmallManor.proto
+# keywords: building/residential
 # A small manor with optional boundingObject.
 # template language: javascript
 
@@ -24,27 +26,27 @@ PROTO SmallManor [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_roof_base_color.jpg"
+              "textures/small_manor_roof_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_roof_roughness.jpg"
+              "textures/small_manor_roof_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_roof_metalness.jpg"
+              "textures/small_manor_roof_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_roof_normal.jpg"
+              "textures/small_manor_roof_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_roof_occlusion.jpg"
+              "textures/small_manor_roof_occlusion.jpg"
             ]
           }
         }
@@ -71,27 +73,27 @@ PROTO SmallManor [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_walls_base_color.jpg"
+              "textures/small_manor_walls_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_walls_roughness.jpg"
+              "textures/small_manor_walls_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_walls_metalness.jpg"
+              "textures/small_manor_walls_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_walls_normal.jpg"
+              "textures/small_manor_walls_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_walls_occlusion.jpg"
+              "textures/small_manor_walls_occlusion.jpg"
             ]
           }
         }
@@ -118,27 +120,27 @@ PROTO SmallManor [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_frame_base_color.jpg"
+              "textures/small_manor_frame_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_frame_roughness.jpg"
+              "textures/small_manor_frame_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_frame_metalness.jpg"
+              "textures/small_manor_frame_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_frame_normal.jpg"
+              "textures/small_manor_frame_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_frame_occlusion.jpg"
+              "textures/small_manor_frame_occlusion.jpg"
             ]
           }
         }
@@ -165,27 +167,27 @@ PROTO SmallManor [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_windows_base_color.jpg"
+              "textures/small_manor_windows_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_windows_roughness.jpg"
+              "textures/small_manor_windows_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_windows_metalness.jpg"
+              "textures/small_manor_windows_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_windows_normal.jpg"
+              "textures/small_manor_windows_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/small_manor_windows_occlusion.jpg"
+              "textures/small_manor_windows_occlusion.jpg"
             ]
           }
         }
@@ -212,7 +214,7 @@ PROTO SmallManor [
     %< if (fields.enableBoundingObject.value) { >%
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0 0 5
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -221,7 +223,7 @@ PROTO SmallManor [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -4.35 0 5.0
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -230,7 +232,7 @@ PROTO SmallManor [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 4.94 0.58 5.0
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [

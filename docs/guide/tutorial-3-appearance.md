@@ -29,7 +29,7 @@ Lights are costly in term of performance and reduce the simulation speed (especi
 Minimizing the number of lights increases the rendering speed.
 A [PointLight](../reference/pointlight.md) is more efficient than a [SpotLight](../reference/spotlight.md), but less than a [DirectionalLight](../reference/directionallight.md).
 
-In this simulation, the [Light](../reference/light.md) node is not visible in the scene tree because it is contained in the [TexturedBackgroundLight](object-backgrounds.md#texturedbackgroundlight) PROTO node.
+In this simulation, the [Light](../reference/light.md) node is not visible in the scene tree because it is contained in the [TexturedBackgroundLight](https://webots.cloud/run?url={{ url.github_blob }}/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto) PROTO node.
 It consists of a [DirectionalLight](../reference/directionallight.md) whose intensity and direction is computed automatically according to the background of the scene.
 
 ### Modify the Appearance of the Walls
@@ -111,4 +111,4 @@ To compare your world with the solution, go to your files and find the folder na
 In this tutorial, you have learned how to set up a good looking environment using the [PBRAppearance](../reference/pbrappearance.md) node and the light nodes.
 
 You can go further on this topic by reading the detailed description of these nodes in the `Reference Manual`.
-This [section](modeling.md#how-to-get-a-realisitc-and-efficient-rendering) will give you a method to efficiently setup these nodes.
+This [FAQ](https://github.com/cyberbotics/webots/discussions/5411) will give you a method to efficiently setup these nodes.

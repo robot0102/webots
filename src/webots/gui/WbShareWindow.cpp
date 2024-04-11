@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,9 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtGui/QDesktopServices>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 
 #include "WbMainWindow.hpp"
@@ -31,33 +33,39 @@ WbShareWindow::WbShareWindow(QWidget *parent) : QDialog(parent) {
     uploadUrl = uploadUrl.split("//")[1];
   groupBoxStyleSheet = "QGroupBox {border: 1px solid gray;border-radius: 9px;margin-top: 0.5em; } QGroupBox::title "
                        "{subcontrol-origin:  margin; subcontrol-position: top center; }";
-  this->setWindowTitle(tr("Share your simulation online"));
+  this->setWindowTitle(tr("Share your simulation"));
+  this->setMinimumSize(325, 150);
 
   QGridLayout *layout = new QGridLayout(this);
 
-  QLabel *labelIntro = new QLabel(this);
-  labelIntro->setOpenExternalLinks(true);
-  labelIntro->setText(tr("<html><head/><body><p>Publish your simulation on <a href=\"https://%1/\"><span "
-                         "style=\" text-decoration: underline; color:#5dade2;\">%1</span></a>.</p></body></html>")
-                        .arg(uploadUrl));
-  layout->addWidget(labelIntro, 3, 0, 1, 2);
+  QRadioButton *boxButtons[2];
+  boxButtons[0] = new QRadioButton("Upload to " + uploadUrl, this);
+  layout->addWidget(boxButtons[0], 1, 0, 2, 2);
+
+  boxButtons[1] = new QRadioButton("Save as local files", this);
+  layout->addWidget(boxButtons[1], 3, 0, 2, 2);
 
   QSpacerItem *verticalSpacer = new QSpacerItem(100, 10);
-  layout->addItem(verticalSpacer, 4, 0, 1, 2);
+  layout->addItem(verticalSpacer, 5, 0, 1, 2);
+
+  boxButtons[0]->setChecked(true);
 
   QPushButton *pushButtonAnimation = new QPushButton(this);
   pushButtonAnimation->setFocusPolicy(Qt::NoFocus);
-  pushButtonAnimation->setText(tr("Record and\n"
-                                  "upload &animation"));
-  layout->addWidget(pushButtonAnimation, 5, 1, 1, 1);
+  pushButtonAnimation->setText(tr("Record and\nexport animation"));
+  pushButtonAnimation->setFixedHeight(46);
+  layout->addWidget(pushButtonAnimation, 6, 1, 1, 1);
 
   QPushButton *pushButtonScene = new QPushButton(this);
   pushButtonScene->setFocusPolicy(Qt::NoFocus);
-  pushButtonScene->setText(tr("Upload your scene"));
-  pushButtonScene->setFixedHeight(pushButtonAnimation->height() + 9);
-  layout->addWidget(pushButtonScene, 5, 0, 1, 1);
+  pushButtonScene->setText(tr("Export scene"));
+  pushButtonScene->setFixedHeight(46);
+  layout->addWidget(pushButtonScene, 6, 0, 1, 1);
 
   WbMainWindow *mainWindow = dynamic_cast<WbMainWindow *>(parentWidget());
+  mainWindow->setSaveLocally(false);
+
+  connect(boxButtons[1], &QRadioButton::toggled, mainWindow, &WbMainWindow::setSaveLocally);
   connect(pushButtonScene, &QPushButton::pressed, mainWindow, &WbMainWindow::uploadScene);
   connect(pushButtonScene, &QPushButton::pressed, this, &WbShareWindow::close);
   connect(pushButtonAnimation, &QPushButton::pressed, mainWindow, &WbMainWindow::startAnimationRecording);
@@ -65,47 +73,43 @@ WbShareWindow::WbShareWindow(QWidget *parent) : QDialog(parent) {
 }
 
 WbLinkWindow::WbLinkWindow(QWidget *parent) : QDialog(parent) {
-  this->setWindowTitle(tr("Share your simulation"));
+  this->setWindowTitle(tr("Upload Successful"));
+  this->setMinimumSize(325, 110);
 
-  mGroupBoxLink = new QGroupBox(this);
-  mGroupBoxLink->setTitle(tr("Upload successful"));
-  mGroupBoxLink->setStyleSheet(groupBoxStyleSheet);
-  mGroupBoxLink->setGeometry(QRect(10, 20, 291, 61));
+  QGridLayout *layout = new QGridLayout(this);
 
-  QGridLayout *layout = new QGridLayout(mGroupBoxLink);
-  mLabelLink = new QLabel(mGroupBoxLink);
-  mLabelLink->setAlignment(Qt::AlignCenter);
-  mLabelLink->setStyleSheet("border: none;");
-  mLabelLink->setOpenExternalLinks(true);
-  mLabelLink->setMinimumHeight(15);
-  layout->addWidget(mLabelLink, 0, 0, 1, 1);
+  QSpacerItem *verticalSpacer = new QSpacerItem(100, 8);
+  layout->addItem(verticalSpacer, 0, 0, 1, 3);
 
-  mPushButtonSave = new QPushButton(this);
-  mPushButtonSave->setGeometry(QRect(10, 90, 181, 25));
-  mPushButtonSave->setFocusPolicy(Qt::NoFocus);
-  mPushButtonSave->setText(tr("Also save a local copy..."));
+  QPushButton *pushButtonOpenLink = new QPushButton(this);
+  pushButtonOpenLink->setFocusPolicy(Qt::NoFocus);
+  pushButtonOpenLink->setText(tr("Open in Browser"));
+  pushButtonOpenLink->setFixedWidth(pushButtonOpenLink->width() + 50);
+  layout->addWidget(pushButtonOpenLink, 1, 1, 1, 1);
+  connect(pushButtonOpenLink, &QPushButton::pressed, this, &WbLinkWindow::openUrl);
+  connect(pushButtonOpenLink, &QPushButton::pressed, this, &WbShareWindow::close);
 
-  WbMainWindow *mainWindow = dynamic_cast<WbMainWindow *>(parentWidget());
-  connect(mPushButtonSave, &QPushButton::clicked, mainWindow, &WbMainWindow::exportHtmlFiles);
+  QLabel *labelInfo = new QLabel(this);
+  labelInfo->setText(tr("<html><head/><body><p style=\" text-align: center;\">Make sure to click Open in Browser "
+                        "to associate<br>the upload with your webots.cloud account.</a></p></body></html>"));
+  layout->addWidget(labelInfo, 2, 0, 1, 3);
 }
 
 void WbLinkWindow::reject() {
   QDir dir(WbStandardPaths::webotsTmpPath() + "textures/");  // remove tmp files
   dir.removeRecursively();
-  const QStringList extensions = {".html", ".x3d", ".json"};
+  const QStringList extensions = {".html", ".x3d", ".json", ".jpg"};
   foreach (QString extension, extensions)
     QFile::remove(WbStandardPaths::webotsTmpPath() + "cloud_export" + extension);
 
   QDialog::reject();
 }
 
-void WbLinkWindow::fileSaved() {
-  mPushButtonSave->setEnabled(false);
-  mPushButtonSave->setText(tr("local copy saved"));
-  mPushButtonSave->setStyleSheet("color: gray;");
+void WbLinkWindow::setUploadUrl(const QString &url) {
+  mUrl = url + "?upload=webots";
 }
 
-void WbLinkWindow::setLabelLink(QString url) {
-  mLabelLink->setText(tr("Link: <a style='color: #5DADE2;' href='%1'>%1</a>").arg(url));
-  mGroupBoxLink->adjustSize();
+void WbLinkWindow::openUrl() {
+  if (QDesktopServices::openUrl(QUrl(mUrl, QUrl::TolerantMode)))
+    return;
 }

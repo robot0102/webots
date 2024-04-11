@@ -5,8 +5,8 @@ import os
 import sys
 
 try:
-    includePath = os.environ.get("WEBOTS_HOME") + "/projects/samples/robotbenchmark/include"
-    includePath.replace('/', os.sep)
+    includePath = os.path.join(os.path.normpath(os.environ.get("WEBOTS_HOME")), 'projects', 'samples', 'robotbenchmark',
+                               'include')
     sys.path.append(includePath)
     from robotbenchmark import robotbenchmarkRecord
 except ImportError:
@@ -38,12 +38,13 @@ while robot.step(timestep) != -1:
         tx = t[0]
     else:  # wait for record message
         message = robot.wwiReceiveText()
-        if message:
+        while message:
             if message.startswith("record:"):
                 record = robotbenchmarkRecord(message, "robot_programming", percent)
                 robot.wwiSendText(record)
                 break
             elif message == "exit":
                 break
+            message = robot.wwiReceiveText()
 
 robot.simulationSetMode(Supervisor.SIMULATION_MODE_PAUSE)

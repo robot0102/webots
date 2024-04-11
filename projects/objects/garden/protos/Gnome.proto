@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/garden/protos/Gnome.proto
+# keywords: exterior/garden
 # A gnome with optional physics.
 # template language: javascript
 
@@ -26,27 +28,27 @@ PROTO Gnome [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/garden/protos/textures/gnome_base_color.jpg"
+              "textures/gnome_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/garden/protos/textures/gnome_roughness.jpg"
+              "textures/gnome_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/garden/protos/textures/gnome_metalness.jpg"
+              "textures/gnome_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/garden/protos/textures/gnome_normal.jpg"
+              "textures/gnome_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/garden/protos/textures/gnome_occlusion.jpg"
+              "textures/gnome_occlusion.jpg"
             ]
           }
         }
@@ -71,9 +73,8 @@ PROTO Gnome [
         }
       }
     ]
-    boundingObject Transform {
+    boundingObject Pose {
       translation 0 0 0.4
-      rotation 0 0 1 0
       children [
         Cylinder {
           height 0.8

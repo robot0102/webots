@@ -18,16 +18,15 @@ MAX_TIME = 60.0
 sensorVisualizationNodes = []
 
 try:
-    includePath = os.environ.get("WEBOTS_HOME") + "/projects/samples/robotbenchmark/include"
-    includePath.replace('/', os.sep)
-    sys.path.append(includePath)
+    sys.path.append(os.path.join(os.path.normpath(os.environ.get("WEBOTS_HOME")), 'projects', 'samples', 'robotbenchmark',
+                                 'include'))
     from robotbenchmark import robotbenchmarkRecord
 except ImportError:
     sys.stderr.write("Warning: 'robotbenchmark' module not found.\n")
     sys.exit(0)
 
 
-def apply_spline_subdivison_to_path(path, subdivision):
+def apply_spline_subdivision_to_path(path, subdivision):
     """Apply spline subdivision to the list of points."""
     spline = []
     points = list(path)
@@ -159,7 +158,7 @@ for i in range(waypoints.getCount()):
     coordinates.append((point[1], point[0]))
 subdividedCoordinates = coordinates
 if splineSubdivision > 0:
-    subdividedCoordinates = apply_spline_subdivison_to_path(coordinates, splineSubdivision)
+    subdividedCoordinates = apply_spline_subdivision_to_path(coordinates, splineSubdivision)
 roadPath = LineString(subdividedCoordinates)
 emergencyLanePath = roadPath.parallel_offset(1.5 * laneWidth, 'right')
 initialDistance = roadPath.project(initialPoint)
@@ -193,11 +192,14 @@ while time < MAX_TIME and not inEmergencyLane and not collided and not sumoFailu
     supervisor.wwiSendText("update: " + str(time) + " {0:.3f}".format(distance))
     # check if sensors visualization should be enabled/disabled
     message = supervisor.wwiReceiveText()
-    if message and message.startswith("sensors visualization:"):
-        if message.endswith("false"):
-            enable_sensors_visualization(supervisor, False)
-        elif message.endswith("true"):
-            enable_sensors_visualization(supervisor, True)
+    while message:
+        if message.startswith("sensors visualization:"):
+            if message.endswith("false"):
+                enable_sensors_visualization(supervisor, False)
+            elif message.endswith("true"):
+                enable_sensors_visualization(supervisor, True)
+        message = supervisor.wwiReceiveText()
+
 
 supervisor.wwiSendText("stop")
 
@@ -217,12 +219,13 @@ distance = round(roadPath.project(Point((position[0], position[1]))) - initialDi
 while supervisor.step(timestep) != -1:
     # wait for record message
     message = supervisor.wwiReceiveText()
-    if message:
+    while message:
         if message.startswith("record:"):
             record = robotbenchmarkRecord(message, "highway_driving", distance)
             supervisor.wwiSendText(record)
             break
         elif message == "exit":
             break
+        message = supervisor.wwiReceiveText()
 
 supervisor.simulationSetMode(Supervisor.SIMULATION_MODE_PAUSE)

@@ -1,13 +1,17 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/traffic/protos/SpeedLimitPanel.proto
+# keywords: traffic/sign
 # Traffic panel: Speed limit panel (5mph to 80mph) or one way panel.
+
+EXTERNPROTO "webots://projects/objects/geometries/protos/Extrusion.proto"
 
 PROTO SpeedLimitPanel [
   field SFVec3f     translation        0 0 0
   field SFRotation  rotation           0 0 1 0
   field SFString    name               "speed limit panel"
-  field MFString    signImage          "webots://projects/objects/traffic/protos/textures/signs/us/speed_limit_45.jpg"  # Defines the texture used for the sign.
+  field MFString    signImage          "textures/signs/us/speed_limit_45.jpg"  # Defines the texture used for the sign.
   field SFColor     color              0.8 0.8 0.8                             # Defines the color of the panel.
   field MFColor     recognitionColors  [ 1 1 1, 0.8 0.8 0.8 ]                  # Is `Solid.recognitionColors`.
 ]
@@ -44,8 +48,8 @@ PROTO SpeedLimitPanel [
           ]
         }
       }
-      Transform {
-        translation 0 0 -0.89
+      Pose {
+        translation 0 -0.0185 -0.899
         rotation 0 1 0 1.5708
         children [
           DEF PANEL_BODY Shape {
@@ -70,7 +74,7 @@ PROTO SpeedLimitPanel [
     ]
     name IS name
     model "speed limit panel"
-    boundingObject Transform {
+    boundingObject Pose {
       translation 0.03 -0.01 0
       children [
         Box {

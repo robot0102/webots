@@ -1,4 +1,10 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "webots://projects/objects/solids/protos/SolidBox.proto"
+
 WorldInfo {
   info [
     "Example world demonstrating the use of a simple Motor device."
@@ -34,7 +40,7 @@ DEF ROBOT Robot {
       ]
       endPoint Solid {
         children [
-          Transform {
+          Pose {
             translation 0 0 0.063
             children [
               Shape {
@@ -51,7 +57,7 @@ DEF ROBOT Robot {
               }
             ]
           }
-          Transform {
+          Pose {
             translation 0 0 0.063
             rotation 0 0 1 0.523599
             children [
@@ -70,7 +76,7 @@ DEF ROBOT Robot {
               }
             ]
           }
-          Transform {
+          Pose {
             translation 0.05 0 0.063
             rotation 0 1 0 1.570796
             children [
@@ -91,7 +97,7 @@ DEF ROBOT Robot {
         ]
         boundingObject Group {
           children [
-            Transform {
+            Pose {
               translation 0 0 0.063
               children [
                 Shape {
@@ -104,7 +110,7 @@ DEF ROBOT Robot {
                 }
               ]
             }
-            Transform {
+            Pose {
               translation 0.05 0 0.063
               rotation 0 1 0 1.5708
               children [
@@ -127,7 +133,7 @@ DEF ROBOT Robot {
     }
     DEF BASIS_GROUP Group {
       children [
-        Transform {
+        Pose {
           translation 0 0 0.019
           children [
             Shape {

@@ -1,4 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
 WorldInfo {
   info [
     "This world shows all the base graphical geometries."
@@ -13,7 +17,7 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-DEF BOX Transform {
+DEF BOX Pose {
   children [
     Shape {
       appearance PBRAppearance {
@@ -27,7 +31,7 @@ DEF BOX Transform {
     }
   ]
 }
-DEF CONE Transform {
+DEF CONE Pose {
   translation 1 0 0
   children [
     Shape {
@@ -44,7 +48,7 @@ DEF CONE Transform {
     }
   ]
 }
-DEF CAPSULE Transform {
+DEF CAPSULE Pose {
   translation 2 0 0
   children [
     Shape {
@@ -61,7 +65,7 @@ DEF CAPSULE Transform {
     }
   ]
 }
-DEF CYLINDER Transform {
+DEF CYLINDER Pose {
   translation 3 0 0
   children [
     Shape {
@@ -77,7 +81,7 @@ DEF CYLINDER Transform {
     }
   ]
 }
-DEF ELEVATION_GRID Transform {
+DEF ELEVATION_GRID Pose {
   translation 3.75 -0.25 0
   children [
     Shape {
@@ -98,7 +102,7 @@ DEF ELEVATION_GRID Transform {
     }
   ]
 }
-DEF INDEXED_LINE_SET Transform {
+DEF INDEXED_LINE_SET Pose {
   translation 5 0 0
   children [
     Shape {
@@ -128,7 +132,7 @@ DEF INDEXED_LINE_SET Transform {
     }
   ]
 }
-DEF INDEXED_FACE_SET Transform {
+DEF INDEXED_FACE_SET Pose {
   translation 6 0 0
   children [
     Shape {
@@ -157,7 +161,7 @@ DEF INDEXED_FACE_SET Transform {
     }
   ]
 }
-DEF PLANE Transform {
+DEF PLANE Pose {
   translation 7 0 0
   children [
     Shape {
@@ -172,7 +176,7 @@ DEF PLANE Transform {
     }
   ]
 }
-DEF SPHERE Transform {
+DEF SPHERE Pose {
   translation 8 0 0
   children [
     Shape {
@@ -188,7 +192,7 @@ DEF SPHERE Transform {
     }
   ]
 }
-DEF POINT_SET Transform {
+DEF POINT_SET Pose {
   translation 9 0 0
   children [
     Shape {

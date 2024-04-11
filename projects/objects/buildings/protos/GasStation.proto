@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/buildings/protos/GasStation.proto
+# keywords: building/shop
 # A gas station with optional boundingObject.
 # template language: javascript
 
@@ -24,18 +26,18 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_cover_base_color.jpg"
+              "textures/gas_station_store_cover_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_cover_roughness.jpg"
+              "textures/gas_station_store_cover_roughness.jpg"
             ]
           }
           metalness 0
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_cover_normal.jpg"
+              "textures/gas_station_store_cover_normal.jpg"
             ]
           }
         }
@@ -62,27 +64,27 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_roof_base_color.jpg"
+              "textures/gas_station_roof_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_roof_roughness.jpg"
+              "textures/gas_station_roof_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_roof_metalness.jpg"
+              "textures/gas_station_roof_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_roof_normal.jpg"
+              "textures/gas_station_roof_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_roof_occlusion.jpg"
+              "textures/gas_station_roof_occlusion.jpg"
             ]
           }
         }
@@ -109,27 +111,27 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_column_base_color.jpg"
+              "textures/gas_station_column_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_column_roughness.jpg"
+              "textures/gas_station_column_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_column_metalness.jpg"
+              "textures/gas_station_column_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_column_normal.jpg"
+              "textures/gas_station_column_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_column_occlusion.jpg"
+              "textures/gas_station_column_occlusion.jpg"
             ]
           }
         }
@@ -156,27 +158,27 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_wall_base_color.jpg"
+              "textures/gas_station_wall_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_wall_roughness.jpg"
+              "textures/gas_station_wall_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_wall_metalness.jpg"
+              "textures/gas_station_wall_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_wall_normal.jpg"
+              "textures/gas_station_wall_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_wall_occlusion.jpg"
+              "textures/gas_station_wall_occlusion.jpg"
             ]
           }
         }
@@ -203,27 +205,27 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_base_color.jpg"
+              "textures/gas_station_store_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_roughness.jpg"
+              "textures/gas_station_store_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_metalness.jpg"
+              "textures/gas_station_store_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_normal.jpg"
+              "textures/gas_station_store_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_store_occlusion.jpg"
+              "textures/gas_station_store_occlusion.jpg"
             ]
           }
         }
@@ -250,27 +252,27 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_sidewalk_base_color.jpg"
+              "textures/gas_station_sidewalk_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_sidewalk_roughness.jpg"
+              "textures/gas_station_sidewalk_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_sidewalk_metalness.jpg"
+              "textures/gas_station_sidewalk_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_sidewalk_normal.jpg"
+              "textures/gas_station_sidewalk_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_sidewalk_occlusion.jpg"
+              "textures/gas_station_sidewalk_occlusion.jpg"
             ]
           }
         }
@@ -316,27 +318,27 @@ PROTO GasStation [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_dispenser_base_color.jpg"
+              "textures/gas_station_dispenser_base_color.jpg"
             ]
           }
           roughnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_dispenser_roughness.jpg"
+              "textures/gas_station_dispenser_roughness.jpg"
             ]
           }
           metalnessMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_dispenser_metalness.jpg"
+              "textures/gas_station_dispenser_metalness.jpg"
             ]
           }
           normalMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_dispenser_normal.jpg"
+              "textures/gas_station_dispenser_normal.jpg"
             ]
           }
           occlusionMap ImageTexture {
             url [
-              "webots://projects/objects/buildings/protos/textures/gas_station_dispenser_occlusion.jpg"
+              "textures/gas_station_dispenser_occlusion.jpg"
             ]
           }
         }
@@ -363,7 +365,7 @@ PROTO GasStation [
     %< if (fields.enableBoundingObject.value) { >%
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 5.6828 -1.08 7.3103
           rotation -0.584896 0.584896 0.561956 -2.117641
           children [
@@ -372,7 +374,7 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -5.2185 10.83 6.874
           rotation -0.584896 0.584896 0.561956 -2.117641
           children [
@@ -381,7 +383,7 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -9.0253 -5.73 2.4
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -390,7 +392,7 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 7.3147 -5.73 3.1928
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -399,28 +401,28 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 7.3145 1.33 3.2
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
             USE COLUMN
           ]
         }
-        Transform {
+        Pose {
           translation -8.6655 6.7 3.2
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
             USE COLUMN
           ]
         }
-        Transform {
+        Pose {
           translation -8.6655 16.74 3.2
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
             USE COLUMN
           ]
         }
-        Transform {
+        Pose {
           translation 7.4047 -6.9 1.25
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -429,28 +431,28 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 7.4047 -4.54 1.25
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
             USE MACHINE
           ]
         }
-        Transform {
+        Pose {
           translation 7.4047 0.2 1.25
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
             USE MACHINE
           ]
         }
-        Transform {
+        Pose {
           translation 7.4047 2.56 1.25
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
             USE MACHINE
           ]
         }
-        Transform {
+        Pose {
           translation 7.4647 -3.03 0.07
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -459,7 +461,7 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -3.0953 -4.52 -0.04
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [
@@ -468,7 +470,7 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -9.0653 1.97 -0.04
           rotation 1 0 0 1.570796
           children [
@@ -477,7 +479,7 @@ PROTO GasStation [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -8.6153 10.87 -0.04
           rotation 0.57735 -0.57735 -0.57735 2.094395
           children [

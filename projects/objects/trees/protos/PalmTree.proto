@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/trees/protos/PalmTree.proto
+# keywords: exterior/tree
 # A palm tree with optional boundingObject.
 # template language: javascript
 
@@ -25,7 +27,7 @@ PROTO PalmTree [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/trees/protos/textures/palm_tree_branches.jpg"
+              "textures/palm_tree_branches.jpg"
             ]
           }
           metalness 0
@@ -54,7 +56,7 @@ PROTO PalmTree [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/trees/protos/textures/palm_tree_trunk_auxiliary.png"
+              "textures/palm_tree_trunk_auxiliary.png"
             ]
           }
           metalness 0
@@ -83,7 +85,7 @@ PROTO PalmTree [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/trees/protos/textures/palm_tree_trunk_spikes.jpg"
+              "textures/palm_tree_trunk_spikes.jpg"
             ]
           }
           metalness 0
@@ -112,7 +114,7 @@ PROTO PalmTree [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/trees/protos/textures/palm_tree_trunk.jpg"
+              "textures/palm_tree_trunk.jpg"
             ]
           }
           metalness 0
@@ -141,7 +143,7 @@ PROTO PalmTree [
         appearance PBRAppearance {
           baseColorMap ImageTexture {
             url [
-              "webots://projects/objects/trees/protos/textures/palm_tree_leaf.png"
+              "textures/palm_tree_leaf.png"
             ]
           }
           metalness 0
@@ -168,7 +170,7 @@ PROTO PalmTree [
       }
     ]
     %< if (fields.enableBoundingObject.value) { >%
-    boundingObject Transform {
+    boundingObject Pose {
       translation 0 0 1.125
       children [
         Cylinder {

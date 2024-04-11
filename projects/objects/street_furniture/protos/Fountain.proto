@@ -1,8 +1,12 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/street_furniture/protos/Fountain.proto
 # A configurable fountain.
 # template language: javascript
+
+EXTERNPROTO "webots://projects/objects/geometries/protos/Extrusion.proto"
+EXTERNPROTO "webots://projects/objects/solids/protos/SolidPipe.proto"
 
 PROTO Fountain [
   field SFVec3f     translation            0 0 0
@@ -119,7 +123,7 @@ PROTO Fountain [
         subdivision %<= subdivision >%
         appearance USE PIPE
       }
-      Transform {
+      Pose {
         translation 0 0 %<= 0.0385 * height >%
         children [
           Shape {
@@ -143,7 +147,7 @@ PROTO Fountain [
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 %<= 0.504 * height >%
         children [
           Shape {
@@ -156,7 +160,7 @@ PROTO Fountain [
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 %<= 0.9 * height >%
         children [
           Shape {
@@ -170,7 +174,7 @@ PROTO Fountain [
         ]
       }
       # water
-      Transform {
+      Pose {
         translation 0 0 %<= 0.066 * height >%
         children [
           Shape {
@@ -190,7 +194,7 @@ PROTO Fountain [
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 %<= 0.52 * height >%
         children [
           Shape {
@@ -205,7 +209,7 @@ PROTO Fountain [
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 %<= 0.88 * height >%
         children [
           Shape {
@@ -223,7 +227,7 @@ PROTO Fountain [
     ]
     name IS name
     model "fountain"
-    boundingObject Transform {
+    boundingObject Pose {
       translation 0 0 %<= 0.45 * height >%
       rotation 0 0 1 -1.570796
       children [

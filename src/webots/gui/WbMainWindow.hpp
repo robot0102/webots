@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,8 +32,9 @@ class WbNode;
 class WbOdeDebugger;
 class WbRecentFilesList;
 class WbRobot;
+class WbRobotWindow;
 class WbSimulationView;
-class WbStreamingServer;
+class WbTcpServer;
 
 class QMenu;
 class QMenuBar;
@@ -49,11 +50,11 @@ class WbMainWindow : public QMainWindow {
   Q_PROPERTY(QString toolBarAlign MEMBER mToolBarAlign READ toolBarAlign WRITE setToolBarAlign)
 
 public:
-  explicit WbMainWindow(bool minimizedOnStart, WbStreamingServer *streamingServer, QWidget *parent = NULL);
+  explicit WbMainWindow(bool minimizedOnStart, WbTcpServer *tcpServer, QWidget *parent = NULL);
   virtual ~WbMainWindow();
 
   void lockFullScreen(bool isLocked);
-  bool savePerspective(bool reloading, bool saveToFile);
+  void savePerspective(bool reloading, bool saveToFile, bool isSaveEvent = false);
   void restorePerspective(bool reloading, bool firstLoad, bool loadingFromMemory);
 
   const QString &enabledIconPath() const { return mEnabledIconPath; }
@@ -68,21 +69,24 @@ public:
 
   void restorePreferredGeometry(bool minimizedOnStart = false);
 
+  void deleteRobotWindow(WbRobot *robot);
+
 signals:
   void restartRequested();
   void splashScreenCloseRequested();
 
 public slots:
-  bool loadDifferentWorld(const QString &fileName);
-  bool loadWorld(const QString &fileName, bool reloading = false);
+  void loadDifferentWorld(const QString &fileName);
+  void loadWorld(const QString &fileName, bool reloading = false);
   bool setFullScreen(bool isEnabled, bool isRecording = false, bool showDialog = true, bool startup = false);
   void showGuidedTour();
   void showUpdatedDialog();
   void setView3DSize(const QSize &size);
   void restoreRenderingDevicesPerspective();
   void resetWorldFromGui();
-  void exportHtmlFiles();
 
+  QString exportHtmlFiles();
+  void setSaveLocally(bool status) { mSaveLocally = status; };
   void uploadScene();
   void startAnimationRecording();
 
@@ -100,8 +104,6 @@ private slots:
   void saveWorldAs(bool skipSimulationHasRunWarning = false);
   void reloadWorld();
   void resetGui(bool restartControllers);
-  void importVrml();
-  void exportVrml();
   void showAboutBox();
   void show3DViewingInfo();
   void show3DMovingInfo();
@@ -123,6 +125,7 @@ private slots:
   void newProjectDirectory();
   void newRobotController();
   void newPhysicsPlugin();
+  void newProto();
   void openPreferencesDialog();
   void openWebotsUpdateDialogFromStartup();
   void openWebotsUpdateDialogFromMenu();
@@ -132,7 +135,11 @@ private slots:
   void showStatusBarMessage(WbLog::Level level, const QString &message);
   void editRobotController();
   void showRobotWindow();
+  void clearOverlaysMenu();
   void updateOverlayMenu();
+  void updateRobotNameInOverlaysMenu();
+  void addRobotInOverlaysMenu(WbRobot *robot);
+  void removeRobotInOverlaysMenu(const WbRobot *robot);
   void createWorldLoadingProgressDialog();
   void deleteWorldLoadingProgressDialog();
   void setWorldLoadingProgress(const int progress);
@@ -144,12 +151,20 @@ private slots:
   void disableAnimationAction();
 
   void ShareMenu();
-  void upload(char type);
+  void upload();
   void updateUploadProgressBar(qint64 bytesSent, qint64 bytesTotal);
   void uploadFinished();
+  void uploadStatus();
 
 private:
-  void showHtmlRobotWindow(WbRobot *);
+  void showHtmlRobotWindow(WbRobot *robot, bool manualTrigger);
+  void closeClientRobotWindow(WbRobot *robot);
+  void onSocketOpened();
+  QList<WbRobotWindow *> mRobotWindows;
+  QList<WbRobot *> mRobotsWaitingForWindowToOpen;
+  bool mOnSocketOpen;
+  bool mRobotWindowClosed;
+
   int mExitStatus;
   QList<WbConsole *> mConsoles;
   WbBuildEditor *mTextEditor;
@@ -182,13 +197,11 @@ private:
   QMenu *createBuildMenu();
   QMenu *createOverlayMenu();
   QMenu *createToolsMenu();
-  QMenu *createWizardsMenu();
   QMenu *createHelpMenu();
   bool proposeToSaveWorld(bool reloading = false);
   QString findHtmlFileName(const char *title);
   void enableToolsWidgetItems(bool enabled);
   void updateWindowTitle();
-  void updateGui();
   void updateSimulationMenu();
   void writePreferences() const;
   void showDocument(const QString &url);
@@ -207,20 +220,21 @@ private:
   // QSS properties
   QString mEnabledIconPath, mDisabledIconPath, mCoreIconPath, mToolBarAlign;
 
-  WbStreamingServer *mStreamingServer;
-  WbLinkWindow *mLinkWindow;
+  WbTcpServer *mTcpServer;
+  bool mSaveLocally;
+
+  bool uploadFileExists(const QString &fileName);
+  char mUploadType;
 
 private slots:
   void showOnlineDocumentation(const QString &book, const QString &page = "index");
   void updateProjectPath(const QString &oldPath, const QString &newPath);
   void simulationQuit(int exitStatus);
-  void openFileInTextEditor(const QString &);
+  void openFileInTextEditor(const QString &fileName, bool modify = true, bool isRobot = false);
 
   void maximizeDock();
   void minimizeDock();
   void setWidgetMaximized(QWidget *widget, bool maximized);
-  void removeHtmlRobotWindow(WbNode *node);
-  void handleNewRobotInsertion(WbRobot *robot);
 
   void toggleFullScreen(bool enabled);
   void exitFullScreen();

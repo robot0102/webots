@@ -1,4 +1,9 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/objects/floors/protos/RectangleArena.proto"
+
 WorldInfo {
   info [
     "Example world demonstrating the use of a simple LinearMotor device."
@@ -47,7 +52,7 @@ DEF ROBOT Robot {
         ]
       }
     }
-    DEF BASIS_GROUP Transform {
+    DEF BASIS_GROUP Pose {
       translation 0.03 -0.1025 0
       rotation 0 -1 0 1.570795
       children [

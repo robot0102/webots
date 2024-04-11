@@ -1,4 +1,9 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/robots/adept/pioneer2/protos/Pioneer2.proto"
+
 WorldInfo {
   info [
     "The model of the Pioneer 2 robot"
@@ -57,7 +62,7 @@ Solid {
   name "ground"
   boundingObject Group {
     children [
-      Transform {
+      Pose {
         translation 0 -0.02 0
         children [
           Box {
@@ -65,7 +70,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 2 0.15 0
         children [
           Box {
@@ -73,7 +78,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation -2 0.15 0
         children [
           Box {
@@ -81,7 +86,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0.15 2
         rotation 0 1 0 1.57
         children [
@@ -90,7 +95,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0.15 -2
         rotation 0 1 0 1.57
         children [
@@ -99,7 +104,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 1.7 0.15 0
         children [
           Box {
@@ -107,7 +112,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 1.77 0.15 0.455
         rotation 0 1 0 0.885
         children [
@@ -116,7 +121,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation -1.77 0.15 -0.455
         rotation 0 1 0 0.885
         children [
@@ -125,7 +130,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 1.77 0.15 -0.455
         rotation 0 1 0 -0.885
         children [
@@ -134,7 +139,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation -1.77 0.15 0.455
         rotation 0 1 0 -0.885
         children [
@@ -143,7 +148,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation -1.7 0.15 0
         children [
           Box {
@@ -151,7 +156,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0.15 1.7
         rotation 0 1 0 1.57
         children [
@@ -160,7 +165,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0.15 -1.7
         rotation 0 1 0 1.57
         children [
@@ -169,7 +174,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation -0.445 0.15 1.77
         rotation 0 1 0 -0.685
         children [
@@ -178,7 +183,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0.445 0.15 1.77
         rotation 0 1 0 0.685
         children [
@@ -187,7 +192,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0.445 0.15 -1.77
         rotation 0 1 0 -0.685
         children [
@@ -196,7 +201,7 @@ Solid {
           }
         ]
       }
-      Transform {
+      Pose {
         translation -0.445 0.15 -1.77
         rotation 0 1 0 0.685
         children [

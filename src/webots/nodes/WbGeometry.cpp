@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,6 +25,7 @@
 #include "WbSimulationState.hpp"
 #include "WbSlot.hpp"
 #include "WbSolid.hpp"
+#include "WbTransform.hpp"
 #include "WbVector4.hpp"
 #include "WbWorld.hpp"
 #include "WbWrenMeshBuffers.hpp"
@@ -85,7 +86,7 @@ WbGeometry::WbGeometry(const WbNode &other) : WbBaseNode(other) {
 WbGeometry::~WbGeometry() {
   delete mResizeManipulator;
   if (mOdeGeom)
-    destroyOdeObjects();  // for WbGeometries lying in a boundinObject
+    destroyOdeObjects();  // for WbGeometries lying in a boundingObject
   delete mOdeMass;
   delete mBoundingSphere;
 
@@ -158,10 +159,10 @@ dGeomID WbGeometry::createOdeGeom(dSpaceID space) {
 }
 
 void WbGeometry::checkFluidBoundingObjectOrientation() {
-  const WbMatrix3 &m = upperTransform()->rotationMatrix();
+  const WbMatrix3 &m = upperPose()->rotationMatrix();
   const WbVector3 &zAxis = m.column(2);
   const WbVector3 &g = WbWorld::instance()->worldInfo()->gravityVector();
-  const double alpha = zAxis.angle(g);
+  const double alpha = zAxis.angle(-g);
 
   static const double ZERO_THRESHOLD = 1e-3;
 
@@ -175,19 +176,6 @@ void WbGeometry::checkFluidBoundingObjectOrientation() {
 /////////////////////////
 // Create WREN Objects //
 /////////////////////////
-
-void WbGeometry::checkForResizeManipulator() {
-  if (!mResizeManipulator && hasResizeManipulator()) {
-    createResizeManipulator();
-    if (mResizeManipulator)
-      mResizeManipulator->attachTo(wrenNode());
-  }
-}
-
-void WbGeometry::updateContextDependentObjects() {
-  checkForResizeManipulator();
-  WbBaseNode::updateContextDependentObjects();
-}
 
 void WbGeometry::setPickable(bool pickable) {
   if (!mWrenRenderable || isInBoundingObject())
@@ -249,7 +237,8 @@ void WbGeometry::applyToOdeMass() {
   assert(odeGeomData);
   if (mOdeMass->mass > 0.0) {
     WbSolid *const solid = odeGeomData->solid();
-    solid->correctOdeMass(mOdeMass, transformedGeometry());
+    if (solid && solid->physics())
+      solid->correctOdeMass(mOdeMass, transformedGeometry());
   }
 }
 
@@ -428,13 +417,21 @@ void WbGeometry::updateResizeHandlesSize() {
 void WbGeometry::createResizeManipulatorIfNeeded() {
   if (!mResizeManipulatorInitialized) {
     mResizeManipulatorInitialized = true;
-    checkForResizeManipulator();
+    if (!mResizeManipulator && hasResizeManipulator()) {
+      createResizeManipulator();
+      if (mResizeManipulator)
+        mResizeManipulator->attachTo(wrenNode());
+    }
   }
 }
 
 WbWrenAbstractResizeManipulator *WbGeometry::resizeManipulator() {
   createResizeManipulatorIfNeeded();
   return mResizeManipulator;
+}
+
+bool WbGeometry::isResizeManipulatorAttached() const {
+  return mResizeManipulator ? mResizeManipulator->isAttached() : false;
 }
 
 void WbGeometry::attachResizeManipulator() {
@@ -474,7 +471,10 @@ void WbGeometry::setOdeData(dGeomID geom, WbMatter *matterAncestor) {
   if (!areOdeObjectsCreated())
     createOdeObjects();
 
+  if (mOdeGeom)
+    dGeomDestroy(mOdeGeom);
   mOdeGeom = geom;
+
   WbSolid *s = dynamic_cast<WbSolid *>(matterAncestor);
   if (s)
     dGeomSetData(geom, new WbOdeGeomData(s, this));
@@ -484,20 +484,20 @@ void WbGeometry::setOdeData(dGeomID geom, WbMatter *matterAncestor) {
 
 // Utility functions
 
-WbBaseNode *WbGeometry::transformedGeometry() {  // returns an upper WbTransform lying in the same boundingObject if it does
+WbBaseNode *WbGeometry::transformedGeometry() {  // returns an upper WbPose lying in the same boundingObject if it does
                                                  // exist, otherwise the WbGeometry itself
-  WbTransform *const ut = upperTransform();
-  return ut->isInBoundingObject() ? static_cast<WbBaseNode *>(ut) : static_cast<WbBaseNode *>(this);
+  WbPose *const up = upperPose();
+  return up->isInBoundingObject() ? static_cast<WbBaseNode *>(up) : static_cast<WbBaseNode *>(this);
 }
 
 const WbVector3 WbGeometry::absoluteScale() const {
-  const WbTransform *const ut = upperTransform();
-  return ut ? ut->absoluteScale() : WbVector3(1.0, 1.0, 1.0);
+  const WbTransform *const up = upperTransform();
+  return up ? up->absoluteScale() : WbVector3(1.0, 1.0, 1.0);
 }
 
 WbVector3 WbGeometry::absolutePosition() const {
-  const WbTransform *const ut = upperTransform();
-  return ut ? ut->position() : WbVector3();
+  const WbPose *const up = upperPose();
+  return up ? up->position() : WbVector3();
 }
 
 void WbGeometry::computeCastShadows(bool enabled) {
@@ -561,8 +561,8 @@ bool WbGeometry::isAValidBoundingObject(bool checkOde, bool warning) const {
   if (!isInBoundingObject())
     return false;
 
-  const WbTransform *const ut = upperTransform();
-  if (ut && ut->isInBoundingObject() && ut->geometry() != this)
+  const WbPose *const up = upperPose();
+  if (up && up->isInBoundingObject() && up->geometry() != this)
     return false;
 
   if (checkOde && mOdeGeom == NULL)
@@ -578,7 +578,7 @@ int WbGeometry::triangleCount() const {
     return 0;
 }
 
-bool WbGeometry::exportNodeHeader(WbVrmlWriter &writer) const {
+bool WbGeometry::exportNodeHeader(WbWriter &writer) const {
   if (writer.isUrdf())
     return true;
   return WbBaseNode::exportNodeHeader(writer);
@@ -589,15 +589,15 @@ bool WbGeometry::exportNodeHeader(WbVrmlWriter &writer) const {
 ////////////////////////////////
 
 WbMatrix4 WbGeometry::matrix() const {
-  const WbTransform *ut = upperTransform();
-  if (!ut)
+  const WbPose *up = upperPose();
+  if (!up)
     return WbMatrix4();
-  if (!ut->isInBoundingObject())
-    return ut->matrix();
+  if (!up->isInBoundingObject())
+    return up->matrix();
   else {
-    const WbMatrix4 &matrix = ut->vrmlMatrix();
-    ut = ut->upperTransform();
-    return ut->matrix() * matrix;
+    const WbMatrix4 &matrix4 = up->vrmlMatrix();
+    up = up->upperPose();
+    return up->matrix() * matrix4;
   }
 }
 
@@ -611,7 +611,7 @@ int WbGeometry::constraintType() const {
   if (geometryType == WB_NODE_SPHERE || geometryType == WB_NODE_CAPSULE)
     constraint = WbWrenAbstractResizeManipulator::UNIFORM;
   else if (geometryType == WB_NODE_CYLINDER)
-    constraint = WbWrenAbstractResizeManipulator::X_EQUAL_Z;
+    constraint = WbWrenAbstractResizeManipulator::X_EQUAL_Y;
 
   return constraint;
 }
@@ -620,46 +620,11 @@ int WbGeometry::constraintType() const {
 // Export //
 ////////////
 
-void WbGeometry::exportBoundingObjectToX3D(WbVrmlWriter &writer) const {
+void WbGeometry::exportBoundingObjectToX3D(WbWriter &writer) const {
   assert(writer.isX3d());
   assert(isInBoundingObject());
   if (!mWrenMesh)
     return;
 
-  const int vertexCount = wr_static_mesh_get_vertex_count(mWrenMesh);
-  const int indexCount = wr_static_mesh_get_index_count(mWrenMesh);
-  float vertices[3 * vertexCount];
-  unsigned int indices[indexCount];
-  wr_static_mesh_read_data(mWrenMesh, vertices, NULL, NULL, indices);
-
-  writer << "<Shape>";
-  writer << "<Appearance sortType='transparent'><Material emissiveColor='1 1 1'></Material></Appearance>";
-  writer << "<IndexedLineSet coordIndex='";
-
-  for (int i = 0; i < indexCount / 2; ++i)
-    writer << indices[2 * i] << " " << indices[2 * i + 1] << " -1 ";
-  writer << "'>";
-
-  writer << "<Coordinate point='";
-  const float *floatMatrix = wr_transform_get_matrix(mWrenScaleTransform);
-  double doubleMatrix[16];
-  for (int i = 0; i < 16; ++i)
-    doubleMatrix[i] = static_cast<double>(floatMatrix[i]);
-
-  // Extract WREN scaling factors
-  WbMatrix4 meshMatrix;
-  meshMatrix.fromOpenGlMatrix(doubleMatrix);
-  WbVector3 scale = meshMatrix.scale();
-  scale /= absoluteScale();
-
-  for (int i = 0; i < vertexCount; ++i) {
-    const int index = 3 * i;
-    const WbVector3 coord = WbVector3(vertices[index], vertices[index + 1], vertices[index + 2]) * scale;
-    if (i > 0)
-      writer << ", ";
-    writer << coord.toString(WbPrecision::FLOAT_MAX);
-  }
-  writer << "'></Coordinate>";
-  writer << "</IndexedLineSet>";
-  writer << "</Shape>";
+  this->write(writer);
 }

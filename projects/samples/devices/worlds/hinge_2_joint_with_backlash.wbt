@@ -1,4 +1,18 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "webots://projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "webots://projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "webots://projects/appearances/protos/ThreadMetalPlate.proto"
+EXTERNPROTO "webots://projects/objects/solids/protos/SolidRoundedBox.proto"
+EXTERNPROTO "webots://projects/appearances/protos/GalvanizedMetal.proto"
+EXTERNPROTO "webots://projects/objects/solids/protos/SolidTorus.proto"
+EXTERNPROTO "webots://projects/appearances/protos/BrushedAluminium.proto"
+EXTERNPROTO "webots://projects/objects/factory/tools/protos/CapScrew.proto"
+EXTERNPROTO "webots://projects/objects/solids/protos/SolidBox.proto"
+EXTERNPROTO "webots://projects/objects/factory/tools/protos/Bolt.proto"
+EXTERNPROTO "webots://projects/joints/protos/Hinge2JointWithBacklash.proto"
+
 WorldInfo {
   info [
     "Example world demonstrating the difference between a Hinge2Joint and Hinge2JointWithBacklash."
@@ -25,12 +39,14 @@ DEF WITHOUT_BACKLASH Robot {
   translation 0.1 0 0
   children [
     SolidRoundedBox {
+      translation 0 0 0
       size 0.2 0.2 0.01
       borderRadius 0.005
       appearance GalvanizedMetal {
       }
     }
     SolidTorus {
+      translation 0 0 0
       majorRadius 0.03
       minorRadius 0.02
       appearance BrushedAluminium {
@@ -233,12 +249,14 @@ DEF WITH_BACKLASH Robot {
   rotation 0 0 1 -1.570795
   children [
     SolidRoundedBox {
+      translation 0 0 0
       size 0.2 0.2 0.01
       borderRadius 0.005
       appearance GalvanizedMetal {
       }
     }
     SolidTorus {
+      translation 0 0 0
       majorRadius 0.03
       minorRadius 0.02
       appearance BrushedAluminium {

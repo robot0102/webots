@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -63,12 +63,7 @@ public:
   void insertChild(int index, WbNode *child);
 
   // set a child at the specified index
-  // TODO: this will be used instead of removeChild() + insertChild() once the problem with WbMFNode::setItem() is fixed
   void setChild(int index, WbNode *child);
-
-  // remove the child without deleteing it
-  // returns false if the was 'node' was not a child of this Group
-  bool removeChild(WbNode *node);
 
   // remove all children without deleting them
   void clear();
@@ -76,10 +71,13 @@ public:
   // remove and delete all children
   void deleteAllChildren();
 
+  // remove and delete all solid children
+  virtual void deleteAllSolids();
+
   // utility forward functions if the group/transform node has no solid ancestor
   // forward jerk notification to children
   virtual void forwardJerk();
-  void writeParameters(WbVrmlWriter &writer) const override;
+  void writeParameters(WbWriter &writer) const override;
   virtual void collectHiddenKinematicParameters(WbHiddenKinematicParameters::HiddenKinematicParametersMap &map,
                                                 int &counter) const;
   virtual bool resetHiddenKinematicParameters();
@@ -90,9 +88,12 @@ public:
   // selection
   void propagateSelection(bool selected) override;
 
+  // propagate change in segmentation color
+  void updateSegmentationColor(const WbRgb &color) override;
+
   // bounding sphere
   WbBoundingSphere *boundingSphere() const override { return mBoundingSphere; }
-  void recomputeBoundingSphere() const;
+  void recomputeBoundingSphere();
   // For a group in a boundingObject
   dSpaceID odeSpace() const { return mOdeSpace; }
   void setOdeData(dSpaceID s) { mOdeSpace = s; }
@@ -101,7 +102,7 @@ public:
   void setMatrixNeedUpdate() override;
 
   // export
-  void exportBoundingObjectToX3D(WbVrmlWriter &writer) const override;
+  void exportBoundingObjectToX3D(WbWriter &writer) const override;
 
 signals:
   // called after the list of children has changed
@@ -112,6 +113,7 @@ signals:
   void notifyParentSlot(WbBaseNode *child);
   void notifyParentJoint(WbBaseNode *child);
   void childFinalizationHasProgressed(const int progress);  // 0: beginning, 100: end
+  void worldLoadingStatusHasChanged(QString status);
 
 protected:
   // this constructor is reserved for derived classes only
@@ -137,6 +139,7 @@ private:
 
   // user accessible fields
   WbMFNode *mChildren;
+  int mLoadProgress;
 
 public slots:
   void cancelFinalization();

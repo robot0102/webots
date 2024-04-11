@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,6 @@
 
 #include "WbLog.hpp"
 #include "WbProject.hpp"
-#include "WbQjsCollada.hpp"
 #include "WbQjsFile.hpp"
 #include "WbStandardPaths.hpp"
 
@@ -54,11 +53,9 @@ void WbTemplateEngine::copyModuleToTemporaryFile(QString modulePath) {
     filters << "*.lua";
 #ifdef _WIN32
     filters << "*.dll";
-#endif
-#ifdef __linux__
+#elif defined(__linux__)
     filters << "*.so";
-#endif
-#ifdef __APPLE__
+#else  // __APPLE__
     filters << "*.dylib";
 #endif
     QFileInfoList files = luaModulesPath.entryInfoList(filters, QDir::Files | QDir::NoSymLinks);
@@ -69,7 +66,7 @@ void WbTemplateEngine::copyModuleToTemporaryFile(QString modulePath) {
 
 void WbTemplateEngine::initializeJavaScript() {
   // copy JavaScript modules to the temporary directory
-  QDirIterator it(WbStandardPaths::resourcesPath() + "javascript/", QDirIterator::Subdirectories);
+  QDirIterator it(WbStandardPaths::resourcesPath() + "web/wwi/protoVisualizer/templating/", QDirIterator::Subdirectories);
   while (it.hasNext()) {
     QDir jsModulesPath(it.next());
 
@@ -140,8 +137,13 @@ const QString &WbTemplateEngine::closingToken() {
   return gClosingToken;
 }
 
+QString WbTemplateEngine::escapeString(const QString &string) {
+  QString escaped(string);
+  return escaped.replace("\\", "\\\\").replace("\n", "\\n").replace("'", "\\'").toUtf8();
+}
+
 bool WbTemplateEngine::generate(QHash<QString, QString> tags, const QString &logHeaderName, const QString &templateLanguage) {
-  bool result;
+  bool output;
 
   if (templateLanguage == "lua") {
     static bool firstLuaCall = true;
@@ -153,7 +155,7 @@ bool WbTemplateEngine::generate(QHash<QString, QString> tags, const QString &log
     gOpeningToken = "%{";
     gClosingToken = "}%";
 
-    result = generateLua(tags, logHeaderName);
+    output = generateLua(tags, logHeaderName);
   } else {
     static bool firstJavaScriptCall = true;
     if (firstJavaScriptCall) {
@@ -164,10 +166,10 @@ bool WbTemplateEngine::generate(QHash<QString, QString> tags, const QString &log
     gOpeningToken = "%<";
     gClosingToken = ">%";
 
-    result = generateJavascript(tags, logHeaderName);
+    output = generateJavascript(tags, logHeaderName);
   }
 
-  return result;
+  return output;
 }
 
 bool WbTemplateEngine::generateJavascript(QHash<QString, QString> tags, const QString &logHeaderName) {
@@ -236,18 +238,18 @@ bool WbTemplateEngine::generateJavascript(QHash<QString, QString> tags, const QS
   }
 
   // extract imports from javaScriptBody, if any
-  // QRegExp explanation: any statement of the form "import ... from '...' " that ends with a new line or semi-colon
+  // QRegularExpression explanation: any statement of the form "import ... from '...' " that ends with a new line or semi-colon
   QRegularExpression reImport("import(.*?from.*?'.*?')[;\n]");
   QRegularExpressionMatchIterator it = reImport.globalMatch(javaScriptBody);
   while (it.hasNext()) {
-    QRegularExpressionMatch match = it.next();
+    const QRegularExpressionMatch match = it.next();
     if (match.hasMatch()) {
-      QString statement = match.captured(0);
+      QString statement = match.captured();
       javaScriptBody.replace(statement, "");  // remove it from javaScriptBody
 
       if (statement.endsWith(";"))
         statement.append("\n");
-      else if (statement.endsWith("\n") && statement.at(statement.size() - 2) != ";")
+      else if (statement.endsWith("\n") && statement.at(statement.size() - 2) != QString(";"))
         statement.insert(statement.size() - 2, ";");
       else
         statement.append(";\n");
@@ -266,7 +268,7 @@ bool WbTemplateEngine::generateJavascript(QHash<QString, QString> tags, const QS
   // write to file (note: can't evaluate directly because the evaluator doesn't support importing of modules)
   QFile outputFile("jsTemplateFilled.js");
   if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
-    mError = tr("Couldn't write jsTemplateFilled to disk.");
+    mError = tr("Couldn't write jsTemplateFilled in %1").arg(QDir::currentPath());
     return false;
   }
 
@@ -280,10 +282,6 @@ bool WbTemplateEngine::generateJavascript(QHash<QString, QString> tags, const QS
   WbQjsFile *jsFileObject = new WbQjsFile();
   QJSValue jsFile = engine.newQObject(jsFileObject);
   engine.globalObject().setProperty("wbfile", jsFile);
-  // create and add collada module
-  WbQjsCollada *jsColladaObject = new WbQjsCollada();
-  QJSValue jsCollada = engine.newQObject(jsColladaObject);
-  engine.globalObject().setProperty("wbcollada", jsCollada);
   // add stream holders
   QJSValue jsStdOut = engine.newArray();
   engine.globalObject().setProperty("stdout", jsStdOut);
@@ -297,13 +295,13 @@ bool WbTemplateEngine::generateJavascript(QHash<QString, QString> tags, const QS
   }
 
   QJSValue generateVrml = module.property("generateVrml");
-  QJSValue result = generateVrml.call();
-  if (result.isError()) {
-    mError = tr("failed to execute JavaScript template: %1").arg(result.property("message").toString());
+  QJSValue r = generateVrml.call();
+  if (r.isError()) {
+    mError = tr("failed to execute JavaScript template: %1").arg(r.property("message").toString());
     return false;
   }
 
-  mResult = result.toString().toUtf8();
+  mResult = r.toString().toUtf8();
 
   // display stream messages
   for (int i = 0; i < jsStdOut.property("length").toInt(); ++i)
@@ -341,19 +339,13 @@ bool WbTemplateEngine::generateLua(QHash<QString, QString> tags, const QString &
 // Update 'package.cpath' variable to be able to load '*.dll' and '*.dylib'
 #ifdef _WIN32
   tags["cpath"] = "package.cpath = package.cpath .. \";?.dll\"";
-#endif
-#ifdef __linux__
+#elif defined(__linux__)
   tags["cpath"] = "";
-#endif
-#ifdef __APPLE__
+#else  // __APPLE__
   tags["cpath"] = "package.cpath = package.cpath .. \";?.dylib\"";
 #endif
 
-  tags["templateContent"] = mTemplateContent;
-  tags["templateContent"] = tags["templateContent"].replace("\\", "\\\\");
-  tags["templateContent"] = tags["templateContent"].replace("\n", "\\n");
-  tags["templateContent"] = tags["templateContent"].replace("'", "\\'");
-  tags["templateContent"] = tags["templateContent"].toUtf8();
+  tags["templateContent"] = escapeString(mTemplateContent);
 
   // make sure these key are set
   if (!tags.contains("fields"))

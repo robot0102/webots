@@ -1,10 +1,10 @@
-# Copyright 1996-2022 Cyberbotics Ltd.
+# Copyright 1996-2023 Cyberbotics Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,8 @@ import re
 from projection import Projection
 
 
-GRASS_TEXTURE = 'https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/default/worlds/textures/grass.jpg'
+PREFIX = 'https://raw.githubusercontent.com/cyberbotics/webots/R2023b/'
+GRASS_TEXTURE = f'{PREFIX}projects/default/worlds/textures/grass.jpg'
 
 
 def get_world_size(minlat, minlon, maxlat, maxlon):
@@ -31,10 +32,38 @@ def get_world_size(minlat, minlon, maxlat, maxlon):
     return (xSize, zSize)
 
 
-def print_header(file, minlat, minlon, maxlat, maxlon, elevation=None):
+def extern_proto_declaration(options):
+    declaration = ''
+
+    declaration += f'EXTERNPROTO "{PREFIX}projects/objects/backgrounds/protos/TexturedBackground.proto"\n'
+    declaration += f'EXTERNPROTO "{PREFIX}projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"\n'
+    declaration += f'EXTERNPROTO "{PREFIX}projects/objects/floors/protos/Floor.proto"\n'
+
+    if not options.noRoads:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/road/protos/Road.proto"\n'
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/road/protos/Crossroad.proto"\n'
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/road/protos/RoadLine.proto"\n'
+    if not options.noBuildings:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/buildings/protos/SimpleBuilding.proto"\n'
+    if not options.noTrees:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/trees/protos/SimpleTree.proto"\n'
+    if not options.noBarriers:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/street_furniture/protos/Fence.proto"\n'
+    if not options.noBarriers or not options.noRivers:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/geometries/protos/Extrusion.proto"\n'
+    if not options.noAreas:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/trees/protos/Forest.proto"\n'
+    if not options.noParkings:
+        declaration += f'EXTERNPROTO "{PREFIX}projects/objects/traffic/protos/ParkingLines.proto"\n'
+
+    return f'\n{declaration}\n'
+
+
+def print_header(options, file, minlat, minlon, maxlat, maxlon, elevation=None):
     """Print the 'WorldInfo', 'Viewpoint', 'TexturedBackground', 'TexturedBackgroundLight' and 'Floor' nodes."""
     xSize, zSize = get_world_size(minlat=minlat, minlon=minlon, maxlat=maxlat, maxlon=maxlon)
-    file.write("#VRML_SIM R2022b utf8\n")
+    file.write("#VRML_SIM R2023b utf8\n")
+    file.write(extern_proto_declaration(options))
     file.write("WorldInfo {\n")
     file.write("  info [\n")
     file.write("    \"World generated using the Open Street Map to Webots importer\"\n")
@@ -51,9 +80,9 @@ def print_header(file, minlat, minlon, maxlat, maxlon, elevation=None):
     file.write("  lineScale " + str(round(max(xSize, zSize) / 200.0)) + "\n")
     file.write("}\n")
     file.write("Viewpoint {\n")
-    file.write("  orientation -0.443 0 0.896 3.14102\n")
+    file.write("  orientation -0.3922 0.3922 0.8321 1.7536\n")
     position = round(xSize * math.cos(0.785) * 1.5 + zSize * math.cos(0.785) * 1.5)
-    file.write("  position " + str(position * 0.75) + " 0 " + str(position) + "\n")
+    file.write("  position 0 " + str(-position * 0.85) + " " + str(position) + "\n")
     file.write("  near 3\n")
     file.write("}\n")
     file.write("TexturedBackground {\n")

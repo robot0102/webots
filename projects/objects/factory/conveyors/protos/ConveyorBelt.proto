@@ -1,13 +1,19 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/factory/conveyors/protos/ConveyorBelt.proto
+# keywords: industrial/conveyor
 # A customizable conveyor belt moving at a constant speed.
 # template language: javascript
+
+EXTERNPROTO "webots://projects/appearances/protos/CorrugatedMetal.proto"
+EXTERNPROTO "webots://projects/appearances/protos/Rubber.proto"
 
 PROTO ConveyorBelt [
   field SFVec3f    translation      0 0 0
   field SFRotation rotation         0 0 1 0
   field SFString   name             "conveyor belt"
+  field SFString   window           "<none>"
   field SFVec3f    size             1.5 0.5 0.6
   field SFNode     appearance       CorrugatedMetal { textureTransform TextureTransform { scale 2 2 } }  # Defines the appearance of the conveyor belt.
   field SFFloat    borderThickness  0.03                                                                 # Defines the thickness of the metal part around the conveyor belt.
@@ -41,6 +47,7 @@ PROTO ConveyorBelt [
       %<= '"' + fields.speed.value + '"' >%
       %<= '"' + fields.timer.value + '"' >%
     ]
+    window IS window
     children [
       Track {
         translation 0 0 %<= 0.75 * size.z >%
@@ -160,7 +167,7 @@ PROTO ConveyorBelt [
     ]
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation %<= 0.5 * (size.x + borderThickness) >% 0 %<= 0.5 * (size.z + borderHeight) >%
           children [
             Box {
@@ -168,7 +175,7 @@ PROTO ConveyorBelt [
             }
           ]
         }
-        Transform {
+        Pose {
           translation %<= -0.5 * (size.x + borderThickness) >% 0 %<= 0.5 * (size.z + borderHeight) >%
           children [
             Box {
@@ -176,7 +183,7 @@ PROTO ConveyorBelt [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0 %<= -0.5 * (size.y + borderThickness) >% %<= 0.5 * (size.z + borderHeight) >%
           children [
             Box {
@@ -184,7 +191,7 @@ PROTO ConveyorBelt [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0 %<= 0.5 * (size.y + borderThickness) >% %<= 0.5 * (size.z + borderHeight) >%
           children [
             Box {

@@ -1,6 +1,8 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Creative Commons Attribution 4.0 International License.
 # license url: https://creativecommons.org/licenses/by/4.0/legalcode
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/garden/protos/PicketFence.proto
+# keywords: exterior/garden
 # A picket fence made of several segments with optional boundingObject.
 # Each segment is made of 11 pickets.
 # template language: javascript
@@ -31,21 +33,21 @@ PROTO PicketFence [
     ]
     children [
       %< for (let i = 0; i <= numberOfSegments - 1; ++i) { >%
-        Transform {
+        Pose {
           translation 0 %<= -1.7 * i >% 0
           children [
             Shape {
               appearance PBRAppearance {
                 baseColorMap ImageTexture {
                   url [
-                    "webots://projects/objects/garden/protos/textures/picket_fence_base_color.jpg"
+                    "textures/picket_fence_base_color.jpg"
                   ]
                 }
                 roughness 1
                 metalness 0
                 normalMap ImageTexture {
                   url [
-                    "webots://projects/objects/garden/protos/textures/picket_fence_normal.jpg"
+                    "textures/picket_fence_normal.jpg"
                   ]
                 }
               }
@@ -73,7 +75,7 @@ PROTO PicketFence [
       %< } >%
     ]
     %< if (fields.enableBoundingObject.value) { >%
-    boundingObject Transform {
+    boundingObject Pose {
       translation 0 %<= -0.85 * numberOfSegments >% 0.55
       children [
         Box {

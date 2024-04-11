@@ -1,21 +1,28 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
-# documentation url: https://www.cyberbotics.com/doc/guide/epuck
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/robots/gctronic/e-puck/protos/E-puck.proto
+# keywords: robot/wheeled
 # EPFL educational and research mini mobile robot.
 # The e-puck is powered by a dsPIC processor and features a very large number of sensors in its basic configuration.
 # More info here: http://www.e-puck.org.
 # template language: javascript
 
+EXTERNPROTO "webots://projects/appearances/protos/Copper.proto"
+EXTERNPROTO "E-puckDistanceSensor.proto"
+EXTERNPROTO "webots://projects/objects/solids/protos/SolidPipe.proto"
+
 PROTO E-puck [
-  field SFVec3f            translation                  0 0 0                    # Is `Transform.translation`.
-  field SFRotation         rotation                     0 0 1 0                  # Is `Transform.rotation`.
+  field SFVec3f            translation                  0 0 0                    # Is `Pose.translation`.
+  field SFRotation         rotation                     0 0 1 0                  # Is `Pose.rotation`.
   field SFString           name                         "e-puck"                 # Is `Solid.name`.
   field SFString           controller                   "e-puck_avoid_obstacles" # Is `Robot.controller`.
   field MFString           controllerArgs               []                       # Is `Robot.controllerArgs`.
+  field SFString           window                       "e-puck"                 # Is `Robot.window`.
   field SFString           customData                   ""                       # Is `Robot.customData`.
   field SFBool             supervisor                   FALSE                    # Is `Robot.supervisor`.
   field SFBool             synchronization              TRUE                     # Is `Robot.synchronization`.
+  field MFFloat            battery                      []                       # Is `Robot.battery`.
   field SFString{"1", "2"} version                      "1"                      # Defines the e-puck version; either "1" or "2".
   field SFFloat            camera_fieldOfView           0.84                     # Is `Camera.fieldOfView`.
   field SFInt32            camera_width                 52                       # Is `Camera.width`.
@@ -27,8 +34,6 @@ PROTO E-puck [
   field SFInt32            distance_sensor_numberOfRays 1                        # Is `DistanceSensor.numberOfRays`.
   field SFInt32            emitter_channel              1                        # Is `Emitter.channel`.
   field SFInt32            receiver_channel             1                        # Is `Receiver.channel`.
-  field MFFloat            battery                      []                       # Is `Robot.battery`.
-  field SFString           window                       "e-puck"                 # Is `Robot.window`.
   field MFNode             turretSlot                   []                       # Extends the robot with new nodes in the turret slot.
   field MFNode             groundSensorsSlot            []                       # Extends the robot with new nodes in the ground slot. Typically: `E-puckGroundSensors.proto`.
   field SFBool             kinematic                    FALSE                    # Defines whether the robot motion and its sensors are computed according to a 2D kinematics algorithm.
@@ -66,7 +71,7 @@ Robot {
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
         translation 0 0.026 0.02
         children [
-          DEF EPUCK_WHEEL Transform {
+          DEF EPUCK_WHEEL Pose {
             rotation 1 0 0 -1.570796
             children [
               Shape {
@@ -82,7 +87,7 @@ Robot {
                   subdivision 24
                 }
               }
-              Transform {
+              Pose {
                 translation 0 0 0.0016
                 rotation 1 0 0 1.570796
                 children [
@@ -92,7 +97,7 @@ Robot {
                       roughness 0.4
                       baseColorMap ImageTexture {
                         url [
-                          "webots://projects/robots/gctronic/e-puck/protos/textures/gctronic_logo.png"
+                          "textures/gctronic_logo.png"
                         ]
                       }
                     }
@@ -135,7 +140,7 @@ Robot {
                   bottom FALSE
                 }
               }
-              Transform {
+              Pose {
                 translation 0 0 0.0035
                 children [
                   Shape {
@@ -147,7 +152,7 @@ Robot {
                   }
                 ]
               }
-              Transform {
+              Pose {
                 children [
                   Shape {
                     appearance PBRAppearance {
@@ -160,7 +165,7 @@ Robot {
                   }
                 ]
               }
-              Transform {
+              Pose {
                 translation 0 0 0.0065
                 children [
                   Shape {
@@ -180,7 +185,7 @@ Robot {
           }
         ]
         name "left wheel"
-        boundingObject DEF EPUCK_WHEEL_BOUNDING_OBJECT Transform {
+        boundingObject DEF EPUCK_WHEEL_BOUNDING_OBJECT Pose {
           rotation 1 0 0 1.570796
           children [
             Cylinder {
@@ -221,7 +226,7 @@ Robot {
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
         translation 0 -0.026 0.02
         children [
-          Transform {
+          Pose {
             rotation 1 0 0 3.14159
             children [
               USE EPUCK_WHEEL
@@ -235,7 +240,7 @@ Robot {
         %< } >%
       }
     }
-    DEF BATTERY_CONNECTOR Transform {
+    DEF BATTERY_CONNECTOR Pose {
       rotation 0.577354 0.577344 0.577352 2.094396
       children [
         Shape {
@@ -345,7 +350,7 @@ Robot {
         }
       ]
     }
-    DEF MOTORS Transform {
+    DEF MOTORS Pose {
       translation 0 0 0.02
       rotation 1 0 0 -1.570796
       children [
@@ -398,45 +403,45 @@ Robot {
             baseColorMap ImageTexture {
               url [
                 %< if (v2) { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck2_plate.jpg"
+                  "textures/e-puck2_plate.jpg"
                 %< } else { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_plate_base_color.jpg"
+                  "textures/e-puck1_plate_base_color.jpg"
                 %< } >%
               ]
             }
             roughnessMap ImageTexture {
               url [
                 %< if (v2) { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck2_plate.jpg"
+                  "textures/e-puck2_plate.jpg"
                 %< } else { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_plate_roughness.jpg"
+                  "textures/e-puck1_plate_roughness.jpg"
                 %< } >%
               ]
             }
             metalnessMap ImageTexture {
               url [
                 %< if (v2) { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck2_plate.jpg"
+                  "textures/e-puck2_plate.jpg"
                 %< } else { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_plate_metalness.jpg"
+                  "textures/e-puck1_plate_metalness.jpg"
                 %< } >%
               ]
             }
             normalMap ImageTexture {
               url [
                 %< if (v2) { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck2_plate.jpg"
+                  "textures/e-puck2_plate.jpg"
                 %< } else { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_plate_normal.jpg"
+                  "textures/e-puck1_plate_normal.jpg"
                 %< } >%
               ]
             }
             occlusionMap ImageTexture {
               url [
                 %< if (v2) { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck2_plate.jpg"
+                  "textures/e-puck2_plate.jpg"
                 %< } else { >%
-                  "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_plate_occlusion.jpg"
+                  "textures/e-puck1_plate_occlusion.jpg"
                 %< } >%
               ]
             }
@@ -463,7 +468,7 @@ Robot {
         }
       ]
     }
-    DEF EPUCK_BATTERY Transform {
+    DEF EPUCK_BATTERY Pose {
       translation -0.026 0 0.007
       rotation 0 0 1 -1.5708
       children [
@@ -527,27 +532,27 @@ Robot {
           appearance PBRAppearance {
             baseColorMap ImageTexture {
               url [
-                "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_turret_base_color.jpg"
+                "textures/e-puck1_turret_base_color.jpg"
               ]
             }
             roughnessMap ImageTexture {
               url [
-                "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_turret_roughness.jpg"
+                "textures/e-puck1_turret_roughness.jpg"
               ]
             }
             metalnessMap ImageTexture {
               url [
-                "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_turret_metalness.jpg"
+                "textures/e-puck1_turret_metalness.jpg"
               ]
             }
             normalMap ImageTexture {
               url [
-                "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_turret_normal.jpg"
+                "textures/e-puck1_turret_normal.jpg"
               ]
             }
             occlusionMap ImageTexture {
               url [
-                "webots://projects/robots/gctronic/e-puck/protos/textures/e-puck1_turret_occlusion.jpg"
+                "textures/e-puck1_turret_occlusion.jpg"
               ]
             }
           }
@@ -584,7 +589,7 @@ Robot {
         ]
       }
     %< } >%
-    DEF EPUCK_RIGHT_COLUMN Transform {
+    DEF EPUCK_RIGHT_COLUMN Pose {
       translation 0.0254 -0.0193 0.0426
       children [
         DEF EPUCK_COLUMN Shape {
@@ -598,20 +603,20 @@ Robot {
         }
       ]
     }
-    DEF EPUCK_LEFT_COLUMN Transform {
+    DEF EPUCK_LEFT_COLUMN Pose {
       translation 0.0254 0.0193 0.0426
       children [
         USE EPUCK_COLUMN
       ]
     }
-    DEF EPUCK_REAR_COLUMN Transform {
+    DEF EPUCK_REAR_COLUMN Pose {
       translation -0.032 0 0.0426
       children [
         USE EPUCK_COLUMN
       ]
     }
     %< if (v1) { >%
-      DEF EPUCK_RIGHT_CONNECTOR Transform {
+      DEF EPUCK_RIGHT_CONNECTOR Pose {
         translation -0.0033 -0.0033 0.0426
         children [
           DEF EPUCK_CONNECTOR Shape {
@@ -626,7 +631,7 @@ Robot {
           }
         ]
       }
-      DEF EPUCK_LEFT_CONNECTOR Transform {
+      DEF EPUCK_LEFT_CONNECTOR Pose {
         translation -0.0024 0.012 0.0426
         children [
           DEF EPUCK_CONNECTOR Shape {
@@ -642,7 +647,7 @@ Robot {
         ]
       }
     %< } else { >%
-      DEF EPUCK_CONNECTOR Transform {
+      DEF EPUCK_CONNECTOR Pose {
         translation 0.001 -0.012 0.0396
         children [
           DEF EPUCK_CONNECTOR Shape {
@@ -789,7 +794,7 @@ Robot {
             2.00  2000.0  0.000
         ]
         children [
-          Transform {
+          Pose {
             translation -0.0006 0.0008 0
             children [
               Shape {
@@ -821,7 +826,7 @@ Robot {
       translation 0.03 0 0.028
       rotation IS camera_rotation
       children [
-        Transform {
+        Pose {
           rotation 0 0.707107 0.707107 3.14159
           children [
             Shape {
@@ -1069,7 +1074,7 @@ Robot {
     DEF EPUCK_GYRO Gyro {
       lookupTable [ -13.315805 -100000 0.003 13.315805 100000 0.003 ]
     }
-    DEF EPUCK_SMALL_LOGO Transform {
+    DEF EPUCK_SMALL_LOGO Pose {
       translation -0.035 0 0.031
       rotation 0 0 -1 3.14159
       children [
@@ -1079,7 +1084,7 @@ Robot {
             metalness 0
             baseColorMap ImageTexture {
               url [
-                "webots://projects/robots/gctronic/e-puck/protos/textures/gctronic_logo.png"
+                "textures/gctronic_logo.png"
               ]
             }
           }
@@ -1121,11 +1126,11 @@ Robot {
     }
     DEF EPUCK_SPEAKER Speaker {
     }
-    DEF TURRET_SLOT Transform {
+    DEF TURRET_SLOT Pose {
       translation -0.0095 0 0.0486
       children IS turretSlot
     }
-    DEF GROUND_SENSOR_SLOT Transform {
+    DEF GROUND_SENSOR_SLOT Pose {
       translation 0.03 0 0.0003
       children IS groundSensorsSlot
     }
@@ -1139,7 +1144,7 @@ Robot {
   description "Educational robot designed at EPFL"
   boundingObject Group {
     children [
-      Transform {
+      Pose {
         translation 0 0 0.025
         rotation 1 0 0 3.141589
         children [
@@ -1150,7 +1155,7 @@ Robot {
           }
         ]
       }
-      Transform {
+      Pose {
         translation 0 0 0.0051
         children [
           Box {
@@ -1174,16 +1179,18 @@ Robot {
   %< } >%
   controller IS controller
   controllerArgs IS controllerArgs
+  window IS window
   customData IS customData
   supervisor IS supervisor
   synchronization IS synchronization
   battery IS battery
   cpuConsumption 1.11 # 100% to 0% in 90[s] (calibrated for the rat's life contest)
-  window IS window
-  %< if (v2) { >%
-    remoteControl "e-puck_wifi"
-  %< } else { >%
-    remoteControl "e-puck_bluetooth"
-  %< } >%
+  %< if (fields.window.value != "<generic>" && fields.window.value != "<none>") {
+       if (v2) { >%
+         remoteControl "e-puck_wifi"
+  %<   } else { >%
+         remoteControl "e-puck_bluetooth"
+  %<   }
+     } >%
 }
 }

@@ -1,10 +1,10 @@
-// Copyright 1996-2022 Cyberbotics Ltd.
+// Copyright 1996-2023 Cyberbotics Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@
 #include "WbSFVector3.hpp"
 #include "WbTokenizer.hpp"
 #include "WbValue.hpp"
-#include "WbVrmlWriter.hpp"
+#include "WbWriter.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -62,7 +62,8 @@ WbField::WbField(const WbField &other, WbNode *parentNode) :
   mParameter(NULL),
   mAlias(other.mAlias),
   mIsTemplateRegenerator(other.mIsTemplateRegenerator),
-  mParentNode(parentNode) {
+  mParentNode(parentNode),
+  mScope(other.mScope) {
   mModel->ref();
   if (hasRestrictedValues())
     connect(mValue, &WbValue::changed, this, &WbField::checkValueIsAccepted, Qt::UniqueConnection);
@@ -79,6 +80,11 @@ WbField::~WbField() {
 }
 
 void WbField::listenToValueSizeChanges() const {
+  if (singleType() == WB_SF_NODE) {
+    WbSFNode *sfnode = static_cast<WbSFNode *>(mValue);
+    connect(sfnode, &WbSFNode::changed, this, &WbField::valueSizeChanged, Qt::UniqueConnection);
+    return;
+  }
   if (isSingle())
     return;
   const WbMultipleValue *mf = static_cast<WbMultipleValue *>(mValue);
@@ -100,7 +106,7 @@ bool WbField::isDeprecated() const {
 
 void WbField::readValue(WbTokenizer *tokenizer, const QString &worldPath) {
   if (mWasRead)
-    tokenizer->reportError(tr("Duplicate field value."));
+    tokenizer->reportError(tr("Duplicate field value: '%1'").arg(name()));
 
   mValue->read(tokenizer, worldPath);
   mWasRead = true;
@@ -108,7 +114,7 @@ void WbField::readValue(WbTokenizer *tokenizer, const QString &worldPath) {
     checkValueIsAccepted();
 }
 
-void WbField::write(WbVrmlWriter &writer) const {
+void WbField::write(WbWriter &writer) const {
   if (isDefault())
     return;
   if (writer.isX3d())
@@ -161,7 +167,7 @@ void WbField::checkValueIsAccepted() {
   if (!mModel->isValueAccepted(mValue, &refusedIndex)) {
     QString acceptedValuesList = "";
     foreach (const WbVariant acceptedValue, mModel->acceptedValues())
-      acceptedValuesList += acceptedValue.toStringRepresentation() + ", ";
+      acceptedValuesList += acceptedValue.toSimplifiedStringRepresentation() + ", ";
     acceptedValuesList.chop(2);
     QString error;
     if (isSingle()) {
@@ -190,9 +196,7 @@ void WbField::setValue(const WbValue *otherValue) {
   WbMultipleValue *mvalue = dynamic_cast<WbMultipleValue *>(mValue);
   if (mvalue) {
     // remove all children
-    const int n = mvalue->size() - 1;
-    for (int i = n; i >= 0; --i)
-      mvalue->removeItem(i);
+    mvalue->clear();
 
     // add default children
     switch (mvalue->type()) {
@@ -306,27 +310,61 @@ bool WbField::isHiddenParameter() const {
 }
 
 // redirect this node field to a proto parameter
-void WbField::redirectTo(WbField *parameter) {
+void WbField::redirectTo(WbField *parameter, bool skipCopy) {
   // qDebug() << "redirectTo: " << this << " " << name() << " -> " << parameter << " " << parameter->name();
 
-  if (this == parameter || parameter->mInternalFields.contains(this)) {
+  if (mParameter == parameter || this == parameter || parameter->mInternalFields.contains(this))
     // skip self and duplicated redirection
     return;
+
+  if (mParameter) {
+    // remove previous connections
+    WbMFNode *mfnode = dynamic_cast<WbMFNode *>(mParameter->value());
+    if (mfnode) {
+      disconnect(mfnode, &WbMFNode::itemInserted, mParameter, &WbField::parameterNodeInserted);
+      disconnect(mfnode, &WbMFNode::itemRemoved, mParameter, &WbField::parameterNodeRemoved);
+    } else {
+      // make sure the field gets updated when the parameter changes, e.g. by Scene Tree or Supervisor, etc.
+      if (mParameter->mInternalFields.size() == 1) {
+        disconnect(mParameter, &WbField::valueChanged, mParameter, &WbField::parameterChanged);
+        disconnect(mParameter->value(), &WbValue::changedByUser, this->value(), &WbValue::changedByUser);
+      }
+      disconnect(this, &WbField::valueChanged, mParameter, &WbField::fieldChanged);
+    }
+
+    // ODE updates
+    const QString &fieldName = name();
+    if (fieldName == "translation") {
+      disconnect(static_cast<WbSFVector3 *>(mValue), &WbSFVector3::changedByOde, mParameter, &WbField::fieldChangedByOde);
+      disconnect(static_cast<WbSFVector2 *>(mValue), &WbSFVector2::changedByWebots, mParameter, &WbField::fieldChangedByOde);
+    } else if (fieldName == "rotation")
+      disconnect(static_cast<WbSFRotation *>(mValue), &WbSFRotation::changedByOde, mParameter, &WbField::fieldChangedByOde);
+    else if (fieldName == "position")
+      disconnect(static_cast<WbSFDouble *>(mValue), &WbSFDouble::changedByOde, mParameter, &WbField::fieldChangedByOde);
+
+    mParameter->mInternalFields.removeAll(this);
   }
+
+  mParameter = parameter;
+
+  assert(mParameter);
+  if (!mParameter)
+    return;
 
   // propagate top -> down the template regenerator flag
   if (isTemplateRegenerator())
     parameter->setTemplateRegenerator(true);
 
-  mParameter = parameter;
   mParameter->mInternalFields.append(this);
   connect(this, &QObject::destroyed, mParameter, &WbField::removeInternalField);
 
   // copy parameter value to field
-  mValue->copyFrom(mParameter->value());
+  if (!skipCopy)
+    mValue->copyFrom(mParameter->value());
 
   WbMFNode *mfnode = dynamic_cast<WbMFNode *>(mParameter->value());
   if (mfnode) {
+    connect(mfnode, &WbMFNode::itemChanged, mParameter, &WbField::parameterNodeChanged, Qt::UniqueConnection);
     connect(mfnode, &WbMFNode::itemInserted, mParameter, &WbField::parameterNodeInserted, Qt::UniqueConnection);
     connect(mfnode, &WbMFNode::itemRemoved, mParameter, &WbField::parameterNodeRemoved, Qt::UniqueConnection);
 
@@ -397,6 +435,16 @@ void WbField::parameterNodeRemoved(int index) {
   foreach (WbField *const field, mInternalFields) {
     mfnode = dynamic_cast<WbMFNode *>(field->value());
     mfnode->removeItem(index);
+  }
+}
+
+void WbField::parameterNodeChanged(int index) {
+  WbMFNode *mfnode = dynamic_cast<WbMFNode *>(mValue);
+  WbNode *const node = mfnode->item(index);
+  foreach (WbField *const field, mInternalFields) {
+    WbNode *instance = node->cloneAndReferenceProtoInstance();
+    mfnode = dynamic_cast<WbMFNode *>(field->value());
+    mfnode->setItem(index, instance);
   }
 }
 

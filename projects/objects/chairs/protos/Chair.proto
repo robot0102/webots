@@ -1,7 +1,12 @@
-#VRML_SIM R2022b utf8
+#VRML_SIM R2023b utf8
 # license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
 # license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/objects/chairs/protos/Chair.proto
+# keywords: furniture/chair
 # A chair (0.5 x 0.5 x 1 m).
+
+EXTERNPROTO "webots://projects/appearances/protos/VarnishedPine.proto"
+EXTERNPROTO "webots://projects/appearances/protos/ShinyLeather.proto"
 
 PROTO Chair [
   field SFVec3f    translation 0 0 0
@@ -73,7 +78,7 @@ PROTO Chair [
     model "chair"
     boundingObject Group {
       children [
-        Transform {
+        Pose {
           translation 0 0 0.45
           children [
             Box {
@@ -81,7 +86,7 @@ PROTO Chair [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0.22 0.22 0.2
           children [
             Box {
@@ -89,7 +94,7 @@ PROTO Chair [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -0.22 0.22 0.2
           children [
             Box {
@@ -97,7 +102,7 @@ PROTO Chair [
             }
           ]
         }
-        Transform {
+        Pose {
           translation 0.22 -0.22 0.2
           children [
             Box {
@@ -105,7 +110,7 @@ PROTO Chair [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -0.22 -0.22 0.2
           children [
             Box {
@@ -113,7 +118,7 @@ PROTO Chair [
             }
           ]
         }
-        Transform {
+        Pose {
           translation -0.237 0 0.75
           rotation 0 1 0 -0.07
           children [
